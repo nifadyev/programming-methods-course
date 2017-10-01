@@ -63,9 +63,6 @@ void TBitField::SetBit(const int n) // установить бит
 {
 	if ((n < 0) || (n > BitLen))
 		throw WRONG_RANGE;
-	//int index = GetMemIndex(n);
-	//TELEM mask = GetMemMask(n);
-	//pMem[index] = pMem[index] | mask;
 	pMem[GetMemIndex(n)] = pMem[GetMemIndex(n)] | GetMemMask(n);
 }
 
@@ -212,18 +209,14 @@ istream &operator>>(istream &istr, TBitField &bf) // ввод
 		if (ch == '1')
 		{
 			bf.SetBit(i);
-			//i++;
 		}
 		else
 		{
 			bf.ClearBit(i);
-			//i++;
 		}
 		bf.SetBit(i);
 		i++;
 	}
-	//for (int i = 0; (ch == '1') || (ch == '0'); i++)
-	//	bf.SetBit(i);
 	return istr;
 }
 
