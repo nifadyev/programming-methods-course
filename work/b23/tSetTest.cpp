@@ -301,7 +301,6 @@ TEST(TSetCustom, ThrowsWhenSubstractTooLargeElement)
 
 TEST(TSetCustom, CanSubtractNonExistingElement)
 {
-	
 	const int size = 4;
 	const int k = 3;
 	TSet set(size), result(size);
