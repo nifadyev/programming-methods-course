@@ -1,22 +1,23 @@
 # Отчет по лабораторной работе №1: Множества на овснове битовых полей
-//Выполнил студент группы 381608-1 Нифадьев Вадим
+__Выполнил:__ студент группы 381608-1 Нифадьев Вадим
 ## Цели и задачи
-* 	Реализация класса битового поля TBitField согласно заданному интерфейсу.
-*	Реализация класса множества TSet согласно заданному интерфейсу.
+* 	Реализация класса битового поля `TBitField` согласно заданному интерфейсу.
+*	Реализация класса множества `TSet` согласно заданному интерфейсу.
 *	Обеспечение работоспособности тестов и примера использования.
-*	Реализация нескольких простых тестов на базе Google Test.
-*	Публикация исходных кодов в личном репозитории на BitBucket.
+*	Реализация нескольких простых тестов на базе `Google Test`.
+*	Публикация исходных кодов в личном репозитории на `BitBucket`.
 ## Описание работы программы
-* ### Реализация класса TBitField
-* ### Реализация класса TSet
-* ### Тестирование класса TBitField
-* ### Тестирование класса TSet
-## Исходный код программы
-* ### TBitField.cpp
-``` C++
-// ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
-// tbitfield.cpp - Copyright (c) Гергель В.П. 07.05.2001
-//   Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (19.04.2015)
+### Реализация класса `TBitField`
+Битовое поле в данном классе выполнено в виде массива беззнаковых целых чисел(`TELEM`ов). 
+* Подсчет длины массива происходит по формуле `len + sizeof(TELEM) * 8 - 1) / (sizeof(TELEM) * 8)`. Данный вид подсчета существенно экономит памать в случаях, когда `len` кратен количеству бит в `TELEM`, так как полученная длина не будет на 1 больше необходимой.
+* Установка бита осуществляется с помощью поразрядной дизъюнкции соответствующих элемента массива `TELEM`'ов и маски.
+* Удаление бита осуществляется с помощью поразрядной конъюнции соответствующих элемента массива `TELEM`'ов и инвертированной маски.
+* Получение бита осуществляется с помощью поразрядной дизъюнкции элемента массива `TELEM`'ов и маски.
+* Побитовые операции реализованы с помощью осуществления побитовых операций над элементами множества `TELEM`'ов.
+* Потоковый ввод получает непрерывную последовательность 0 и 1 до момента, пока битовое поле не закончится либо пока не встретится посторонний символ.
+* Потоковый вывод выводит непрерывную последовательность 0 и 1.
+#### TBitField.cpp
+```C++
 // Битовое поле
 
 #include "tBitField.h"
@@ -30,7 +31,7 @@ TBitField::TBitField(int len)
 		throw WRONG_LENGTH;
 	}
 	BitLen = len;
-	MemLen = (len + sizeof(int) - 1) / sizeof(int);
+	MemLen = (len + sizeof(TELEM) * 8 - 1) / (sizeof(TELEM) * 8);
 	pMem = new TELEM[BitLen];
 	for (int i = 0; i < MemLen; i++)
 		pMem[i] = 0;
@@ -77,9 +78,6 @@ void TBitField::SetBit(const int n) // установить бит
 {
 	if ((n < 0) || (n > BitLen))
 		throw WRONG_RANGE;
-	//int index = GetMemIndex(n);
-	//TELEM mask = GetMemMask(n);
-	//pMem[index] = pMem[index] | mask;
 	pMem[GetMemIndex(n)] = pMem[GetMemIndex(n)] | GetMemMask(n);
 }
 
@@ -226,18 +224,14 @@ istream &operator>>(istream &istr, TBitField &bf) // ввод
 		if (ch == '1')
 		{
 			bf.SetBit(i);
-			//i++;
 		}
 		else
 		{
 			bf.ClearBit(i);
-			//i++;
 		}
 		bf.SetBit(i);
 		i++;
 	}
-	//for (int i = 0; (ch == '1') || (ch == '0'); i++)
-	//	bf.SetBit(i);
 	return istr;
 }
 
@@ -250,12 +244,16 @@ ostream &operator<<(ostream &ostr, const TBitField &bf) // вывод
 	}
 	return ostr;
 }
-
-
 ```
-
-* ### TSet.cpp
-``` C++
+### Реализация класса `TSet`
+В классе `TSet` множество базируется на битовом поле, только представлено в другом виде.
+* Операция включение в множество происходит с помощью установки бита под заданным номером.
+* Операция удаление в множество происходит с помощью очистки бита под заданным номером.
+* Все операции над множествами основаны на схожих операций над битовыми полями (пересечение - конъюнкция, объединение - дизъюнкция и т.д.)
+* Потоковый ввод считывает целые числа до появления в потоке постороннего символа.
+* Потоковый вывод последовательно выводит индексы элементов, находящихся в множестве, и заключает их в фигурные скобки.
+#### TSet.cpp
+```C++
 // Множество - реализация через битовые поля
 
 #include "tSet.h"
@@ -293,12 +291,12 @@ int TSet::IsMember(const int Elem) const // проверка элемента н
 	return BitField.GetBit(Elem);
 }
 
-void TSet::InsElem(const int Elem) // включение элемента множества
+void TSet::InsertElem(const int Elem) // включение элемента множества
 {
 	BitField.SetBit(Elem);
 }
 
-void TSet::DelElem(const int Elem) // исключение элемента множества
+void TSet::DeleteElem(const int Elem) // исключение элемента множества
 {
 	BitField.ClearBit(Elem);
 }
@@ -314,7 +312,7 @@ TSet& TSet::operator=(const TSet &s) // присваивание
 
 int TSet::operator==(const TSet &s) const // сравнение
 {
-	if ((MaxPower != s.MaxPower) || (BitField != s.BitField))
+	if ((MaxPower != s.GetMaxPower()) || (BitField != s.BitField))
 	{
 		return 0;
 	}
@@ -322,7 +320,6 @@ int TSet::operator==(const TSet &s) const // сравнение
 	{
 		return 1;
 	}
-	/*return BitField == s.BitField;*/
 }
 
 int TSet::operator!=(const TSet &s) const // сравнение
@@ -348,25 +345,16 @@ TSet TSet::operator+(const int Elem) // объединение с элемент
 	{
 		throw ("Elem is out of allowed range");
 	}
-	TBitField temp(MaxPower);
+	TBitField temp(BitField);
 	temp.SetBit(Elem);
-	return BitField | temp;
-
-	//TSet tmp(*this);
-	//tmp.InsElem(Elem);
-	//return tmp;
+	return TSet(temp);
 }
 
 TSet TSet::operator-(const int Elem) // разность с элементом
 {
-	//TBitField temp(MaxPower);
-	//temp.SetBit(Elem);
-	//return BitField & temp;
-	TSet result = *this;
-	result.DelElem(Elem);
-	//result.BitField.ClearBit(Elem);
-	//return result.BitField;
-	return result;
+	TBitField temp(BitField);
+	temp.ClearBit(Elem);
+	return TSet(temp);
 }
 
 TSet TSet::operator*(const TSet &s) // пересечение
@@ -382,22 +370,12 @@ TSet TSet::operator~(void) // дополнение
  //перегрузка ввода/вывода
 istream &operator>>(istream &istr, TSet &s) // ввод
 {
-	//TODO: Упростить либо вникнуть в логику
-	int i = 0;
-	char ch;
-	do
+	int i;
+	while (istr >> i)
 	{
-		istr >> ch;
-	} while (ch != '{');
-	do
-	{
-		istr >> i;
-		s.InsElem(i);
-		do
-		{
-			istr >> ch;
-		} while ((ch = ',') && (ch = '}'));
-	} while (ch != '}');
+		if (!s.IsMember(i))
+			s.InsertElem(i);
+	}
 	return istr;
 }
 
@@ -413,111 +391,113 @@ ostream& operator<<(ostream &ostr, const TSet &s) // вывод
 				ostr << i;
 				break;
 			}
-			ostr << i << ", ";
+			else
+				ostr << i << ", ";
 		}
 	}
 	ostr << '}';
 	return ostr;
 }
 ```
-* ### TBitFieldTest.cpp
-``` C++
-#include "tBitField.h"
-
-#include <gtest\gtest.h>
-
+## Тестирование
+### Тестирование класса `TBitField`
+Функциональность созданных классов была протестирована с помощью библиотеки `Google Test`. К предоставленным тестам были добавлены 3 теста, проверяющие ход выполнения операций как в обычных, так и в недопустимых условиях.
+![](https://image.ibb.co/nsVmJw/TBit_Field_Test.png "TBitFieldTest")
+     _Результат прохождения предоставленных тестов класса `TBitField`_
+    
+К тестированию класса `TBitField` были добавлены 3 теста: проверка на равенство пустых битовых полей, проверка на корректность работы оператора & с пустым битовым полем и проверка корректности сравнения битовых полей разной длины. 
+#### TBitFieldCustom
+```C++
 TEST(TBitFieldCustom, EmptyBitfieldsAreEqual)
 {
 	const int size = 4;
 	TBitField bf1(size), bf2(size);
-	//bf1.SetBit(1);
-	//bf1.SetBit(3);
-	//bf2.SetBit(1);
-	//bf2.SetBit(2);
 	EXPECT_EQ(bf1, bf2);
 }
 
 TEST(TBitFieldCustom, AndOperatorAppliedToEmptyBitfield)
 {
-	const int size1 = 4, size2 = 5;
-	TBitField bf1(size1), bf2(size2), expBf(size2);
+	const int size = 4;
+	TBitField bf1(size), bf2(size), expectedBf(size);
 	// bf1 = 0011
 	bf1.SetBit(2);
 	bf1.SetBit(3);
-	// bf2 = 01010
-	//bf2.SetBit(1);
-	//bf2.SetBit(3);
-	// expBf = 00010
-	//expBf.SetBit(1);
-	//expBf.SetBit(2);
-	//expBf.SetBit(3);
-	EXPECT_EQ(expBf, bf1 & bf2);
+	//bf2 = 0000
+	EXPECT_EQ(expectedBf, bf1 & bf2);
+}
+
+TEST(TBitFieldCustom, CanCompareBitfieldsOfDifferentSizes)
+{
+	const int size1 = 2, size2 = 5;
+	TBitField result(size1), bf(size2);
+	// bf = 11
+	bf.SetBit(0);
+	bf.SetBit(1);
+	//result = 11000
+	result = bf;
+	EXPECT_EQ(1, bf == result);
 }
 ```
-* ### TSetTest.cpp
-``` C++
+![](https://image.ibb.co/cAidWG/TBit_Field_Custom.png "TBitFieldCustom")
+_Результат прохождения собственных тестов класса `TBitField`_
+
+### Тестирование класса `TSet`
+Класс `TSet` тестировался так же, как и класс `TBitField`: к предоставленым тестам были добавлены 3 собственных теста. 
+![](https://image.ibb.co/hCBnQb/TSetTest.png "TSetTest")
+_Результат прохождения предоставленных тестов класса `TSet`_
+
+К предоставленному тестированию класса `TSet` были добавлены следующие тесты: проверка работоспособности оператора разности множества и элемента, проверка на выброс иключения при вычитании элемента, выходящего за пределы множества и проверка на возможность вычесть несуществующий элемент множества.
+#### `TSetCustom`
+```C++
 TEST(TSetCustom, CheckDifferenceOperator)
 {
 	const int size = 4, elem = 2;
 	TSet set(size), result(size), expectedSet(size);
 	// set = {1, 2, 3}
-	set.InsElem(1);
-	set.InsElem(2);
-	set.InsElem(3);
-	//result.InsElem(1);
-	//result.InsElem(2);
-	//result.InsElem(3);
-	result = set -elem;
+	set.InsertElem(1);
+	set.InsertElem(2);
+	set.InsertElem(3);
+	result = set - elem;
 	//expectedSet = {1, 3}
-	expectedSet.InsElem(1);
-	expectedSet.InsElem(3);
+	expectedSet.InsertElem(1);
+	expectedSet.InsertElem(3);
 	EXPECT_EQ(expectedSet, result);
 	EXPECT_EQ(0, result.IsMember(elem));		
 }
 
-TEST(TSetCustom, ThrowsWhenSubstractNonExistingElement)
+TEST(TSetCustom, ThrowsWhenSubstractTooLargeElement)
 {
 	const int size = 4;
 	const int k = 6;
 	TSet set(size), result(size);
-	set.InsElem(0);
-	set.InsElem(2);
+	set.InsertElem(0);
+	set.InsertElem(2);
 	ASSERT_ANY_THROW(result = set - k);
 }
 
 TEST(TSetCustom, CanSubtractNonExistingElement)
 {
-	
 	const int size = 4;
 	const int k = 3;
 	TSet set(size), result(size);
-	set.InsElem(0);
-	set.InsElem(k);
+	//set = {0, 2}
+	set.InsertElem(0);
+	set.InsertElem(2);
+	//result = {0, 2}
 	result = set - k;
-	//cout << result;
 	EXPECT_NE(1, result.IsMember(k));
 }
-
-//TEST(TSetCustom, CanDealWithMultipleOperators)
-//{
-//	const int size1 = 5, size2 = 7;
-//	TSet set1(size1), set2(size2), result(size1), expectedSet(size2);
-//	// set1 = {1, 2, 4}
-//	set1.InsElem(1);
-//	set1.InsElem(2);
-//	set1.InsElem(4);
-//	// set2 = {0, 1, 2, 4, 6}
-//	set2.InsElem(0);
-//	set2.InsElem(1);
-//	set2.InsElem(2);
-//	set2.InsElem(4);
-//	set2.InsElem(6);
-//	result = set1 * set2 * (~set1);
-//	// expectedSet = { }
-//	//expectedSet.InsElem(1);
-//	//expectedSet.InsElem(2);
-//	//expectedSet.InsElem(4);
-//	EXPECT_EQ(expectedSet, result);
-//}
 ```
+![](https://image.ibb.co/jj03yw/TSet_Custom.png "TSetCustom")
+_Результат прохождения собственных тестов класса `TSet`_
+
+### Результат работы `Решета Ератосфена`
+Программа отработала возложенные на нее функции корректно. Единственное изменение, внесенное в файл `SamplePrimeNumbers.cpp` - в консоль печатается по 25 простых чисел в каждой строке, вместо 10.
+![](https://image.ibb.co/fQwbJw/Eratosfen_TBit_Field.png "Eratosfen TBitField")
+_Результат работы `Решета Ератосфена` при использовании битовых полей `TBitField`_
+
+![](https://image.ibb.co/i01Adw/Eratosfen_TSet.png "Eratosfen TSet")
+_Результат работы `Решета Ератосфена` при использовании множеств `TSet`_
+
 ## Выводы
+Процесс реализации классов `TBitField` и `TSet` помог освоить основы работы с битовыми полями и с базовым тестированием с помощью библиотеки `Google Test`.
