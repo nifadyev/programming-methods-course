@@ -402,6 +402,7 @@ ostream& operator<<(ostream &ostr, const TSet &s) // вывод
 ## Тестирование
 ### Тестирование класса `TBitField`
 Функциональность созданных классов была протестирована с помощью библиотеки `Google Test`. К предоставленным тестам были добавлены 3 теста, проверяющие ход выполнения операций как в обычных, так и в недопустимых условиях.
+
 ![](https://image.ibb.co/nsVmJw/TBit_Field_Test.png "TBitFieldTest")
      _Результат прохождения предоставленных тестов класса `TBitField`_
     
@@ -438,11 +439,13 @@ TEST(TBitFieldCustom, CanCompareBitfieldsOfDifferentSizes)
 	EXPECT_EQ(1, bf == result);
 }
 ```
+
 ![](https://image.ibb.co/cAidWG/TBit_Field_Custom.png "TBitFieldCustom")
 _Результат прохождения собственных тестов класса `TBitField`_
 
 ### Тестирование класса `TSet`
 Класс `TSet` тестировался так же, как и класс `TBitField`: к предоставленым тестам были добавлены 3 собственных теста. 
+
 ![](https://image.ibb.co/hCBnQb/TSetTest.png "TSetTest")
 _Результат прохождения предоставленных тестов класса `TSet`_
 
@@ -488,11 +491,13 @@ TEST(TSetCustom, CanSubtractNonExistingElement)
 	EXPECT_NE(1, result.IsMember(k));
 }
 ```
+
 ![](https://image.ibb.co/jj03yw/TSet_Custom.png "TSetCustom")
 _Результат прохождения собственных тестов класса `TSet`_
 
 ### Результат работы `Решета Ератосфена`
 Программа отработала возложенные на нее функции корректно. Единственное изменение, внесенное в файл `SamplePrimeNumbers.cpp` - в консоль печатается по 25 простых чисел в каждой строке, вместо 10.
+
 ![](https://image.ibb.co/fQwbJw/Eratosfen_TBit_Field.png "Eratosfen TBitField")
 _Результат работы `Решета Ератосфена` при использовании битовых полей `TBitField`_
 
