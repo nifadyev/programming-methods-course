@@ -1,6 +1,6 @@
 // Множество - реализация через битовые поля
 
-#include "tSet.h"
+#include "tset.h"
 
 TSet::TSet(int mp) : BitField(mp)
 {
