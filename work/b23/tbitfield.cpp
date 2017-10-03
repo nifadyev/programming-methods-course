@@ -5,7 +5,7 @@
 //
 // Битовое поле
 
-#include "tBitField.h"
+#include "tbitfield.h"
 
 enum ERRORS {WRONG_LENGTH, WRONG_RANGE, LENGHTS_NOT_EQUAL};
 
