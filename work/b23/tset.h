@@ -3,7 +3,7 @@
 #ifndef __SET_H__
 #define __SET_H__
 
-#include "tBitField.h"
+#include "tbitfield.h"
 
 class TSet
 {
