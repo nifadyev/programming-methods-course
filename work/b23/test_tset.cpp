@@ -1,4 +1,4 @@
-#include "tSet.h"
+#include "tset.h"
 #include <gtest\gtest.h>
 
 TEST(TSet, CanGetMaxPower)
