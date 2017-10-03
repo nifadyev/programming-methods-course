@@ -1,4 +1,4 @@
-#include "tBitField.h"
+#include "tbitfield.h"
 #include <gtest\gtest.h>
 
 TEST(TBitField, CanCreateBitfieldWithPositiveLength)
