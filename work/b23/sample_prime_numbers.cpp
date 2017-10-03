@@ -12,7 +12,7 @@
 
 #ifndef USE_SET // Использовать класс TBitField
 
-#include "tBitField.h"
+#include "tbitfield.h"
 
 int main()
 {
