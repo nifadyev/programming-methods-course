@@ -29,7 +29,7 @@ int main()
 		if (s.GetBit(m)) // если m в s, удаление кратных
 			for (k = 2 * m; k <= n; k += m)
 				if (s.GetBit(k))
-					s.ClearBit(k);
+					s.ClrBit(k);
 	// оставшиеся в s элементы - простые числа
 	cout << endl << "Печать множества некратных чисел" << endl << s << endl;
 	cout << endl << "Печать простых чисел" << endl;
@@ -62,14 +62,14 @@ int main()
 	TSet s(n + 1);
 	// заполнение множества
 	for (m = 2; m <= n; m++)
-		s.InsertElem(m);
+		s.InsElem(m);
 	// проверка до sqrt(n) и удаление кратных
 	for (m = 2; m * m <= n; m++)
 		// если м в s, удаление кратных
 		if (s.IsMember(m))
 			for (k = 2 * m; k <= n; k += m)
 				if (s.IsMember(k))
-					s.DeleteElem(k);
+					s.DelElem(k);
 	// оставшиеся в s элементы - простые числа
 	cout << endl << "Печать множества некратных чисел" << endl << s << endl;
 	cout << endl << "Печать простых чисел" << endl;
