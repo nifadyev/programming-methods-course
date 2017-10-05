@@ -35,14 +35,14 @@ int TSet::IsMember(const int Elem) const // проверка элемента н
 	return BitField.GetBit(Elem);
 }
 
-void TSet::InsertElem(const int Elem) // включение элемента множества
+void TSet::InsElem(const int Elem) // включение элемента множества
 {
 	BitField.SetBit(Elem);
 }
 
-void TSet::DeleteElem(const int Elem) // исключение элемента множества
+void TSet::DelElem(const int Elem) // исключение элемента множества
 {
-	BitField.ClearBit(Elem);
+	BitField.ClrBit(Elem);
 }
 
 // теоретико-множественные операции
@@ -97,7 +97,7 @@ TSet TSet::operator+(const int Elem) // объединение с элемент
 TSet TSet::operator-(const int Elem) // разность с элементом
 {
 	TBitField temp(BitField);
-	temp.ClearBit(Elem);
+	temp.ClrBit(Elem);
 	return TSet(temp);
 }
 
@@ -118,7 +118,7 @@ istream &operator>>(istream &istr, TSet &s) // ввод
 	while (istr >> i)
 	{
 		if (!s.IsMember(i))
-			s.InsertElem(i);
+			s.InsElem(i);
 	}
 	return istr;
 }
