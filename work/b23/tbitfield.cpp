@@ -66,7 +66,7 @@ void TBitField::SetBit(const int n) // установить бит
 	pMem[GetMemIndex(n)] = pMem[GetMemIndex(n)] | GetMemMask(n);
 }
 
-void TBitField::ClearBit(const int n) // очистить бит
+void TBitField::ClrBit(const int n) // очистить бит
 {
 	if ((n < 0) || (n > BitLen))
 		throw WRONG_RANGE;
@@ -212,7 +212,7 @@ istream &operator>>(istream &istr, TBitField &bf) // ввод
 		}
 		else
 		{
-			bf.ClearBit(i);
+			bf.ClrBit(i);
 		}
 		bf.SetBit(i);
 		i++;
