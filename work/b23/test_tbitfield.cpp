@@ -37,7 +37,7 @@ TEST(TBitField, CanClearBit)
 	int bitIndex = 3;
 	bf.SetBit(bitIndex);
 	EXPECT_NE(0, bf.GetBit(bitIndex));
-	bf.ClearBit(bitIndex);
+	bf.ClrBit(bitIndex);
 	EXPECT_EQ(0, bf.GetBit(bitIndex));
 }
 
@@ -74,13 +74,13 @@ TEST(TBitField, ThrowsWhenGetBitWithTooLargeIndex)
 TEST(TBitField, ThrowsWhenClearBitWithNegativeIndex)
 {
 	TBitField bf(10);
-	ASSERT_ANY_THROW(bf.ClearBit(-3));
+	ASSERT_ANY_THROW(bf.ClrBit(-3));
 }
 
 TEST(TBitField, ThrowsWhenClearBitWithTooLargeIndex)
 {
 	TBitField bf(10);
-	ASSERT_ANY_THROW(bf.ClearBit(11));
+	ASSERT_ANY_THROW(bf.ClrBit(11));
 }
 
 TEST(TBitField, CanAssignBitfieldsOfEqualSize)
@@ -220,7 +220,7 @@ TEST(TBitField, CanInvertLargeBitfield)
 	negativeBf = ~bf;
 	for (int i = 0; i < size; i++)
 		expectedBf.SetBit(i);
-	expectedBf.ClearBit(35);
+	expectedBf.ClrBit(35);
 	EXPECT_EQ(expectedBf, negativeBf);
 }
 
@@ -241,7 +241,7 @@ TEST(TBitField, CanInvertManyRandomBitsBitfield)
 	for (int i = 0; i < size; i++)
 		expectedBf.SetBit(i);
 	for (unsigned int i = 0; i < bits.size(); i++)
-		expectedBf.ClearBit(bits[i]);
+		expectedBf.ClrBit(bits[i]);
 	EXPECT_EQ(expectedBf, negativeBf);
 }
 
