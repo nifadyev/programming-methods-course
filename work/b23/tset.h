@@ -18,8 +18,8 @@ public:
 
 	// доступ к битам
 	int GetMaxPower(void) const;     // максимальная мощность множества
-	void InsertElem(const int Elem);       // включить элемент в множество
-	void DeleteElem(const int Elem);       // удалить элемент из множества
+	void InsElem(const int Elem);       // включить элемент в множество
+	void DelElem(const int Elem);       // удалить элемент из множества
 	int IsMember(const int Elem) const; // проверить наличие элемента в множестве
 
 	// теоретико-множественные операции
