@@ -132,49 +132,95 @@ bool TVector<ValType>::operator!=(const TVector &v) const
 template <class ValType> // присваивание
 TVector<ValType>& TVector<ValType>::operator=(const TVector &v)
 {
-	// TODO:
+	Size = v.Size;
+	StartIndex = v.StartIndex;
+	pVector = new ValType[Size];
+	for (int i = 0; i < Size; i++) // StartIndex
+	{
+		if (i < StartIndex) // „истит мусор перед стартовым элементов
+		{
+			pVector[i] = 0;
+			continue;
+		}
+		pVector[i] = v.pVector[i];
+	}
 	return *this;
 } 
 
 template <class ValType> // прибавить скал€р
 TVector<ValType> TVector<ValType>::operator+(const ValType &val)
 {
-	// TODO:
+	for (int i = StartIndex; i < Size; i++)
+	{
+		pVector[i] += val;
+	}
 	return *this;
 } 
 
 template <class ValType> // вычесть скал€р
 TVector<ValType> TVector<ValType>::operator-(const ValType &val)
 {
-	// TODO:
+	for (int i = StartIndex; i < Size; i++)
+	{
+		pVector[i] -= val;
+	}
 	return *this;
 } 
 
 template <class ValType> // умножить на скал€р
 TVector<ValType> TVector<ValType>::operator*(const ValType &val)
 {
-	// TODO:
+	for (int i = StartIndex; i < Size; i++)
+	{
+		pVector[i] *= val;
+	}
 	return *this;
 } 
 
 template <class ValType> // сложение
 TVector<ValType> TVector<ValType>::operator+(const TVector<ValType> &v)
 {
-	// TODO:
-	return v;
+	if (Size != v.Size)
+	{
+		throw "Sizes are not equal";
+	}
+	TVector result(*this);
+	for (int i = StartIndex; i < Size; i++)
+	{
+		result.pVector[i] = pVector[i] + v.pVector[i];
+	}
+	return result;
 } 
 
 template <class ValType> // вычитание
 TVector<ValType> TVector<ValType>::operator-(const TVector<ValType> &v)
 {
-	// TODO:
+	if (Size != v.Size)
+	{
+		throw "Sizes are not equal";
+	}
+	TVector result(*this);
+	for (int i = StartIndex; i < Size; i++)
+	{
+		result.pVector[i] = pVector[i] - v.pVector[i];
+	}
+	return result;
 } 
 
 template <class ValType> // скал€рное произведение
 ValType TVector<ValType>::operator*(const TVector<ValType> &v)
 {
-	// TODO:
-	return (ValType)1;
+	int sum = 0;
+	if (Size != v.Size)
+	{
+		throw "Sizes are not equal";
+	}
+	TVector result(*this);
+	for (int i = StartIndex; i < Size; i++)
+	{
+		sum += pVector[i] * v.pVector[i];
+	}
+	return sum;
 } 
 
 
