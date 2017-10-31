@@ -327,8 +327,8 @@ TMatrix<ValType>& TMatrix<ValType>::operator=(const TMatrix<ValType> &mt)
 		if (this->Size != mt.Size)
 		{
 			this->Size = mt.Size;
-			delete[] pVector;
-			this->pVector = new TVector<ValType>[Size];
+			delete[] this->pVector;
+			this->pVector = new TVector<ValType>[this->Size];
 		}
 		this->StartIndex = mt.StartIndex;
 		for (int i = 0; i < this->Size; ++i)
