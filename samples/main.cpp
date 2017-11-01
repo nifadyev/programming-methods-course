@@ -6,7 +6,7 @@
 // Динамические структуры данных - тестирование стека
 
 #include <iostream>
-#include "tdatstack.h"
+#include "tstack.h"
 
 using namespace std;
 
