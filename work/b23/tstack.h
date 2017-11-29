@@ -1,7 +1,9 @@
+#include <iostream>
 #include "tdataroot.h"
 
 #define MemorySize 25
 #define StackSize 10
+using namespace std;
 
 class TStack : public TDataRoot
 {
