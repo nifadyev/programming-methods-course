@@ -18,7 +18,7 @@ protected:
 	}
 public:
 	TDataCom() : RetCode(DataOK) {}
-	virtual ~TDataCom() = 0 {}
+	virtual ~TDataCom() {}
 	int GetRetCode()
 	{
 		int temp = RetCode;

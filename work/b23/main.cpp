@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void main()
+int main()
 {
 	TStack st(35);
 	int temp;
@@ -24,4 +24,5 @@ void main()
 		temp = st.Get();
 		cout << "Взяли значение " << temp << " Код " << st.GetRetCode() << endl;
 	}
+	return 0;
 }
