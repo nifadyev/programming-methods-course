@@ -25,12 +25,61 @@ protected:
 	int DataCount;    // Количество элементов в СД
 	TMemType MemType; // Режим управления памятью
 
-	void SetMem(void *p, int Size);  // Задание памяти
+	void SetMem(void *p, int Size)  // Задание памяти
+	{
+		if (MemType == MEM_HOLDER)
+		{
+			delete[] pMem;
+		}
+
+		pMem = (TElem*)p;
+		MemSize = Size;
+		MemType = MEM_RENTER;
+		SetRetCode(DataOK);
+
+		if (pMem == nullptr)
+		{
+			SetRetCode(DataNoMem);
+		}
+	}
+
 public:
 	virtual ~TDataRoot();
-	TDataRoot(int Size = DefMemSize);
-	virtual bool IsEmpty(void) const;        // Контроль пустоты СД
-	virtual bool IsFull(void) const;         // Контроль переполнения СД
+	{
+		if (MemType == MEM_HOLDER)
+		{
+			delete[] pMem;
+		}
+		pMem = nullptr;
+	}
+
+	TDataRoot(int Size = DefMemSize)
+	{
+		MemSize = Size;
+		DataCount = 0;
+		SetRetCode(DataOK);
+		if (MemSize == 0)
+		{
+			pMem = nullptr;
+			SetRetCode(DataNoMem);
+			MemType = MEM_RENTER;
+		}
+		else
+		{
+			pMem = new TElem[MemSize]{};
+			MemType = MEM_HOLDER;
+		}
+	}
+	virtual bool IsEmpty(void) const     // Контроль пустоты СД
+	{
+		return DataCount == 0;
+	}
+
+	virtual bool IsFull(void) const         // Контроль переполнения СД
+	{
+		return DataCount == MemSize;
+	}
+
 	virtual void  Put(const TData &val) = 0; // Добавить значение
 	virtual TData Get(void) = 0;             // Извлечь значение
 
