@@ -41,18 +41,9 @@ protected:
 		{
 			SetRetCode(DataNoMem);
 		}
-	}
+	};
 
 public:
-	virtual ~TDataRoot();
-	{
-		if (MemType == MEM_HOLDER)
-		{
-			delete[] pMem;
-		}
-		pMem = nullptr;
-	}
-
 	TDataRoot(int Size = DefMemSize)
 	{
 		MemSize = Size;
@@ -69,16 +60,26 @@ public:
 			pMem = new TElem[MemSize]{};
 			MemType = MEM_HOLDER;
 		}
-	}
+	};
+	
+	virtual ~TDataRoot();
+	{
+		if (MemType == MEM_HOLDER)
+		{
+			delete[] pMem;
+		}
+		pMem = nullptr;
+	};
+	
 	virtual bool IsEmpty(void) const     // Контроль пустоты СД
 	{
 		return DataCount == 0;
-	}
+	};
 
 	virtual bool IsFull(void) const         // Контроль переполнения СД
 	{
 		return DataCount == MemSize;
-	}
+	};
 
 	virtual void  Put(const TData &val) = 0; // Добавить значение
 	virtual TData Get(void) = 0;             // Извлечь значение
