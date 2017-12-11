@@ -62,7 +62,7 @@ public:
 		}
 	};
 	
-	virtual ~TDataRoot();
+	virtual ~TDataRoot()
 	{
 		if (MemType == MEM_HOLDER)
 		{
