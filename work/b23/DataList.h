@@ -21,6 +21,8 @@ protected:
 
 	pTDataLink GetLink(pTDataValue pVal = nullptr /*NULL*/, pTDataLink pLink = nullptr /*NULL*/);
 	void DeleteLink(pTDataLink pLink);
+
+	void InsertIntoEmptyList(pTDataValue pVal);
 public:
 	TDataList();
 	~TDataList() { DeleteList(); }
@@ -38,7 +40,7 @@ public:
 
 	/*int*/void MoveNext(); // Сдвиг вправо текущего звена (=1 после применения MoveNext для последнего звена списка)
 
-	void Print(const TDataList& list);
+	void Print();
 
 	virtual void InsertBeforeFirst(pTDataValue pVal = nullptr);
 	virtual void InsertAfterLast(pTDataValue pVal = nullptr);
