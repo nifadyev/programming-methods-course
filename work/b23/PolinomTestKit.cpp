@@ -267,28 +267,75 @@ TEST(TMonom, CanCompareMonomsLessOrNot)
 TEST(TDataList, CanCreateList)
 {
 	TDataList list;
+
 	ASSERT_NO_THROW(TDataList list1);
 	EXPECT_EQ(list.GetCurrentPosition(), 0);
 	EXPECT_EQ(list.GetListLength(), 0);
-	EXPECT_EQ(list.GetDataValue(), nullptr);
-
-	//int pos = 2;
-	//list.SetCurrentPosition(pos);
-	//cout << endl << list.GetCurrentPosition() << endl;
+	EXPECT_EQ(list.GetDataValue(FIRST), nullptr);
+	EXPECT_EQ(list.GetDataValue(CURRENT), nullptr);
+	EXPECT_EQ(list.GetDataValue(LAST), nullptr);
+	EXPECT_TRUE(list.IsEmpty());
+	EXPECT_FALSE(list.IsListEnded());
 }
 
-//TEST(TDataList, CanGetDataValue)
-//{
-//
-//}
+TEST(TDataList, CanGetDataValue)
+{
+	TDataList list;
+
+	ASSERT_NO_THROW(list.GetDataValue());
+}
+
+TEST(TDataList, GetDataValueReturnsCorrectValues)
+{
+	TDataList list;
+	TMonom monom1(-7, 214), monom2(478, 6), monom3(124, 24);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+	TDataValue *pValue3 = monom3.GetCopy();
+
+	list.InsertBeforeFirst(pValue1);
+	list.InsertAfterLast(pValue2);
+	list.InsertBeforeCurrent(pValue3);
+
+	EXPECT_EQ(list.GetDataValue(FIRST), pValue1);
+	EXPECT_EQ(list.GetDataValue(CURRENT), pValue3);
+	EXPECT_EQ(list.GetDataValue(LAST), pValue2);
+}
+
+TEST(TDataList, GetDataValueReturnsNullptr)
+{
+	TDataList list;
+
+	EXPECT_EQ(list.GetDataValue(), nullptr);
+}
 
 
 TEST(TDataList, CanSetPosition)
 {
 	TDataList list;
+	TMonom monom1(-7, 214), monom2(478, 6);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+
+	list.InsertBeforeFirst(pValue1);
+	list.InsertAfterLast(pValue2);
+
+
+	ASSERT_NO_THROW(list.SetCurrentPosition(1));	
+}
+
+TEST(TDataList, ThrowWhenSetNegativePosition)
+{
+	TDataList list;
+
+	ASSERT_THROW(list.SetCurrentPosition(-1), range_error);
+}
+
+TEST(TDataList, ThrowWhenSetOutOfRangePosition)
+{
+	TDataList list;
 
 	ASSERT_THROW(list.SetCurrentPosition(10), logic_error);
-	ASSERT_THROW(list.SetCurrentPosition(-1), range_error);
 }
 
 TEST(TDataList, CanGetPosition)
@@ -302,18 +349,97 @@ TEST(TDataList, CanGetPosition)
 TEST(TDataList, CanReset)
 {
 	TDataList list;
+
+	ASSERT_NO_THROW(list.Reset());
+	EXPECT_EQ(list.GetCurrentPosition(), 0);
+}
+
+TEST(TDataList, ResetNotEmptyList)
+{
+	TDataList list;
+	TMonom monom1(437, 2), monom2(-27, 357);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+
+	list.InsertBeforeFirst(pValue1);
+	list.InsertAfterLast(pValue2);
+
 	list.Reset();
 
 	EXPECT_EQ(list.GetCurrentPosition(), 0);
-	//EXPECT_EQ(list.)
+	EXPECT_EQ(list.GetDataValue(FIRST), list.GetDataValue(CURRENT));
+}
 
+//TODO: Add Reset test for ended list
+
+TEST(TDataList, IsListEndedReturnsFalse)
+{
+	TDataList list;
+
+	EXPECT_FALSE(list.IsListEnded());
+}
+
+TEST(TDataList, IsListEndedReturnsTrue)
+{
+	TDataList list;
+	TMonom monom(4, 245);
+	TDataValue *pValue = monom.GetCopy();
+
+	list.InsertBeforeFirst(pValue);
+	list.MoveNext();
+
+	EXPECT_TRUE(list.IsListEnded());
 }
 
 TEST(TDataList, CanMoveNext)
 {
 	TDataList list;
+	TMonom monom(-57, 993);
+	TDataValue *pValue = monom.GetCopy();
+
+	list.InsertBeforeFirst(pValue);
+	ASSERT_NO_THROW(list.MoveNext());
+}
+
+TEST(TDataList, ThrowWhenPCurrentIsPStop)
+{
+	TDataList list;
+	TMonom monom(253, 1);
+	TDataValue *pValue = monom.GetCopy();
 
 	ASSERT_THROW(list.MoveNext(), logic_error);
+
+	list.InsertBeforeFirst(pValue);
+	list.MoveNext();
+
+	ASSERT_THROW(list.MoveNext(), logic_error);
+}
+
+TEST(TDataList, MoveNextToPStopIfPCurrentIsPLast)
+{
+	TDataList list;
+	TMonom monom(253, 1);
+	TDataValue *pValue = monom.GetCopy();
+
+	list.InsertBeforeFirst(pValue);
+	list.MoveNext();
+
+	EXPECT_EQ(list.GetCurrentPosition(), -1);
+	EXPECT_EQ(list.GetDataValue(), nullptr);
+}
+
+TEST(TDataList, CanPrint)
+{
+	TDataList list;
+	TMonom monom1(437, 2), monom2(-27, 357);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+
+	list.InsertBeforeFirst(pValue1);
+	list.InsertAfterLast(pValue2);
+
+	ASSERT_NO_THROW(list.Print());
+
 }
 
 TEST(TDataList, CanInsertBeforeFirst)
@@ -325,36 +451,268 @@ TEST(TDataList, CanInsertBeforeFirst)
 	ASSERT_NO_THROW(list.InsertBeforeFirst(monom.GetCopy()));
 }
 
-TEST(TDataList, CorrectrlyInsertFirstLink)
+TEST(TDataList, InsertBeforeFirstIntoEmptyList)
 {
 	TDataList list;
 	TMonom monom(3, 111);
 	TDataValue *pValue = monom.GetCopy();
 
-	//cout << *pValue << endl;
 	list.InsertBeforeFirst(pValue);
 
 	EXPECT_EQ(list.GetListLength(), 1);
 	EXPECT_EQ(list.GetDataValue(), pValue);
 	EXPECT_EQ(list.GetCurrentPosition(), 0);
+	EXPECT_FALSE(list.IsEmpty());
+	EXPECT_FALSE(list.IsListEnded());
 }
 
-TEST(TDataList, CorrectrlyInsertFirst)
+TEST(TDataList, InsertBeforeFirstInto1ElementList)
 {
 	TDataList list;
-	TMonom monom(3, 111), monom2(-22, 89);
-	TDataValue *pValue = monom.GetCopy();
+	TMonom monom1(3, 111), monom2(-22, 89);
+	TDataValue *pValue1 = monom1.GetCopy();
 	TDataValue *pValue2 = monom2.GetCopy();
 
 	//cout << *pValue << endl;
-	list.InsertBeforeFirst(pValue);
+	list.InsertBeforeFirst(pValue1);
 	list.InsertBeforeFirst(pValue2);
+
+	//cout << list.GetDataValue(LAST) << endl;
+	//cout << pValue << endl;
+	//cout << pValue2 << endl;
 
 	EXPECT_EQ(list.GetListLength(), 2);
 	EXPECT_EQ(list.GetDataValue(), pValue2);
 	EXPECT_EQ(list.GetDataValue(FIRST), pValue2);
-	EXPECT_EQ(list.GetDataValue(LAST), pValue2);
+	//TODO: Возможна утечка памяти
+	EXPECT_EQ(list.GetDataValue(LAST), pValue1);
 	EXPECT_EQ(list.GetCurrentPosition(), 0);
-	EXPECT_EQ(list.IsEmpty(), false);
+	EXPECT_FALSE(list.IsEmpty());
+}
+
+TEST(TDataList, InsertBeforeFirstIntoMultiElementsList)
+{
+	TDataList list;
+	TMonom monom1(-63, 11), monom2(-2, 89), monom3(11, 43);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+	TDataValue *pValue3 = monom3.GetCopy();
+
+	//cout << *pValue << endl;
+	list.InsertBeforeFirst(pValue1); // pLast
+	list.InsertBeforeFirst(pValue2);
+	list.InsertBeforeFirst(pValue3); // pFirst
+
+	//cout << list.GetDataValue(LAST) << endl;
+	//cout << pValue << endl;
+	//cout << pValue2 << endl;
+
+	EXPECT_EQ(list.GetListLength(), 3);
+	EXPECT_EQ(list.GetDataValue(), pValue3);
+	EXPECT_EQ(list.GetDataValue(FIRST), pValue3);
+	//TODO: Возможна утечка памяти
+	EXPECT_EQ(list.GetDataValue(LAST), pValue1);
+	EXPECT_EQ(list.GetCurrentPosition(), 0);
+	EXPECT_FALSE(list.IsEmpty());
+}
+
+TEST(TDataList, CanInsertAfterLast)
+{
+	TDataList list;
+	TMonom monom(-34, 831);
+
+	ASSERT_NO_THROW(list.InsertAfterLast());
+	ASSERT_NO_THROW(list.InsertAfterLast(monom.GetCopy()));
+}
+
+TEST(TDataList, InsertAfterLastIntoEmptyList)
+{
+	TDataList list;
+	TMonom monom(99, 1);
+	TDataValue *pValue = monom.GetCopy();
+
+	list.InsertAfterLast(pValue);
+
+	EXPECT_EQ(list.GetListLength(), 1);
+	EXPECT_EQ(list.GetDataValue(), pValue);
+	EXPECT_EQ(list.GetCurrentPosition(), 0);
+	EXPECT_FALSE(list.IsEmpty());
+	EXPECT_FALSE(list.IsListEnded());
+}
+
+TEST(TDataList, InsertAfterLastInto1ElementList)
+{
+	TDataList list;
+	TMonom monom1(99, 2), monom2(-31, 347);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+
+	list.InsertAfterLast(pValue1); // pFirst, pPrevious
+	list.InsertAfterLast(pValue2); // pLast, pCurrent
+
+	//cout << list.GetDataValue(LAST) << endl;
+	//cout << pValue << endl;
+	//cout << pValue2 << endl;
 	
+	EXPECT_EQ(list.GetListLength(), 2);
+	EXPECT_EQ(list.GetDataValue(), pValue2);
+	EXPECT_EQ(list.GetDataValue(FIRST), pValue1);
+	//TODO: Возможна утечка памяти
+	EXPECT_EQ(list.GetDataValue(LAST), pValue2);
+	EXPECT_EQ(list.GetCurrentPosition(), 1);
+	EXPECT_FALSE(list.IsEmpty());
+}
+
+TEST(TDataList, InsertAfterLastIntoMultiElementsList)
+{
+	TDataList list;
+	TMonom monom1(4, 8), monom2(-84, 689), monom3(251, 913);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+	TDataValue *pValue3 = monom3.GetCopy();
+
+	list.InsertAfterLast(pValue1); // pFirst
+	list.InsertAfterLast(pValue2);
+	list.InsertAfterLast(pValue3); // pLast
+
+	//cout << list.GetDataValue(LAST) << endl;
+	//cout << pValue << endl;
+	//cout << pValue2 << endl;
+
+	EXPECT_EQ(list.GetListLength(), 3);
+	EXPECT_EQ(list.GetDataValue(), pValue3);
+	EXPECT_EQ(list.GetDataValue(FIRST), pValue1);
+	//TODO: Возможна утечка памяти
+	EXPECT_EQ(list.GetDataValue(LAST), pValue3);
+	EXPECT_EQ(list.GetCurrentPosition(), 2);
+	EXPECT_FALSE(list.IsEmpty());
+}
+
+//TODO: Make tests with ended lists
+
+TEST(TDataList, CanInsertBeforeCurrent)
+{
+	TDataList list;
+	TMonom monom(123, 8);
+
+	ASSERT_NO_THROW(list.InsertBeforeCurrent());
+	ASSERT_NO_THROW(list.InsertBeforeCurrent(monom.GetCopy()));
+}
+
+TEST(TDataList, InsertBeforeCurrentIntoEmptyList)
+{
+	TDataList list;
+	TMonom monom(1, 341);
+	TDataValue *pValue = monom.GetCopy();
+
+	list.InsertBeforeCurrent(pValue);
+
+	EXPECT_EQ(list.GetListLength(), 1);
+	EXPECT_EQ(list.GetDataValue(), pValue);
+	EXPECT_EQ(list.GetCurrentPosition(), 0);
+	EXPECT_FALSE(list.IsEmpty());
+	EXPECT_FALSE(list.IsListEnded());
+}
+
+TEST(TDataList, InsertBeforeCurrentInto1ElementList)
+{
+	TDataList list;
+	TMonom monom1(7, 932), monom2(-315, 7);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+
+	list.InsertBeforeCurrent(pValue1); // 
+	list.InsertBeforeCurrent(pValue2); // 
+
+	//cout << list.GetDataValue(LAST) << endl;
+	//cout << pValue << endl;
+	//cout << pValue2 << endl;
+
+	EXPECT_EQ(list.GetListLength(), 2);
+	EXPECT_EQ(list.GetDataValue(), pValue2);
+	EXPECT_EQ(list.GetDataValue(FIRST), pValue2);
+	//TODO: Возможна утечка памяти
+	EXPECT_EQ(list.GetDataValue(LAST), pValue1);
+	EXPECT_EQ(list.GetCurrentPosition(), 0);
+	EXPECT_FALSE(list.IsEmpty());
+}
+
+TEST(TDataList, InsertBeforeCurrentIntoMultiElementsList)
+{
+	TDataList list;
+	TMonom monom1(-32, 443), monom2(357, 9), monom3(553, 998), monom4(12, 783);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+	TDataValue *pValue3 = monom3.GetCopy();
+	TDataValue *pValue4 = monom4.GetCopy();
+
+	list.InsertBeforeCurrent(pValue1); // 
+	list.InsertBeforeCurrent(pValue2);
+	list.InsertAfterLast(pValue3);
+	list.InsertBeforeCurrent(pValue4); // 
+
+	EXPECT_EQ(list.GetListLength(), 4);
+	EXPECT_EQ(list.GetDataValue(), pValue4);
+	EXPECT_EQ(list.GetDataValue(FIRST), pValue2);
+	//TODO: Возможна утечка памяти
+	EXPECT_EQ(list.GetDataValue(LAST), pValue3);
+	EXPECT_EQ(list.GetCurrentPosition(), 2);
+	EXPECT_FALSE(list.IsEmpty());
+}
+
+TEST(TDataList, CanDeleteFirst)
+{
+	TDataList list;
+	TMonom monom(-48, 82);
+	TDataValue *pValue = monom.GetCopy();
+
+	list.InsertBeforeFirst(pValue);
+
+	ASSERT_NO_THROW(list.DeleteFirst());
+}
+
+TEST(TDataList, ThrowWhenDeleleFirstFromEmptyList)
+{
+	TDataList list;
+
+	ASSERT_THROW(list.DeleteFirst(), logic_error);
+}
+
+TEST(TDataList, DeleteFirstIn1ElementList)
+{
+	TDataList list;
+	TMonom monom(-48, 82);
+	TDataValue *pValue = monom.GetCopy();
+
+	list.InsertBeforeFirst(pValue);
+
+	TDataValue *first = list.GetDataValue(FIRST);
+
+	ASSERT_NO_THROW(list.DeleteFirst());
+	EXPECT_TRUE(list.IsEmpty());
+	EXPECT_EQ(list.GetListLength(), 0);
+	EXPECT_EQ(list.GetCurrentPosition(), 0);
+	EXPECT_NE(first, list.GetDataValue(FIRST));
+}
+
+TEST(TDataList, DeleteFirstInMultiElementList)
+{
+	TDataList list;
+	TMonom monom1(-48, 82), monom2(467, 124), monom3(67, 9);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+	TDataValue *pValue3 = monom3.GetCopy();
+
+	list.InsertBeforeFirst(pValue1);
+	list.InsertAfterLast(pValue2);
+	list.InsertBeforeCurrent(pValue3);
+
+	TDataValue *first = list.GetDataValue(FIRST);
+
+	list.DeleteFirst();
+
+	EXPECT_FALSE(list.IsEmpty());
+	EXPECT_EQ(list.GetListLength(), 2);
+	EXPECT_EQ(list.GetCurrentPosition(), 0);
+	EXPECT_NE(first, list.GetDataValue());
 }
