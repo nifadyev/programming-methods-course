@@ -23,7 +23,7 @@ public:
 	void SetDataValue(const pTDataValue pVal) { pValue = pVal; }
 	pTDataValue GetDataValue() const { return pValue; }
 
-	pTDataLink GetNextDataLink() { return (pTDataLink)pNext == nullptr ? (pTDataLink)pNext : nullptr; }
+	pTDataLink GetNextDataLink() { return (pTDataLink)pNext; }
 
 	friend class TDataList;
 };
