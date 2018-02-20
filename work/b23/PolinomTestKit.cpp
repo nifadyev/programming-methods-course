@@ -57,14 +57,14 @@ TEST(TRootLink, CanInsertNextLink)
 
 TEST(TDataLink, CanCreateDataLink)
 {
-	ASSERT_NO_THROW(TDataLink dataLink);
+	ASSERT_NO_THROW(TDataLink dataLink1);
 
 	TMonom monom1(3, 121);
-	ASSERT_NO_THROW(TDataLink dataLink(monom1.GetCopy()));
+	ASSERT_NO_THROW(TDataLink dataLink1(monom1.GetCopy()));
 
 	TMonom monom2(7, 398);
-	TDataLink *dataLink1 = new TDataLink();
-	ASSERT_NO_THROW(TDataLink dataLink(monom2.GetCopy(), dataLink1));
+	TDataLink *dataLink2 = new TDataLink();
+	ASSERT_NO_THROW(TDataLink dataLink(monom2.GetCopy(), dataLink2));
 }
 
 TEST(TDataLink, CanSetDataValue)
@@ -82,13 +82,13 @@ TEST(TDataLink, CanGetDataValue)
 	ASSERT_NO_THROW(dataLink.SetDataValue(monom.GetCopy()));
 	
 	//------------Подсказка по работе с указателями----------//
-	int v = 23;
-	int *p, *pp;
-	p = &v;
-	pp = p;
+	//int v = 23;
+	//int *p, *pp;
+	//p = &v;
+	//pp = p;
 
-	cout << endl <<"Adress: " << p << " value: " << *p << endl;
-	cout << endl << "Adress: " << pp << " value: " << *pp << endl;
+	//cout << endl <<"Adress: " << p << " value: " << *p << endl;
+	//cout << endl << "Adress: " << pp << " value: " << *pp << endl;
 	//-------------------------------------------------------//
 
 	// monom.GetCopy() создает новый указатель => адреса
@@ -96,8 +96,7 @@ TEST(TDataLink, CanGetDataValue)
 
 	TDataValue *pValue = monom.GetCopy();
 	dataLink.SetDataValue(pValue);
-	//cout << pValue << endl;
-	//cout << dataLink.GetDataValue() << endl;
+
 	EXPECT_EQ(dataLink.GetDataValue(), pValue);
 
 	//Невозможно сравнить адреса указателей, exception 0xc00000fd
@@ -108,10 +107,10 @@ TEST(TDataLink, CanGetNextDataLink)
 {
 	TMonom *monom = new TMonom(3, 456);
 	TDataLink *dataLink1 = new TDataLink();
-	TDataLink *dataLink = new TDataLink(monom->GetCopy(), dataLink1);
+	TDataLink *dataLink2 = new TDataLink(monom->GetCopy(), dataLink1);
 
-	ASSERT_NO_THROW(dataLink->GetNextDataLink());
-	EXPECT_EQ(dataLink->GetNextDataLink(), nullptr);
+	ASSERT_NO_THROW(dataLink2->GetNextDataLink());
+	EXPECT_EQ(dataLink2->GetNextDataLink(), dataLink1);
 }
 
 /*-----------------------TESTING TMonom-----------------------*/
@@ -223,7 +222,6 @@ TEST(TMonom, CanAssignMonom)
 	monom1 = monom2;
 
 	EXPECT_EQ(monom1 == monom2, 1);
-
 	EXPECT_EQ(monom2 == monom2, 1);
 }
 
@@ -234,9 +232,7 @@ TEST(TMonom, CanCompareMonomsEqualOrNot)
 	TMonom monom3(23, 780);
 
 	ASSERT_NO_THROW(monom1 == monom2);
-
 	EXPECT_EQ(monom1 == monom2, 0);
-
 	EXPECT_EQ(monom1 == monom3, 1);
 }
 
@@ -249,15 +245,10 @@ TEST(TMonom, CanCompareMonomsLessOrNot)
 	TMonom monom5(77, 7);
 
 	ASSERT_NO_THROW(monom1 < monom2);
-
 	EXPECT_EQ(monom1 < monom2, 1);
-
 	EXPECT_EQ(monom3 < monom1, 0);
-
 	EXPECT_EQ(monom1 < monom1, 0);
-
 	EXPECT_EQ(monom2 < monom4, 0);
-
 	EXPECT_EQ(monom1 < monom5, 1);
 }
 
@@ -319,7 +310,6 @@ TEST(TDataList, CanSetPosition)
 
 	list.InsertBeforeFirst(pValue1);
 	list.InsertAfterLast(pValue2);
-
 
 	ASSERT_NO_THROW(list.SetCurrentPosition(1));	
 }
@@ -398,6 +388,7 @@ TEST(TDataList, CanMoveNext)
 	TDataValue *pValue = monom.GetCopy();
 
 	list.InsertBeforeFirst(pValue);
+
 	ASSERT_NO_THROW(list.MoveNext());
 }
 
@@ -439,7 +430,6 @@ TEST(TDataList, CanPrint)
 	list.InsertAfterLast(pValue2);
 
 	ASSERT_NO_THROW(list.Print());
-
 }
 
 TEST(TDataList, CanInsertBeforeFirst)
@@ -473,13 +463,8 @@ TEST(TDataList, InsertBeforeFirstInto1ElementList)
 	TDataValue *pValue1 = monom1.GetCopy();
 	TDataValue *pValue2 = monom2.GetCopy();
 
-	//cout << *pValue << endl;
 	list.InsertBeforeFirst(pValue1);
 	list.InsertBeforeFirst(pValue2);
-
-	//cout << list.GetDataValue(LAST) << endl;
-	//cout << pValue << endl;
-	//cout << pValue2 << endl;
 
 	EXPECT_EQ(list.GetListLength(), 2);
 	EXPECT_EQ(list.GetDataValue(), pValue2);
@@ -498,14 +483,9 @@ TEST(TDataList, InsertBeforeFirstIntoMultiElementsList)
 	TDataValue *pValue2 = monom2.GetCopy();
 	TDataValue *pValue3 = monom3.GetCopy();
 
-	//cout << *pValue << endl;
 	list.InsertBeforeFirst(pValue1); // pLast
 	list.InsertBeforeFirst(pValue2);
 	list.InsertBeforeFirst(pValue3); // pFirst
-
-	//cout << list.GetDataValue(LAST) << endl;
-	//cout << pValue << endl;
-	//cout << pValue2 << endl;
 
 	EXPECT_EQ(list.GetListLength(), 3);
 	EXPECT_EQ(list.GetDataValue(), pValue3);
@@ -549,10 +529,6 @@ TEST(TDataList, InsertAfterLastInto1ElementList)
 
 	list.InsertAfterLast(pValue1); // pFirst, pPrevious
 	list.InsertAfterLast(pValue2); // pLast, pCurrent
-
-	//cout << list.GetDataValue(LAST) << endl;
-	//cout << pValue << endl;
-	//cout << pValue2 << endl;
 	
 	EXPECT_EQ(list.GetListLength(), 2);
 	EXPECT_EQ(list.GetDataValue(), pValue2);
@@ -574,10 +550,6 @@ TEST(TDataList, InsertAfterLastIntoMultiElementsList)
 	list.InsertAfterLast(pValue1); // pFirst
 	list.InsertAfterLast(pValue2);
 	list.InsertAfterLast(pValue3); // pLast
-
-	//cout << list.GetDataValue(LAST) << endl;
-	//cout << pValue << endl;
-	//cout << pValue2 << endl;
 
 	EXPECT_EQ(list.GetListLength(), 3);
 	EXPECT_EQ(list.GetDataValue(), pValue3);
@@ -623,10 +595,6 @@ TEST(TDataList, InsertBeforeCurrentInto1ElementList)
 
 	list.InsertBeforeCurrent(pValue1); // 
 	list.InsertBeforeCurrent(pValue2); // 
-
-	//cout << list.GetDataValue(LAST) << endl;
-	//cout << pValue << endl;
-	//cout << pValue2 << endl;
 
 	EXPECT_EQ(list.GetListLength(), 2);
 	EXPECT_EQ(list.GetDataValue(), pValue2);
