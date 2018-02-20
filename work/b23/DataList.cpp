@@ -130,7 +130,7 @@ bool TDataList::IsListEnded() const
 
 	currentPosition++;
 	//TODO: попробовать без tempNXT(через temp->GetNextDataLink())
-	TDataLink *tempNxt = pCurrentLink->GetNextDataLink();
+	//TDataLink *tempNxt = pCurrentLink->GetNextDataLink();
 	TDataLink *temp = pCurrentLink;
 	delete pCurrentLink;
 	pPreviousLink = temp;
@@ -266,67 +266,37 @@ void TDataList::DeleteFirst()
 		throw logic_error("Cannot delete first element! List is empty");
 	}
 
-	/*
-	TDataLink *temp = pCurrentLink;
-	delete pCurrentLink;
-	pPreviousLink = temp;
-	pCurrentLink = temp->GetNextDataLink();
-	*/
-
-	//Reset();
-	//currentPosition = 0;
-	//pCurrentLink = pFirst;
-	//pCurrentLink->SetNextLink(pFirst->GetNextLink());
-	//pPreviousLink = pStop;
-	//pPreviousLink->SetNextLink(pFirst->GetNextLink());
-
-	Reset(); /*MoveNext();*/
-
-	//cout << pFirst << endl;
-	//cout << pCurrentLink << endl;
-	//cout << pPreviousLink << endl;
-	//cout << pLast << endl;
-	//cout << pStop << endl;
-
-	//TODO: temp назначается NULL
-	
-	//TDataLink *temp = new TDataLink(pFirst->GetDataValue(), pFirst->GetNextLink());
-	TDataLink *temp = pFirst->GetNextDataLink();
-	//TDataLink *tempNext = new TDataLink(temp->GetDataValue(), temp->GetNextLink());
-	//temp->SetNextLink(pFirst->GetNextLink());
-	//TRootLink *temp = pFirst->GetNextLink();
-	DeleteLink(pFirst);
-
-	//cout << endl << temp << endl <<  pFirst << endl;
-	//cout << pCurrentLink << endl;
-	//cout << pPreviousLink << endl;
-	//cout << pLast << endl;
-	//cout << pStop << endl;
-
-	//TODO: pFirst is not initialising
-
-	//pFirst = new TDataLink(nullptr, temp);
-	pFirst = temp;/*->GetNextDataLink()*/;
-	pCurrentLink = pFirst/*= temp*/;
-	//pPreviousLink->SetNextLink(pCurrentLink);
-	//pStop->SetNextLink(pFirst);
-
-	//cout << endl << temp << endl << pFirst << endl;
-	//cout << pCurrentLink << endl;
-	//cout << pPreviousLink << endl;
-	//cout << pLast << endl;
-	//cout << pStop << endl;
-
-	//pStop->SetNextLink(temp->GetNextLink());
-	//pCurrentLink = temp->GetNextDataLink();
-
-	currentPosition = 0; /*SetCurrentPosition(0);*/
+	TDataLink *temp = pFirst;
+	//GetNextDataLink() Все ломал (pFirst становится NULL)
+	pFirst = pFirst->GetNextDataLink();
+	DeleteLink(temp);
 	listLength--;
-	
+
+	if (IsEmpty()) {
+		pLast = pStop;
+		Reset();
+	}
+	else if (currentPosition == 0)
+		pCurrentLink = pFirst;
+	//else if (currentPosition == 1)
+	//	pCurrentLink = pStop;
+	if (currentPosition)
+		currentPosition--;
 }
 
 void TDataList::DeleteCurrent()
 {
+	if (IsEmpty())
+	{
+		throw logic_error("Cannot delete current element! List is empty");
+	}
+
+	if (pFirst == pLast /*listLength == 1*/)
+	{
+		DeleteFirst();
+	}
+
+
 	pCurrentLink = pCurrentLink->GetNextDataLink();
 	pPreviousLink->SetNextLink(pCurrentLink);
 
