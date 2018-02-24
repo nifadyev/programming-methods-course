@@ -13,6 +13,8 @@
 #include <iostream>
 using namespace std;
 
+
+
 /*-----------------------TESTING TRootLink-----------------------*/
 TEST(TRootLink, CanCreateRootLink)
 {
@@ -406,18 +408,18 @@ TEST(TDataList, ThrowWhenPCurrentIsPStop)
 	ASSERT_THROW(list.MoveNext(), logic_error);
 }
 
-TEST(TDataList, MoveNextToPStopIfPCurrentIsPLast)
-{
-	TDataList list;
-	TMonom monom(253, 1);
-	TDataValue *pValue = monom.GetCopy();
-
-	list.InsertBeforeFirst(pValue);
-	list.MoveNext();
-
-	EXPECT_EQ(list.GetCurrentPosition(), -1);
-	EXPECT_EQ(list.GetDataValue(), nullptr);
-}
+//TEST(TDataList, MoveNextToPStopIfPCurrentIsPLast)
+//{
+//	TDataList list;
+//	TMonom monom(253, 1);
+//	TDataValue *pValue = monom.GetCopy();
+//
+//	list.InsertBeforeFirst(pValue);
+//	list.MoveNext();
+//
+//	EXPECT_EQ(list.GetCurrentPosition(), -1);
+//	EXPECT_EQ(list.GetDataValue(), nullptr);
+//}
 
 TEST(TDataList, CanPrint)
 {
@@ -683,4 +685,101 @@ TEST(TDataList, DeleteFirstInMultiElementList)
 	EXPECT_EQ(list.GetListLength(), 2);
 	EXPECT_EQ(list.GetCurrentPosition(), 0);
 	EXPECT_NE(first, list.GetDataValue());
+}
+
+TEST(TDataList, CanDeleteCurrentLink)
+{
+	TDataList list;
+	TMonom monom(-432, 3);
+	TDataValue *pValue = monom.GetCopy();
+
+	list.InsertBeforeFirst(pValue);
+
+	ASSERT_NO_THROW(list.DeleteCurrent());
+}
+
+TEST(TDataList, ThrowWhenDeleteCurrentFromEmptyList)
+{
+	TDataList list;
+
+	ASSERT_THROW(list.DeleteCurrent(), logic_error);
+}
+
+TEST(TDataList, DeleteCurrentIn1ElementList)
+{
+	TDataList list;
+	TMonom monom(89, 245);
+	TDataValue *pValue = monom.GetCopy();
+
+	list.InsertBeforeFirst(pValue);
+
+	TDataValue *current = list.GetDataValue(CURRENT);
+
+	ASSERT_NO_THROW(list.DeleteCurrent());
+	EXPECT_TRUE(list.IsEmpty());
+	EXPECT_EQ(list.GetListLength(), 0);
+	EXPECT_EQ(list.GetCurrentPosition(), 0);
+	EXPECT_NE(current, list.GetDataValue(CURRENT));
+}
+
+TEST(TDataList, DeleteCurrentInMultiElementList)
+{
+	TDataList list;
+	TMonom monom1(-42, 541), monom2(312, 124), monom3(4, 2), monom4(-21, 435);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+	TDataValue *pValue3 = monom3.GetCopy();
+	TDataValue *pValue4 = monom4.GetCopy();
+
+	list.InsertBeforeCurrent(pValue1);
+	list.InsertBeforeFirst(pValue2);
+	list.InsertAfterLast(pValue3);
+	list.InsertBeforeCurrent(pValue4);
+
+	TDataValue *current = list.GetDataValue(CURRENT);
+	list.DeleteCurrent();
+
+	EXPECT_FALSE(list.IsEmpty());
+	EXPECT_EQ(list.GetListLength(), 3);
+	EXPECT_EQ(list.GetCurrentPosition(), 2);
+	EXPECT_NE(current, list.GetDataValue(CURRENT));
+}
+
+TEST(TDataList, CanDeleteList)
+{
+	TDataList list;
+	TMonom monom1(-42, 541), monom2(312, 124), monom3(4, 2), monom4(-21, 435);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+	TDataValue *pValue3 = monom3.GetCopy();
+	TDataValue *pValue4 = monom4.GetCopy();
+
+	list.InsertBeforeCurrent(pValue1);
+	list.InsertBeforeFirst(pValue2);
+	list.InsertAfterLast(pValue3);
+	list.InsertBeforeCurrent(pValue4);
+
+	ASSERT_NO_THROW(list.DeleteList());
+}
+
+TEST(TDataList, DeleteListResetEverything)
+{
+	TDataList list;
+	TMonom monom1(-42, 541), monom2(312, 124), monom3(4, 2), monom4(-21, 435);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+	TDataValue *pValue3 = monom3.GetCopy();
+	TDataValue *pValue4 = monom4.GetCopy();
+
+	list.InsertBeforeCurrent(pValue1);
+	list.InsertBeforeFirst(pValue2);
+	list.InsertAfterLast(pValue3);
+	list.InsertBeforeCurrent(pValue4);
+
+	list.DeleteList();
+
+	EXPECT_EQ(list.GetListLength(), 0);
+	EXPECT_EQ(list.IsListEnded(), true);
+	EXPECT_EQ(list.IsEmpty(), true);
+	EXPECT_EQ(list.GetCurrentPosition(), 0);
 }
