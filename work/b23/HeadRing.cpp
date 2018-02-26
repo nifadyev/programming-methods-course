@@ -5,41 +5,43 @@
 
 THeadRing::THeadRing() : TDataList()
 {
+	//InsertAfterLast();
+	//listLength++; // Уже все ломает. Каким-то образом чинит вылет в деструкторе 
 	pHead = nullptr;
+	pStop = pHead = pFirst;
+	//Reset();
+	//pFirst->SetNextLink(pFirst);
 }
 
 THeadRing::~THeadRing()
 {
 	DeleteList();
+	if (pHead != nullptr)
+	{
+		DeleteLink(pHead);
+	}	
+	//pHead = nullptr;
 }
 
 void THeadRing::InsertBeforeFirst(pTDataValue pVal)
 {
-	if (IsListEnded())
-	{
-		throw "Cannot insert before first! List is ended";
-	}
-
 	//TODO: адаптировать для кольцевой очереди
-	if (IsEmpty())
-	{
-		InsertIntoEmptyList(pVal);
-		return;
-	}
-
-	TDataLink *temp = pFirst;
-	//temp->SetNextLink(pFirst->GetNextLink());
-	pFirst = new TDataLink(pVal);
-	pFirst->SetNextLink(temp);
-	pCurrentLink = pFirst;
-	//pPreviousLink = pStop;
-
-	if (temp->GetNextLink() == nullptr)
-	{
-		pLast = temp;
-	}
+	TDataList::InsertBeforeFirst(pVal);
+	//if (listLength == 1)
+	//{
+		//pHead = pFirst;
+	//}
+	//if (listLength > 1)
+	//{
+	//	pHead->SetNextLink(pFirst);
+	//}
 }
 
 void THeadRing::DeleteFirst()
 {
+	TDataList::DeleteFirst();
+	if (pHead != nullptr)
+	{
+		pHead->SetNextLink(pFirst);
+	}
 }
