@@ -789,17 +789,150 @@ TEST(TDataList, DeleteListResetEverything)
 /*-----------------------TESTING THeadRing-----------------------*/
 
 
-TEST(THeadRing, CanCreateHeadRing)
+TEST(THeadRing, CanCreateHeadRingList)
 {
 	ASSERT_NO_THROW(THeadRing ring);
+	
+	ASSERT_NO_THROW(THeadRing ringList1);
+	THeadRing ringList;
+	EXPECT_EQ(ringList.GetCurrentPosition(), 0);
+	EXPECT_EQ(ringList.GetListLength(), 0);
+	EXPECT_EQ(ringList.GetDataValue(FIRST), nullptr);
+	EXPECT_EQ(ringList.GetDataValue(CURRENT), nullptr);
+	EXPECT_EQ(ringList.GetDataValue(LAST), nullptr);
+	EXPECT_TRUE(ringList.IsEmpty());
+	EXPECT_FALSE(ringList.IsListEnded());
+}
 
-	THeadRing ring;
-	//ASSERT_NO_THROW(TDataList list1);
-	EXPECT_EQ(ring.GetCurrentPosition(), 0);
-	EXPECT_EQ(ring.GetListLength(), 0);
-	EXPECT_EQ(ring.GetDataValue(FIRST), nullptr);
-	EXPECT_EQ(ring.GetDataValue(CURRENT), nullptr);
-	EXPECT_EQ(ring.GetDataValue(LAST), nullptr);
-	EXPECT_TRUE(ring.IsEmpty());
-	EXPECT_FALSE(ring.IsListEnded());
+TEST(THeadRing, CanInsertIntoHeadRingList)
+{
+	THeadRing ringList;
+	TMonom monom(-32, 182);
+	TDataValue *pValue = monom.GetCopy();
+
+	ASSERT_NO_THROW(ringList.InsertBeforeFirst(pValue));
+}
+
+TEST(THeadRing, InsertIntoEmptyHeadRingList)
+{
+	THeadRing ringList;
+	TMonom monom(999, 3);
+	TDataValue *pValue = monom.GetCopy();
+
+	ringList.InsertBeforeFirst(pValue);
+
+	EXPECT_EQ(ringList.GetCurrentPosition(), 0);
+	EXPECT_EQ(ringList.GetListLength(), 1);
+	EXPECT_EQ(ringList.GetDataValue(FIRST), pValue);
+	EXPECT_EQ(ringList.GetDataValue(CURRENT), pValue);
+	EXPECT_EQ(ringList.GetDataValue(LAST), pValue);
+	EXPECT_FALSE(ringList.IsEmpty());
+	EXPECT_FALSE(ringList.IsListEnded());
+}
+
+TEST(THeadRing, InsertInto1ElementHeadRingList)
+{
+	THeadRing ringList;
+	TMonom monom1(-8, 67), monom2(3, 997);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+
+	ringList.InsertBeforeFirst(pValue1);
+	ringList.InsertBeforeFirst(pValue2);
+
+	EXPECT_EQ(ringList.GetCurrentPosition(), 0);
+	EXPECT_EQ(ringList.GetListLength(), 2);
+	EXPECT_EQ(ringList.GetDataValue(FIRST), pValue2);
+	EXPECT_EQ(ringList.GetDataValue(CURRENT), pValue2);
+	EXPECT_EQ(ringList.GetDataValue(LAST), pValue1);
+	EXPECT_FALSE(ringList.IsEmpty());
+	EXPECT_FALSE(ringList.IsListEnded());
+}
+
+TEST(THeadRing, InsertIntoMultiElementHeadRingList)
+{
+	THeadRing ringList;
+	TMonom monom1(12, 2), monom2(84, 770), monom3(1, 82), monom4(-921, 912);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+	TDataValue *pValue3 = monom3.GetCopy();
+	TDataValue *pValue4 = monom4.GetCopy();
+
+	ringList.InsertBeforeFirst(pValue1);
+	ringList.InsertAfterLast(pValue2);
+	ringList.InsertBeforeCurrent(pValue3);
+	ringList.InsertBeforeFirst(pValue4);
+
+	EXPECT_EQ(ringList.GetCurrentPosition(), 0);
+	EXPECT_EQ(ringList.GetListLength(), 4);
+	EXPECT_EQ(ringList.GetDataValue(FIRST), pValue4);
+	EXPECT_EQ(ringList.GetDataValue(CURRENT), pValue4);
+	EXPECT_EQ(ringList.GetDataValue(LAST), pValue2);
+	EXPECT_FALSE(ringList.IsEmpty());
+	EXPECT_FALSE(ringList.IsListEnded());
+}
+
+TEST(THeadRing, CanDeleteHeadRingList)
+{
+	THeadRing ringList;
+	TMonom monom(2, 902);
+	TDataValue *pValue = monom.GetCopy();
+
+	ringList.InsertBeforeFirst(pValue);
+
+	ASSERT_NO_THROW(ringList.DeleteFirst());
+}
+
+TEST(THeadRing, DeleteFrom1ElementHeadRingList)
+{
+	THeadRing ringList;
+	TMonom monom(0, 1);
+	TDataValue *pValue = monom.GetCopy();
+
+	ringList.InsertBeforeFirst(pValue);
+
+	ringList.DeleteFirst();
+
+	EXPECT_EQ(ringList.GetCurrentPosition(), 0);
+	EXPECT_EQ(ringList.GetListLength(), 0);
+	EXPECT_EQ(ringList.GetDataValue(FIRST), nullptr);
+	EXPECT_EQ(ringList.GetDataValue(CURRENT), nullptr);
+	EXPECT_EQ(ringList.GetDataValue(LAST), nullptr);
+	EXPECT_TRUE(ringList.IsEmpty());
+	EXPECT_FALSE(ringList.IsListEnded());
+}
+
+TEST(THeadRing, DeleteFromMultiElementHeadRingList)
+{
+	THeadRing ringList;
+	TMonom monom1(363, 921), monom2(-235, 7), monom3(1, 2), monom4(86, 4);
+	TDataValue *pValue1 = monom1.GetCopy();
+	TDataValue *pValue2 = monom2.GetCopy();
+	TDataValue *pValue3 = monom3.GetCopy();
+	TDataValue *pValue4 = monom4.GetCopy();
+
+	ringList.InsertBeforeFirst(pValue1);
+	ringList.InsertAfterLast(pValue2);
+	ringList.InsertBeforeCurrent(pValue3);
+	ringList.InsertBeforeFirst(pValue4);
+
+	ringList.DeleteFirst();
+
+	EXPECT_EQ(ringList.GetCurrentPosition(), 0);
+	EXPECT_EQ(ringList.GetListLength(), 3);
+	EXPECT_EQ(ringList.GetDataValue(FIRST), pValue1);
+	EXPECT_EQ(ringList.GetDataValue(CURRENT), pValue1);
+	EXPECT_EQ(ringList.GetDataValue(LAST), pValue2);
+	EXPECT_FALSE(ringList.IsEmpty());
+	EXPECT_FALSE(ringList.IsListEnded());
+
+	ringList.DeleteFirst();
+
+	EXPECT_EQ(ringList.GetCurrentPosition(), 0);
+	EXPECT_EQ(ringList.GetListLength(), 2);
+	EXPECT_EQ(ringList.GetDataValue(FIRST), pValue3);
+	EXPECT_EQ(ringList.GetDataValue(CURRENT), pValue3);
+	EXPECT_EQ(ringList.GetDataValue(LAST), pValue2);
+	EXPECT_FALSE(ringList.IsEmpty());
+	EXPECT_FALSE(ringList.IsListEnded());
 }
