@@ -2,6 +2,9 @@
  //PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include <gtest/gtest.h>
+#include <iostream>
+#include <ctime>
+
 #include "RootLink.h"
 #include "DataLink.h"
 #include "Monom.h"
@@ -10,9 +13,9 @@
 #include "HeadRing.h"
 #include "Polinom.h"
 
-#include <iostream>
-using namespace std;
 
+using namespace std;
+//srand(time(0));
 
 
 /*-----------------------TESTING TRootLink-----------------------*/
@@ -132,7 +135,7 @@ TEST(TMonom, CanCreateMonom)
 
 TEST(TMonom, ThrowWhenCreateMonomWithNegativeIndex)
 {
-	ASSERT_ANY_THROW(TMonom monom(3, -1));
+	ASSERT_ANY_THROW(TMonom monom(3, -461));
 
 	ASSERT_ANY_THROW(TMonom monom(3, -16));
 
@@ -935,4 +938,56 @@ TEST(THeadRing, DeleteFromMultiElementHeadRingList)
 	EXPECT_EQ(ringList.GetDataValue(LAST), pValue2);
 	EXPECT_FALSE(ringList.IsEmpty());
 	EXPECT_FALSE(ringList.IsListEnded());
+}
+
+
+/*-----------------------TESTING THeadRing-----------------------*/
+
+
+TEST(TPolinom, CanCreatePolinom)
+{
+	ASSERT_NO_THROW(TPolinom polinom());
+
+	srand(time(0));
+	int monoms[10][2];
+	for (int i = 0; i < 10; i++)
+	{
+		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][1] = 1 + rand() % 1000;
+	}
+
+	TPolinom polinom(monoms, 10);
+
+	EXPECT_EQ(polinom.GetCurrentPosition(), 9);
+	EXPECT_EQ(polinom.GetListLength(), 10);
+	EXPECT_FALSE(polinom.IsEmpty());
+	EXPECT_FALSE(polinom.IsListEnded());
+}
+
+TEST(TPolinom, ThrowWhenMonomsNumberIsNegative)
+{
+	ASSERT_THROW(TPolinom polinom(nullptr, -11), invalid_argument);
+}
+
+TEST(TPolinom, CanCopyEmptyPolinom)
+{
+	TPolinom copiedPolinom;
+
+	ASSERT_NO_THROW(TPolinom emptyPolinom(copiedPolinom));
+}
+
+TEST(TPolinom, CanCopyPolinom)
+{
+	//srand(time(0));
+	int monoms[10][2];
+	for (int i = 0; i < 10; i++)
+	{
+		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][1] = 1 + rand() % 1000;
+	}
+
+	TPolinom polinom(monoms, 10);
+
+	ASSERT_NO_THROW(TPolinom copiedPolinom(polinom));
+
 }
