@@ -946,7 +946,7 @@ TEST(THeadRing, DeleteFromMultiElementHeadRingList)
 
 TEST(TPolinom, CanCreatePolinom)
 {
-	ASSERT_NO_THROW(TPolinom polinom());
+	ASSERT_NO_THROW(TPolinom polinom);
 
 	srand(time(0));
 	int monoms[10][2];
@@ -958,7 +958,7 @@ TEST(TPolinom, CanCreatePolinom)
 
 	TPolinom polinom(monoms, 10);
 
-	EXPECT_EQ(polinom.GetCurrentPosition(), 9);
+	EXPECT_EQ(polinom.GetCurrentPosition(), 0);
 	EXPECT_EQ(polinom.GetListLength(), 10);
 	EXPECT_FALSE(polinom.IsEmpty());
 	EXPECT_FALSE(polinom.IsListEnded());
@@ -987,7 +987,157 @@ TEST(TPolinom, CanCopyPolinom)
 	}
 
 	TPolinom polinom(monoms, 10);
+	TPolinom copiedPolinom(polinom);
 
-	ASSERT_NO_THROW(TPolinom copiedPolinom(polinom));
+	EXPECT_EQ(polinom.GetDataValue(FIRST), copiedPolinom.GetDataValue(FIRST));
+	EXPECT_EQ(polinom.GetDataValue(LAST), copiedPolinom.GetDataValue(LAST));
 
+	EXPECT_EQ(copiedPolinom.GetCurrentPosition(), 9);
+	EXPECT_EQ(copiedPolinom.GetListLength(), 10);
+	EXPECT_FALSE(copiedPolinom.IsEmpty());
+	EXPECT_FALSE(copiedPolinom.IsListEnded());
+
+	EXPECT_EQ(polinom.GetCurrentPosition(), 0);
+	EXPECT_EQ(polinom.GetListLength(), 10);
+	EXPECT_FALSE(polinom.IsEmpty());
+	EXPECT_FALSE(polinom.IsListEnded());
+}
+
+TEST(TPolinom, CanAddEmptyPolinoms)
+{
+	TPolinom lhs, rhs;
+
+	ASSERT_NO_THROW(lhs = lhs + rhs);
+}
+
+TEST(TPolinom, CanAddEmptyPolinom)
+{
+	int monoms[10][2];
+	for (int i = 0; i < 10; i++)
+	{
+		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][1] = 1 + rand() % 1000;
+	}
+
+	TPolinom lhs(monoms, 10), rhs;
+
+	ASSERT_NO_THROW(lhs = lhs + rhs);
+
+	EXPECT_EQ(lhs.GetCurrentPosition(), 0);
+	EXPECT_EQ(lhs.GetListLength(), 10);
+	EXPECT_FALSE(lhs.IsEmpty());
+	EXPECT_FALSE(lhs.IsListEnded());
+}
+
+//TEST(TPolinom, AddToEmptyPolinom)
+//{
+//	int monoms[10][2];
+//	for (int i = 0; i < 10; i++)
+//	{
+//		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+//		monoms[i][1] = 1 + rand() % 1000;
+//	}
+//
+//	TPolinom lhs, rhs(monoms, 10);
+//
+//	/*ASSERT_NO_THROW(lhs = lhs + rhs);*/
+//	lhs = lhs + rhs;
+//
+//	EXPECT_EQ(lhs.GetCurrentPosition(), 0);
+//	EXPECT_EQ(lhs.GetListLength(), 10);
+//	EXPECT_FALSE(lhs.IsEmpty());
+//	EXPECT_FALSE(lhs.IsListEnded());
+//}
+
+TEST(TPolinom, CanEqualEmptyPolinomToFilledPolinom)
+{
+	int monoms[10][2];
+	for (int i = 0; i < 10; i++)
+	{
+		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][1] = 1 + rand() % 1000;
+	}
+
+	TPolinom lhs(monoms, 10), rhs;
+
+	ASSERT_NO_THROW(lhs = rhs);
+	EXPECT_EQ(lhs.GetDataValue(FIRST), nullptr);
+	EXPECT_EQ(lhs.GetDataValue(CURRENT), nullptr);
+	EXPECT_EQ(lhs.GetDataValue(LAST), nullptr);
+	EXPECT_EQ(lhs.GetCurrentPosition(), 0);
+	EXPECT_EQ(lhs.GetListLength(), 0);
+	EXPECT_TRUE(lhs.IsEmpty());
+	EXPECT_FALSE(lhs.IsListEnded());
+}
+
+TEST(TPolinom, CanEqualFilledPolinomToEmptyPolinom)
+{
+	int monoms[10][2];
+	for (int i = 0; i < 10; i++)
+	{
+		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][1] = 1 + rand() % 1000;
+	}
+
+	TPolinom lhs(monoms, 10), rhs;
+	TDataValue *first = lhs.GetDataValue(FIRST);
+	TDataValue *last = lhs.GetDataValue(LAST);
+
+	ASSERT_NO_THROW(rhs = lhs);
+	EXPECT_EQ(rhs.GetDataValue(FIRST), first);
+	EXPECT_EQ(rhs.GetDataValue(LAST), last);
+	EXPECT_EQ(rhs.GetCurrentPosition(), 9);
+	EXPECT_EQ(rhs.GetListLength(), 10);
+	EXPECT_FALSE(rhs.IsEmpty());
+	EXPECT_FALSE(rhs.IsListEnded());
+}
+
+TEST(TPolinom, CanEqualTwoFilledPolinomsWithDifferentLength)
+{
+	int monomsLhs[10][2], monomsRhs[10][2];
+	for (int i = 0; i < 10; i++)
+	{
+		monomsLhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monomsLhs[i][1] = 1 + rand() % 1000;
+
+		monomsRhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monomsRhs[i][1] = 1 + rand() % 1000;
+	}
+
+	TPolinom lhs(monomsLhs, 7), rhs(monomsRhs, 10);
+	TDataValue *first = lhs.GetDataValue(FIRST);
+	TDataValue *last = lhs.GetDataValue(LAST);
+
+	ASSERT_NO_THROW(rhs = lhs);
+	EXPECT_EQ(rhs.GetDataValue(FIRST), first);
+	EXPECT_EQ(rhs.GetDataValue(LAST), last);
+	EXPECT_EQ(rhs.GetCurrentPosition(), 6);
+	EXPECT_EQ(rhs.GetListLength(), 7);
+	EXPECT_FALSE(rhs.IsEmpty());
+	EXPECT_FALSE(rhs.IsListEnded());
+}
+
+TEST(TPolinom, CanEqualTwoFilledPolinomsWithEqualLength)
+{
+	int monomsLhs[10][2], monomsRhs[10][2];
+	for (int i = 0; i < 10; i++)
+	{
+		monomsLhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monomsLhs[i][1] = 1 + rand() % 1000;
+
+		monomsRhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monomsRhs[i][1] = 1 + rand() % 1000;
+	}
+
+	TPolinom lhs(monomsLhs, 10), rhs(monomsRhs, 10);
+	TDataValue *first = lhs.GetDataValue(FIRST);
+	TDataValue *last = lhs.GetDataValue(LAST);
+
+	ASSERT_NO_THROW(rhs = lhs);
+	EXPECT_EQ(rhs.GetDataValue(FIRST), first);
+	EXPECT_EQ(rhs.GetDataValue(LAST), last);
+	EXPECT_EQ(rhs.GetCurrentPosition(), 9);
+	EXPECT_EQ(rhs.GetListLength(), 10);
+	EXPECT_FALSE(rhs.IsEmpty());
+	EXPECT_FALSE(rhs.IsListEnded());
 }
