@@ -16,7 +16,7 @@ void TDataList::DeleteLink(pTDataLink pLink)
 {
 	//if (pLink->GetDataValue() != nullptr)
 	//{
-	//delete pLink->GetDataValue();
+	//	delete pLink->GetDataValue();
 	//}
 	delete pLink;
 }
@@ -45,10 +45,10 @@ pTDataValue TDataList::GetDataValue(TLinkPos mode) const
 		return nullptr;
 	}
 
-	if (IsListEnded())
-	{
-		return nullptr;
-	}
+	//if (IsListEnded())
+	//{
+	//	return nullptr;
+	//}
 
 	TDataValue *temp = nullptr;
 	switch (mode)
@@ -100,7 +100,6 @@ int TDataList::GetCurrentPosition() const
 	currentPosition = 0;
 	pCurrentLink = pFirst;
 	pPreviousLink = pStop;
-
 }
 
 bool TDataList::IsListEnded() const
@@ -200,10 +199,10 @@ void TDataList::InsertAfterLast(pTDataValue pVal)
 
 void TDataList::InsertBeforeCurrent(pTDataValue pVal)
 {
-	if (IsListEnded())
-	{
-		throw "Cannot insert after last! List is ended";
-	}
+	//if (IsListEnded())
+	//{
+	//	throw "Cannot insert after last! List is ended";
+	//}
 
 	listLength++;
 
@@ -244,7 +243,8 @@ void TDataList::DeleteFirst()
 	DeleteLink(temp);
 	listLength--;
 
-	if (IsEmpty()) {
+	if (IsEmpty()) 
+	{
 		pLast = pStop;
 		Reset();
 	}
