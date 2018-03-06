@@ -941,7 +941,7 @@ TEST(THeadRing, DeleteFromMultiElementHeadRingList)
 }
 
 
-/*-----------------------TESTING THeadRing-----------------------*/
+/*-----------------------TESTING TPolinom-----------------------*/
 
 
 TEST(TPolinom, CanCreatePolinom)
@@ -952,8 +952,8 @@ TEST(TPolinom, CanCreatePolinom)
 	int monoms[10][2];
 	for (int i = 0; i < 10; i++)
 	{
-		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-		monoms[i][1] = 1 + rand() % 1000;
+		monoms[i][0] = -999 + rand() % 1999; // [-1000; 1000]
+		monoms[i][1] = 1 + rand() % 999;
 	}
 
 	TPolinom polinom(monoms, 10);
@@ -1020,34 +1020,90 @@ TEST(TPolinom, CanAddEmptyPolinom)
 	}
 
 	TPolinom lhs(monoms, 10), rhs;
-
+	TDataValue *first = lhs.GetDataValue(FIRST);
 	ASSERT_NO_THROW(lhs = lhs + rhs);
 
-	EXPECT_EQ(lhs.GetCurrentPosition(), 0);
+	EXPECT_EQ(first, lhs.GetDataValue(FIRST));
+	EXPECT_EQ(lhs.GetCurrentPosition(), 9);
 	EXPECT_EQ(lhs.GetListLength(), 10);
 	EXPECT_FALSE(lhs.IsEmpty());
 	EXPECT_FALSE(lhs.IsListEnded());
 }
 
-//TEST(TPolinom, AddToEmptyPolinom)
+TEST(TPolinom, AddToEmptyPolinom)
+{
+	int monoms[10][2];
+	for (int i = 0; i < 10; i++)
+	{
+		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][1] = 1 + rand() % 1000;
+	}
+
+	TPolinom lhs, rhs(monoms, 10);
+	TDataValue *first = rhs.GetDataValue(FIRST);
+
+	/*ASSERT_NO_THROW(lhs = lhs + rhs);*/
+	lhs = lhs + rhs;
+
+	EXPECT_EQ(first, lhs.GetDataValue(FIRST));
+	EXPECT_EQ(lhs.GetCurrentPosition(), 9);
+	EXPECT_EQ(lhs.GetListLength(), 10);
+	EXPECT_FALSE(lhs.IsEmpty());
+	EXPECT_FALSE(lhs.IsListEnded());
+}
+
+//TEST(TPolinom, AddPolinomsWithEqualLength)
 //{
-//	int monoms[10][2];
-//	for (int i = 0; i < 10; i++)
-//	{
-//		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-//		monoms[i][1] = 1 + rand() % 1000;
-//	}
+//	//int monomsLhs[10][2], monomsRhs[10][2];
+//	int monomsLhs[5][2] = {-324, 871,
+//							3, 650, 
+//							-2,509, 
+//							761, 121, 
+//							99, 56},
 //
-//	TPolinom lhs, rhs(monoms, 10);
+//		monomsRhs[5][2] = { 97, 811,
+//							-22, 509, 
+//							992,311, 
+//							352, 123,
+//							5, 2 };
 //
-//	/*ASSERT_NO_THROW(lhs = lhs + rhs);*/
-//	lhs = lhs + rhs;
 //
-//	EXPECT_EQ(lhs.GetCurrentPosition(), 0);
-//	EXPECT_EQ(lhs.GetListLength(), 10);
-//	EXPECT_FALSE(lhs.IsEmpty());
-//	EXPECT_FALSE(lhs.IsListEnded());
+//	//for (int i = 0; i < 10; i++)
+//	//{
+//	//	monomsLhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+//	//	monomsLhs[i][1] = 1 + rand() % 1000;
+//
+//	//	monomsRhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+//	//	monomsRhs[i][1] = 1 + rand() % 1000;
+//	//}
+//
+//	TPolinom lhs(monomsLhs, 5), rhs(monomsRhs, 5), result;
+//
+//	ASSERT_NO_THROW(result = lhs + rhs);
+//	EXPECT_EQ(result.GetListLength(), 9);
 //}
+
+TEST(TPolinom, AddPolinomsWithDifferentLengthFirstIsBigger)
+{
+	int monomsLhs[7][2] = { 23, 900,
+							-564, 712,
+							8,700,
+							-74, 650,
+							1, 399 ,
+							999, 41,
+							-7, 8},
+
+		monomsRhs[4][2] = { 97, 702,
+							657, 403,
+							-4,41,
+							3, 9};
+
+	TPolinom lhs(monomsLhs, 7), rhs(monomsRhs, 4), result;
+
+	ASSERT_NO_THROW(result = lhs + rhs);
+	EXPECT_EQ(result.GetListLength(), 10);
+}
+
 
 TEST(TPolinom, CanEqualEmptyPolinomToFilledPolinom)
 {
