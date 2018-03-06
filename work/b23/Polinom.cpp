@@ -125,17 +125,13 @@ TPolinom& TPolinom::operator+(TPolinom & polinom)
 			}
 			else if (polinom.IsListEnded())
 			{
-
+				break;
 			}
 
 			//break;
 		}
 		lhs = GetMonom();
 		rhs = polinom.GetMonom();
-		//if (IsListEnded())
-		//{
-		//	break;
-		//}
 
 		if (rhs->GetIndex() > lhs->GetIndex())
 		{
