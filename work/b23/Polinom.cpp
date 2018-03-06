@@ -21,10 +21,6 @@ TPolinom::TPolinom(int monoms[][2], int monomsNumber)/* : THeadRing()*/
 	}
 
 	Reset();
-	//if (monoms == nullptr)
-	//{
-	//	listLength = monomsNumber;
-	//}
 }
 
 TPolinom::TPolinom(/*const*/ TPolinom& polinom)
@@ -58,92 +54,287 @@ TPolinom::TPolinom(/*const*/ TPolinom& polinom)
 //	//pHead = nullptr;
 //}
 
+//TPolinom& TPolinom::operator+(TPolinom & polinom)
+//{
+//	TPolinom res(*this);
+//	res.Reset();
+//	polinom.Reset();
+//	while (true)
+//	{
+//		TMonom *left = res.GetMonom();
+//		TMonom *right = polinom.GetMonom();
+//		if (right < left)
+//		{
+//			res.MoveNext();
+//
+//		}
+//		else if (left < right)
+//		{
+//			res.InsertBeforeCurrent(right->GetCopy());
+//			polinom.MoveNext();
+//
+//		}
+//		else
+//		{
+//			if (left->GetIndex() == -1) break;
+//			int resCoeff = left->GetCoefficient() + right->GetCoefficient();
+//			if (resCoeff == 0)
+//			{
+//				res.DeleteCurrent();
+//				polinom.MoveNext();
+//			}
+//			else
+//			{
+//				left->SetCoefficient(resCoeff);
+//				res.MoveNext(); polinom.MoveNext();
+//			}
+//		}
+//	}
+//	return res;
+//}
+
 TPolinom& TPolinom::operator+(TPolinom & polinom)
 {
 	if (polinom.IsEmpty())
 	{
 		return *this;
 	}
-
+	
 	if (IsEmpty())
 	{
 		return polinom;
 	}
 
-	const int maxLength = GetListLength() > polinom.GetListLength() ? GetListLength() : polinom.GetListLength();
-	TPolinom *result = new TPolinom(nullptr, maxLength);
-
-	for (int i = 0; i < maxLength; i++)
+	TMonom *lhs, *rhs, *currentMonom;
+	Reset(); polinom.Reset();
+	//После вставки 121 curPos = 9, length = 8
+	while (true)
 	{
 		if (IsListEnded() || polinom.IsListEnded())
 		{
-			if (IsListEnded())
+			if (IsListEnded() && polinom.IsListEnded())
 			{
-				result->InsertAfterLast(polinom.GetDataValue());
+				break;
 			}
 
-			if (polinom.IsListEnded())
+			else if (IsListEnded())
 			{
-				result->InsertAfterLast(GetDataValue());
+				//rhs = polinom.GetMonom();
+				//InsertBeforeCurrent(rhs);
+				//continue;
 			}
-			continue;
+			else if (polinom.IsListEnded())
+			{
+
+			}
+
+			//break;
 		}
-		//if (!IsListEnded())
+		lhs = GetMonom();
+		rhs = polinom.GetMonom();
+		//if (IsListEnded())
 		//{
-		//	SetCurrentPosition(i);
+		//	break;
 		//}
-		//if (!polinom.IsListEnded())
-		//{
-		//	polinom.SetCurrentPosition(i);
-		//}
-		SetCurrentPosition(i);
-		polinom.SetCurrentPosition(i);
-		TMonom *lhs = GetMonom();
-		TMonom *rhs = polinom.GetMonom();
 
-		if (lhs->GetIndex() > rhs->GetIndex())
+		if (rhs->GetIndex() > lhs->GetIndex())
 		{
-			result->InsertAfterLast(lhs->GetCopy());
-			continue;
+			currentMonom = new TMonom(rhs->GetCoefficient(), rhs->GetIndex());
+			InsertBeforeCurrent(currentMonom);
+			currentPosition++;
+			MoveNext();
+			polinom.MoveNext();
 		}
 
-		else if (lhs->GetIndex() == rhs->GetIndex())
+		else if (rhs->GetIndex() < lhs->GetIndex())
 		{
-			TMonom *temp = lhs; // Could be incorrent
-			if (lhs->GetCoefficient() != rhs->GetCoefficient())
+			//на pLast сдвинулись на pStop
+			// поетому plast из polinom не добавился
+			if (GetDataValue(CURRENT) == GetDataValue(LAST))
 			{
-
-				temp->SetCoefficient(lhs->GetCoefficient() + rhs->GetCoefficient());
-				//result->InsertAfterLast(temp->GetCopy());
+				currentMonom = new TMonom(rhs->GetCoefficient(), rhs->GetIndex());
+				InsertAfterLast(currentMonom);
+				MoveNext();
+				polinom.MoveNext();
+				continue;
 			}
-			
-			if (result->GetMonom()->GetCoefficient() >= temp->GetCoefficient())
+			MoveNext();
+		}
+
+		else
+		{
+			if (lhs->GetIndex() == -1) // pHead
 			{
-				result->InsertAfterLast(temp->GetCopy());
+				break;
+			}
+
+			lhs->SetCoefficient(lhs->GetCoefficient() + rhs->GetCoefficient());
+
+			if (lhs->GetCoefficient() != 0)
+			{
+				MoveNext();
+				polinom.MoveNext();
 			}
 
 			else
 			{
-				result->InsertBeforeCurrent(temp->GetCopy());
+				DeleteCurrent();
+				polinom.MoveNext();
 			}
-
-			continue;
+			
 		}
-
-		else /*if (lhs->GetIndex() < rhs->GetIndex())*/
-		{
-			result->InsertAfterLast(rhs->GetCopy());
-			continue;
-		}
+			//if (IsListEnded() /*|| polinom.IsListEnded()*/)
+			//{
+			//	break;
+			//}
 	}
 
-
-	return *result;
+	return *this;
 }
+
+//TPolinom& TPolinom::operator+(TPolinom & polinom)
+//{
+//	//TODO: pHead does not have pNext
+//
+//	if (polinom.IsEmpty())
+//	{
+//		return *this;
+//	}
+//
+//	if (IsEmpty())
+//	{
+//		return polinom;
+//	}
+//
+//	TPolinom *result = new TPolinom();
+//	TMonom *lhs, *rhs, *currentMonom;
+//	bool IsFilled = true;
+//
+//	Reset(); polinom.Reset();
+//	while(!(IsListEnded() && polinom.IsListEnded()))
+//	{
+//		//SetCurrentPosition(i);
+//		//polinom.SetCurrentPosition(i);
+//		if (IsEmpty())
+//		{
+//			lhs = GetMonom();
+//			rhs = polinom.GetMonom();
+//			if (lhs->GetIndex() > rhs->GetIndex())
+//			{
+//				result->InsertAfterLast(lhs->GetCopy());
+//				//MoveNext();
+//				continue;
+//			}
+//
+//			else if (lhs->GetIndex() == rhs->GetIndex())
+//			{
+//				TMonom *temp = lhs; // Could be incorrent
+//				if (lhs->GetCoefficient() != rhs->GetCoefficient())
+//				{
+//
+//					temp->SetCoefficient(lhs->GetCoefficient() + rhs->GetCoefficient());
+//					//result->InsertAfterLast(temp->GetCopy());
+//				}
+//
+//				if (result->GetMonom()->GetCoefficient() >= temp->GetCoefficient())
+//				{
+//					result->InsertAfterLast(temp->GetCopy());
+//				}
+//
+//				else
+//				{
+//					result->InsertBeforeCurrent(temp->GetCopy());
+//				}
+//				//MoveNext();
+//				//polinom.MoveNext();
+//				continue;
+//			}
+//
+//			else /*if (lhs->GetIndex() < rhs->GetIndex())*/
+//			{
+//				result->InsertAfterLast(rhs->GetCopy());
+//				//polinom.MoveNext();
+//				continue;
+//			}
+//		}
+//			if (IsListEnded() || polinom.IsListEnded())
+//			{
+//				if (IsListEnded() && polinom.IsListEnded())
+//				{
+//					break;
+//				}
+//
+//				else if (IsListEnded())
+//				{
+//					result->InsertAfterLast(polinom.GetDataValue());
+//					continue;
+//				}
+//
+//				else if (polinom.IsListEnded())
+//				{
+//					result->InsertAfterLast(GetDataValue());
+//					continue;
+//				}
+//				/*continue;*/
+//			}
+//
+//			MoveNext();
+//			polinom.MoveNext();
+//		
+//		lhs = GetMonom();
+//		rhs = polinom.GetMonom();
+//
+//
+//
+//		if (lhs->GetIndex() > rhs->GetIndex())
+//		{
+//			result->InsertAfterLast(lhs->GetCopy());
+//			//MoveNext();
+//			continue;
+//		}
+//
+//		else if (lhs->GetIndex() == rhs->GetIndex())
+//		{
+//			TMonom *temp = lhs; // Could be incorrent
+//			if (lhs->GetCoefficient() != rhs->GetCoefficient())
+//			{
+//
+//				temp->SetCoefficient(lhs->GetCoefficient() + rhs->GetCoefficient());
+//				//result->InsertAfterLast(temp->GetCopy());
+//			}
+//			
+//			if (result->GetMonom()->GetCoefficient() >= temp->GetCoefficient())
+//			{
+//				result->InsertAfterLast(temp->GetCopy());
+//			}
+//
+//			else
+//			{
+//				result->InsertBeforeCurrent(temp->GetCopy());
+//			}
+//			//MoveNext();
+//			//polinom.MoveNext();
+//			continue;
+//		}
+//
+//		else /*if (lhs->GetIndex() < rhs->GetIndex())*/
+//		{
+//			result->InsertAfterLast(rhs->GetCopy());
+//			//polinom.MoveNext();
+//			continue;
+//		}
+//		
+//	}
+//
+//
+//	return *result;
+//}
 
 TPolinom & TPolinom::operator=(TPolinom & polinom)
 {
-	if (polinom.IsEmpty())
+	TPolinom *temp = new TPolinom(polinom);
+
+	if (temp->IsEmpty())
 	{
 		DeleteList();
 		Reset();
@@ -151,10 +342,11 @@ TPolinom & TPolinom::operator=(TPolinom & polinom)
 	}
 
 	DeleteList();
-	for (polinom.Reset(); !polinom.IsListEnded(); polinom.MoveNext())
+	for (temp->Reset(); !temp->IsListEnded(); temp->MoveNext())
 	{
-		InsertAfterLast(polinom.GetDataValue());
+		InsertAfterLast(temp->GetDataValue());
 	}
+	temp->DeleteList();
 
 	return *this;
 }
