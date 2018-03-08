@@ -425,18 +425,18 @@ TEST(TDataList, ThrowWhenPCurrentIsPStop)
 //	EXPECT_EQ(list.GetDataValue(), nullptr);
 //}
 
-TEST(TDataList, CanPrint)
-{
-	TDataList list;
-	TMonom monom1(437, 2), monom2(-27, 357);
-	TDataValue *pValue1 = monom1.GetCopy();
-	TDataValue *pValue2 = monom2.GetCopy();
-
-	list.InsertBeforeFirst(pValue1);
-	list.InsertAfterLast(pValue2);
-
-	ASSERT_NO_THROW(list.Print());
-}
+//TEST(TDataList, CanPrint)
+//{
+//	TDataList list;
+//	TMonom monom1(437, 2), monom2(-27, 357);
+//	TDataValue *pValue1 = monom1.GetCopy();
+//	TDataValue *pValue2 = monom2.GetCopy();
+//
+//	list.InsertBeforeFirst(pValue1);
+//	list.InsertAfterLast(pValue2);
+//
+//	ASSERT_NO_THROW(list.Print());
+//}
 
 TEST(TDataList, CanInsertBeforeFirst)
 {
@@ -475,7 +475,6 @@ TEST(TDataList, InsertBeforeFirstInto1ElementList)
 	EXPECT_EQ(list.GetListLength(), 2);
 	EXPECT_EQ(list.GetDataValue(), pValue2);
 	EXPECT_EQ(list.GetDataValue(FIRST), pValue2);
-	//TODO: Возможна утечка памяти
 	EXPECT_EQ(list.GetDataValue(LAST), pValue1);
 	EXPECT_EQ(list.GetCurrentPosition(), 0);
 	EXPECT_FALSE(list.IsEmpty());
@@ -496,7 +495,6 @@ TEST(TDataList, InsertBeforeFirstIntoMultiElementsList)
 	EXPECT_EQ(list.GetListLength(), 3);
 	EXPECT_EQ(list.GetDataValue(), pValue3);
 	EXPECT_EQ(list.GetDataValue(FIRST), pValue3);
-	//TODO: Возможна утечка памяти
 	EXPECT_EQ(list.GetDataValue(LAST), pValue1);
 	EXPECT_EQ(list.GetCurrentPosition(), 0);
 	EXPECT_FALSE(list.IsEmpty());
@@ -539,7 +537,6 @@ TEST(TDataList, InsertAfterLastInto1ElementList)
 	EXPECT_EQ(list.GetListLength(), 2);
 	EXPECT_EQ(list.GetDataValue(), pValue2);
 	EXPECT_EQ(list.GetDataValue(FIRST), pValue1);
-	//TODO: Возможна утечка памяти
 	EXPECT_EQ(list.GetDataValue(LAST), pValue2);
 	EXPECT_EQ(list.GetCurrentPosition(), 1);
 	EXPECT_FALSE(list.IsEmpty());
@@ -560,7 +557,6 @@ TEST(TDataList, InsertAfterLastIntoMultiElementsList)
 	EXPECT_EQ(list.GetListLength(), 3);
 	EXPECT_EQ(list.GetDataValue(), pValue3);
 	EXPECT_EQ(list.GetDataValue(FIRST), pValue1);
-	//TODO: Возможна утечка памяти
 	EXPECT_EQ(list.GetDataValue(LAST), pValue3);
 	EXPECT_EQ(list.GetCurrentPosition(), 2);
 	EXPECT_FALSE(list.IsEmpty());
@@ -605,7 +601,6 @@ TEST(TDataList, InsertBeforeCurrentInto1ElementList)
 	EXPECT_EQ(list.GetListLength(), 2);
 	EXPECT_EQ(list.GetDataValue(), pValue2);
 	EXPECT_EQ(list.GetDataValue(FIRST), pValue2);
-	//TODO: Возможна утечка памяти
 	EXPECT_EQ(list.GetDataValue(LAST), pValue1);
 	EXPECT_EQ(list.GetCurrentPosition(), 0);
 	EXPECT_FALSE(list.IsEmpty());
@@ -628,7 +623,6 @@ TEST(TDataList, InsertBeforeCurrentIntoMultiElementsList)
 	EXPECT_EQ(list.GetListLength(), 4);
 	EXPECT_EQ(list.GetDataValue(), pValue4);
 	EXPECT_EQ(list.GetDataValue(FIRST), pValue2);
-	//TODO: Возможна утечка памяти
 	EXPECT_EQ(list.GetDataValue(LAST), pValue3);
 	EXPECT_EQ(list.GetCurrentPosition(), 2);
 	EXPECT_FALSE(list.IsEmpty());
@@ -983,7 +977,7 @@ TEST(TPolinom, CanCopyPolinom)
 	for (int i = 0; i < 10; i++)
 	{
 		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-		monoms[i][1] = 1 + rand() % 1000;
+		monoms[i][1] = 1 + rand() % 999;
 	}
 
 	TPolinom polinom(monoms, 10);
@@ -1016,7 +1010,7 @@ TEST(TPolinom, CanAddEmptyPolinom)
 	for (int i = 0; i < 10; i++)
 	{
 		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-		monoms[i][1] = 1 + rand() % 1000;
+		monoms[i][1] = 1 + rand() % 999;
 	}
 
 	TPolinom lhs(monoms, 10), rhs;
@@ -1036,7 +1030,7 @@ TEST(TPolinom, AddToEmptyPolinom)
 	for (int i = 0; i < 10; i++)
 	{
 		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-		monoms[i][1] = 1 + rand() % 1000;
+		monoms[i][1] = 1 + rand() % 999;
 	}
 
 	TPolinom lhs, rhs(monoms, 10);
@@ -1052,36 +1046,26 @@ TEST(TPolinom, AddToEmptyPolinom)
 	EXPECT_FALSE(lhs.IsListEnded());
 }
 
-//TEST(TPolinom, AddPolinomsWithEqualLength)
-//{
-//	//int monomsLhs[10][2], monomsRhs[10][2];
-//	int monomsLhs[5][2] = {-324, 871,
-//							3, 650, 
-//							-2,509, 
-//							761, 121, 
-//							99, 56},
-//
-//		monomsRhs[5][2] = { 97, 811,
-//							-22, 509, 
-//							992,311, 
-//							352, 123,
-//							5, 2 };
-//
-//
-//	//for (int i = 0; i < 10; i++)
-//	//{
-//	//	monomsLhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-//	//	monomsLhs[i][1] = 1 + rand() % 1000;
-//
-//	//	monomsRhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-//	//	monomsRhs[i][1] = 1 + rand() % 1000;
-//	//}
-//
-//	TPolinom lhs(monomsLhs, 5), rhs(monomsRhs, 5), result;
-//
-//	ASSERT_NO_THROW(result = lhs + rhs);
-//	EXPECT_EQ(result.GetListLength(), 9);
-//}
+TEST(TPolinom, AddPolinomsWithEqualLength)
+{
+	//int monomsLhs[10][2], monomsRhs[10][2];
+	int monomsLhs[5][2] = {-324, 871,
+							3, 650, 
+							-2,509, 
+							761, 121, 
+							99, 56},
+
+		monomsRhs[5][2] = { 97, 811,
+							-22, 509, 
+							992,311, 
+							352, 123,
+							5, 2 };
+
+	TPolinom lhs(monomsLhs, 5), rhs(monomsRhs, 5), result;
+
+	ASSERT_NO_THROW(result = lhs + rhs);
+	EXPECT_EQ(result.GetListLength(), 9);
+}
 
 TEST(TPolinom, AddPolinomsWithDifferentLengthFirstIsBigger)
 {
@@ -1104,6 +1088,28 @@ TEST(TPolinom, AddPolinomsWithDifferentLengthFirstIsBigger)
 	EXPECT_EQ(result.GetListLength(), 10);
 }
 
+TEST(TPolinom, AddPolinomsWithDifferentLengthSecondIsBigger)
+{
+	int monomsLhs[4][2] = { -124, 812,
+							881, 810,
+							-2,751,
+							-82, 661
+							},
+
+		monomsRhs[7][2] = { 11, 902,
+							214, 812,
+							-24, 602,
+							124, 412 ,
+							-15, 335,
+							55, 202,
+							99, 52};
+
+	TPolinom lhs(monomsLhs, 4), rhs(monomsRhs, 7), result;
+
+	ASSERT_NO_THROW(result = lhs + rhs);
+	EXPECT_EQ(result.GetListLength(), 10);
+}
+
 
 TEST(TPolinom, CanEqualEmptyPolinomToFilledPolinom)
 {
@@ -1111,7 +1117,7 @@ TEST(TPolinom, CanEqualEmptyPolinomToFilledPolinom)
 	for (int i = 0; i < 10; i++)
 	{
 		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-		monoms[i][1] = 1 + rand() % 1000;
+		monoms[i][1] = 1 + rand() % 999;
 	}
 
 	TPolinom lhs(monoms, 10), rhs;
@@ -1132,7 +1138,7 @@ TEST(TPolinom, CanEqualFilledPolinomToEmptyPolinom)
 	for (int i = 0; i < 10; i++)
 	{
 		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-		monoms[i][1] = 1 + rand() % 1000;
+		monoms[i][1] = 1 + rand() % 999;
 	}
 
 	TPolinom lhs(monoms, 10), rhs;
@@ -1154,10 +1160,10 @@ TEST(TPolinom, CanEqualTwoFilledPolinomsWithDifferentLength)
 	for (int i = 0; i < 10; i++)
 	{
 		monomsLhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-		monomsLhs[i][1] = 1 + rand() % 1000;
+		monomsLhs[i][1] = 1 + rand() % 999;
 
 		monomsRhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-		monomsRhs[i][1] = 1 + rand() % 1000;
+		monomsRhs[i][1] = 1 + rand() % 999;
 	}
 
 	TPolinom lhs(monomsLhs, 7), rhs(monomsRhs, 10);
@@ -1179,10 +1185,10 @@ TEST(TPolinom, CanEqualTwoFilledPolinomsWithEqualLength)
 	for (int i = 0; i < 10; i++)
 	{
 		monomsLhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-		monomsLhs[i][1] = 1 + rand() % 1000;
+		monomsLhs[i][1] = 1 + rand() % 999;
 
 		monomsRhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
-		monomsRhs[i][1] = 1 + rand() % 1000;
+		monomsRhs[i][1] = 1 + rand() % 999;
 	}
 
 	TPolinom lhs(monomsLhs, 10), rhs(monomsRhs, 10);
