@@ -5,8 +5,6 @@
 
 #ifndef TDATALINK
 #define TDATALINK
-
-
 class TDataLink;
 typedef TDataLink *pTDataLink;
 
@@ -15,7 +13,7 @@ class TDataLink : public TRootLink
 protected:
 	pTDataValue pValue;
 public:
-	TDataLink(pTDataValue pVal = nullptr /*NULL*/, pTRootLink pNxt = nullptr /*NULL*/) : TRootLink(pNxt)
+	TDataLink(pTDataValue pVal = nullptr, pTRootLink pNxt = nullptr) : TRootLink(pNxt)
 	{
 		pValue = pVal;
 	}

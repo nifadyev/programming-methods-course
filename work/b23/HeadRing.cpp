@@ -5,7 +5,6 @@
 
 THeadRing::THeadRing() : TDataList()
 {
-	//listLength++; // Уже все ломает. Каким-то образом чинит вылет в деструкторе 
 	pHead = nullptr;
 	pStop = pHead = pFirst;
 }
@@ -21,35 +20,18 @@ THeadRing::~THeadRing()
 
 void THeadRing::InsertBeforeFirst(pTDataValue pVal)
 {
-	//COMMIT: InsertBeforeFirst: pHead->SetNextLink() now works
 	if (listLength == 0)
 	{
 		pHead = new TDataLink();
-		//pHead->SetNextLink(pFirst);
 	}
 	TDataList::InsertBeforeFirst(pVal);
-	//if (listLength == 1)
-	//{
-		//pHead = pFirst;
-	//}
 
 	pHead->SetNextLink(pFirst);
 }
 
 void THeadRing::InsertAfterLast(pTDataValue pVal)
 {
-	//COMMIT: InsertBeforeFirst: pHead->SetNextLink() now works
-	//if (listLength == 0)
-	//{
-	//	pHead = new TDataLink();
-	//	//pHead->SetNextLink(pFirst);
-	//}
 	TDataList::InsertAfterLast(pVal);
-	//if (listLength == 1)
-	//{
-	//pHead = pFirst;
-	//}
-	//pLast->SetNextLink(pHead);
 
 	pHead->SetNextLink(pFirst);
 }

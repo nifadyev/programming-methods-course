@@ -12,9 +12,8 @@ class TPolinom : public THeadRing
 {
 public:
 	TPolinom(int monoms[][2] = nullptr, int monomsNumber = 0);
-	//TPolinom(int **monoms, int monomsNumber);
 	TPolinom(TPolinom &polinom);
-	//~TPolinom();
+
 	pTMonom GetMonom() { return (pTMonom)GetDataValue(); }
 
 	TPolinom& operator+(TPolinom &polinom);

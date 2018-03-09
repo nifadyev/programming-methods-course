@@ -13,7 +13,7 @@ class TRootLink
 protected:
 	pTRootLink pNext; 
 public:
-	TRootLink(pTRootLink pNxt = nullptr /*NULL*/) { pNext = pNxt; }
+	explicit TRootLink(pTRootLink pNxt = nullptr) { pNext = pNxt; }
 	
 	pTRootLink GetNextLink() const { return pNext; }
 	void SetNextLink(const pTRootLink pLink) { pNext = pLink; }
@@ -22,7 +22,7 @@ public:
 	{
 		pTRootLink p = pNext;
 		pNext = pLink;
-		if (pLink != nullptr /*NULL*/)
+		if (pLink != nullptr)
 		{
 			pLink->pNext = p;
 		}

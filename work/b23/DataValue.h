@@ -3,17 +3,11 @@
 
 #ifndef TDATAVALUE
 #define TDATAVALUE
-
 class TDataValue
 {
 public:
 	virtual TDataValue* GetCopy() const = 0;
 	~TDataValue() {}
-
-	//int operator==(const TDataValue& value)
-	//{
-	//	return *this == value;
-	//}
 };
 
 typedef TDataValue *pTDataValue;

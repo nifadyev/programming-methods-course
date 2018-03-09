@@ -2,7 +2,6 @@
  //PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include <gtest/gtest.h>
-#include <iostream>
 #include <ctime>
 
 #include "RootLink.h"
@@ -14,11 +13,9 @@
 #include "Polinom.h"
 
 
-using namespace std;
-//srand(time(0));
-
-
 /*-----------------------TESTING TRootLink-----------------------*/
+
+
 TEST(TRootLink, CanCreateRootLink)
 {
 	ASSERT_NO_THROW(TDataLink rootLink);
@@ -27,13 +24,13 @@ TEST(TRootLink, CanCreateRootLink)
 TEST(TRootLink, CanGetNextLink)
 {
 	TDataLink rootLink;
-	ASSERT_NO_THROW(rootLink.GetNextLink());
-
-	EXPECT_EQ(rootLink.GetNextLink(), nullptr);
-
 	TDataLink *pRootLink1 = new TDataLink();
 	TDataLink *pRootLink2 = new TDataLink();
+
 	pRootLink1->SetNextLink(pRootLink2);
+
+	ASSERT_NO_THROW(rootLink.GetNextLink());
+	EXPECT_EQ(rootLink.GetNextLink(), nullptr);
 	EXPECT_EQ((pTRootLink)pRootLink1->GetNextLink(), pRootLink2);
 }
 
@@ -41,8 +38,8 @@ TEST(TRootLink, CanSetNextLink)
 {
 	TDataLink rootLink;
 	TDataLink *pRootLink = new TDataLink();
-	ASSERT_NO_THROW(rootLink.SetNextLink(pRootLink));
 
+	ASSERT_NO_THROW(rootLink.SetNextLink(pRootLink));
 	EXPECT_EQ(rootLink.GetNextLink(), pRootLink);
 }
 
@@ -53,93 +50,68 @@ TEST(TRootLink, CanInsertNextLink)
 	TDataLink *pRootLink = new TDataLink(monom.GetCopy());
 
 	ASSERT_NO_THROW(rootLink.InsertNextLink(pRootLink));
-
 	EXPECT_EQ(rootLink.GetNextLink(), pRootLink);
 }
 
 
-///*-----------------------TESTING TDataLink-----------------------*/
+/*-----------------------TESTING TDataLink-----------------------*/
+
 
 TEST(TDataLink, CanCreateDataLink)
 {
-	ASSERT_NO_THROW(TDataLink dataLink1);
-
 	TMonom monom1(3, 121);
-	ASSERT_NO_THROW(TDataLink dataLink1(monom1.GetCopy()));
-
 	TMonom monom2(7, 398);
-	TDataLink *dataLink2 = new TDataLink();
-	ASSERT_NO_THROW(TDataLink dataLink(monom2.GetCopy(), dataLink2));
+	TDataLink *pDataLink2 = new TDataLink();
+
+	ASSERT_NO_THROW(TDataLink dataLink1);
+	ASSERT_NO_THROW(TDataLink dataLink1(monom1.GetCopy()));
+	ASSERT_NO_THROW(TDataLink dataLink(monom2.GetCopy(), pDataLink2));
 }
 
 TEST(TDataLink, CanSetDataValue)
 {
-	TDataLink *dataLink = new TDataLink();
+	TDataLink *pDataLink = new TDataLink();
 	TMonom monom(1, 23);
-	ASSERT_NO_THROW(dataLink->SetDataValue(monom.GetCopy()));
+
+	ASSERT_NO_THROW(pDataLink->SetDataValue(monom.GetCopy()));
 }
 
 TEST(TDataLink, CanGetDataValue)
 {
 	TDataLink dataLink;
 	TMonom monom(4, 173);
-
-	ASSERT_NO_THROW(dataLink.SetDataValue(monom.GetCopy()));
-	
-	//------------Подсказка по работе с указателями----------//
-	//int v = 23;
-	//int *p, *pp;
-	//p = &v;
-	//pp = p;
-
-	//cout << endl <<"Adress: " << p << " value: " << *p << endl;
-	//cout << endl << "Adress: " << pp << " value: " << *pp << endl;
-	//-------------------------------------------------------//
-
-	// monom.GetCopy() создает новый указатель => адреса
-	//указателей не могут быть равны
-
 	TDataValue *pValue = monom.GetCopy();
-	dataLink.SetDataValue(pValue);
 
+	ASSERT_NO_THROW(dataLink.SetDataValue(pValue));
 	EXPECT_EQ(dataLink.GetDataValue(), pValue);
-
-	//Невозможно сравнить адреса указателей, exception 0xc00000fd
-	/*EXPECT_EQ(*dataLink.GetDataValue() == *pValue, 1);*/
 }
 
 TEST(TDataLink, CanGetNextDataLink)
 {
-	TMonom *monom = new TMonom(3, 456);
-	TDataLink *dataLink1 = new TDataLink();
-	TDataLink *dataLink2 = new TDataLink(monom->GetCopy(), dataLink1);
+	TMonom *pMonom = new TMonom(3, 456);
+	TDataLink *pDataLink1 = new TDataLink();
+	TDataLink *pDataLink2 = new TDataLink(pMonom->GetCopy(), pDataLink1);
 
-	ASSERT_NO_THROW(dataLink2->GetNextDataLink());
-	EXPECT_EQ(dataLink2->GetNextDataLink(), dataLink1);
+	ASSERT_NO_THROW(pDataLink2->GetNextDataLink());
+	EXPECT_EQ(pDataLink2->GetNextDataLink(), pDataLink1);
 }
 
-///*-----------------------TESTING TMonom-----------------------*/
+
+/*-----------------------TESTING TMonom-----------------------*/
+
 
 TEST(TMonom, CanCreateMonom)
 {
 	ASSERT_NO_THROW(TMonom monom);
-
 	ASSERT_NO_THROW(TMonom monom(1, 2));
-
 	ASSERT_NO_THROW(TMonom monom(1, 26));
-
 	ASSERT_NO_THROW(TMonom monom(1, 269));
-
 	ASSERT_NO_THROW(TMonom monom(9));
 }
 
 TEST(TMonom, ThrowWhenCreateMonomWithNegativeIndex)
 {
 	ASSERT_ANY_THROW(TMonom monom(3, -461));
-
-	ASSERT_ANY_THROW(TMonom monom(3, -16));
-
-	ASSERT_ANY_THROW(TMonom monom(3, -169));
 }
 
 TEST(TMonom, ThrowWhenCreateMonomWithTooBigIndex)
@@ -157,63 +129,47 @@ TEST(TMonom, CanGetCopy)
 TEST(TMonom, CanSetCoefficient)
 {
 	TMonom monom1;
-
-	ASSERT_NO_THROW(monom1.SetCoefficient(3));
-
-	monom1.SetCoefficient(-6);
-
-	EXPECT_EQ(monom1.GetCoefficient(), -6);
-
 	TMonom monom2(13, 456);
 	monom2.SetCoefficient(9);
 
+	ASSERT_NO_THROW(monom1.SetCoefficient(3));
+	EXPECT_EQ(monom1.GetCoefficient(), 3);
 	EXPECT_EQ(monom2.GetCoefficient(), 9);
 }
 
 TEST(TMonom, CanGetCoefficient)
 {
 	TMonom monom1;
-
-	ASSERT_NO_THROW(monom1.GetCoefficient());
+	TMonom monom2(-78, 4);
 
 	monom1.SetCoefficient(-45);
-
-	EXPECT_EQ(monom1.GetCoefficient(), -45);
-
-	TMonom monom2(-78, 4);
 	monom2.SetCoefficient(99);
 
+	ASSERT_NO_THROW(monom1.GetCoefficient());
+	EXPECT_EQ(monom1.GetCoefficient(), -45);
 	EXPECT_EQ(monom2.GetCoefficient(), 99);
 }
 
 TEST(TMonom, CanSetIndex)
 {
 	TMonom monom1;
+	TMonom monom2(-1, 33);
 
 	ASSERT_NO_THROW(monom1.SetIndex(67));
-
-	monom1.SetIndex(111);
-
-	EXPECT_EQ(monom1.GetIndex(), 111);
-
-	TMonom monom2(-1, 33);
-	monom2.SetIndex(999);
-
+	EXPECT_EQ(monom1.GetIndex(), 67);
+	ASSERT_NO_THROW(monom2.SetIndex(999));
 	EXPECT_EQ(monom2.GetIndex(), 999);
 }
 
 TEST(TMonom, CanGetIndex)
 {
 	TMonom monom1;
-
-	ASSERT_NO_THROW(monom1.GetIndex());
+	TMonom monom2(1, 63);
 
 	monom1.SetIndex(312);
 
+	ASSERT_NO_THROW(monom1.GetIndex());
 	EXPECT_EQ(monom1.GetIndex(), 312);
-
-	TMonom monom2(1, 63);
-
 	EXPECT_EQ(monom2.GetIndex(), 63);
 }
 
@@ -223,9 +179,6 @@ TEST(TMonom, CanAssignMonom)
 	TMonom monom2(23, 781);
 
 	ASSERT_NO_THROW(monom1 = monom2);
-
-	monom1 = monom2;
-
 	EXPECT_EQ(monom1 == monom2, 1);
 	EXPECT_EQ(monom2 == monom2, 1);
 }
@@ -318,6 +271,7 @@ TEST(TDataList, CanSetPosition)
 	list.InsertAfterLast(pValue2);
 
 	ASSERT_NO_THROW(list.SetCurrentPosition(1));	
+	EXPECT_EQ(list.GetCurrentPosition(), 1);
 }
 
 TEST(TDataList, ThrowWhenSetNegativePosition)
@@ -396,6 +350,7 @@ TEST(TDataList, CanMoveNext)
 	list.InsertBeforeFirst(pValue);
 
 	ASSERT_NO_THROW(list.MoveNext());
+	EXPECT_TRUE(list.IsListEnded());
 }
 
 TEST(TDataList, ThrowWhenPCurrentIsPStop)
@@ -404,39 +359,23 @@ TEST(TDataList, ThrowWhenPCurrentIsPStop)
 	TMonom monom(253, 1);
 	TDataValue *pValue = monom.GetCopy();
 
-	ASSERT_THROW(list.MoveNext(), logic_error);
-
 	list.InsertBeforeFirst(pValue);
 	list.MoveNext();
 
 	ASSERT_THROW(list.MoveNext(), logic_error);
 }
 
-//TEST(TDataList, MoveNextToPStopIfPCurrentIsPLast)
-//{
-//	TDataList list;
-//	TMonom monom(253, 1);
-//	TDataValue *pValue = monom.GetCopy();
-//
-//	list.InsertBeforeFirst(pValue);
-//	list.MoveNext();
-//
-//	EXPECT_EQ(list.GetCurrentPosition(), -1);
-//	EXPECT_EQ(list.GetDataValue(), nullptr);
-//}
+TEST(TDataList, MoveNextToPStopIfPCurrentIsPLast)
+{
+	TDataList list;
+	TMonom monom(253, 1);
+	TDataValue *pValue = monom.GetCopy();
 
-//TEST(TDataList, CanPrint)
-//{
-//	TDataList list;
-//	TMonom monom1(437, 2), monom2(-27, 357);
-//	TDataValue *pValue1 = monom1.GetCopy();
-//	TDataValue *pValue2 = monom2.GetCopy();
-//
-//	list.InsertBeforeFirst(pValue1);
-//	list.InsertAfterLast(pValue2);
-//
-//	ASSERT_NO_THROW(list.Print());
-//}
+	list.InsertBeforeFirst(pValue);
+	list.MoveNext();
+
+	EXPECT_EQ(list.GetCurrentPosition(), -1);
+}
 
 TEST(TDataList, CanInsertBeforeFirst)
 {
@@ -595,8 +534,8 @@ TEST(TDataList, InsertBeforeCurrentInto1ElementList)
 	TDataValue *pValue1 = monom1.GetCopy();
 	TDataValue *pValue2 = monom2.GetCopy();
 
-	list.InsertBeforeCurrent(pValue1); // 
-	list.InsertBeforeCurrent(pValue2); // 
+	list.InsertBeforeCurrent(pValue1);
+	list.InsertBeforeCurrent(pValue2);
 
 	EXPECT_EQ(list.GetListLength(), 2);
 	EXPECT_EQ(list.GetDataValue(), pValue2);
@@ -615,10 +554,10 @@ TEST(TDataList, InsertBeforeCurrentIntoMultiElementsList)
 	TDataValue *pValue3 = monom3.GetCopy();
 	TDataValue *pValue4 = monom4.GetCopy();
 
-	list.InsertBeforeCurrent(pValue1); // 
+	list.InsertBeforeCurrent(pValue1);
 	list.InsertBeforeCurrent(pValue2);
 	list.InsertAfterLast(pValue3);
-	list.InsertBeforeCurrent(pValue4); // 
+	list.InsertBeforeCurrent(pValue4);
 
 	EXPECT_EQ(list.GetListLength(), 4);
 	EXPECT_EQ(list.GetDataValue(), pValue4);
@@ -651,10 +590,10 @@ TEST(TDataList, DeleteFirstIn1ElementList)
 	TDataList list;
 	TMonom monom(-48, 82);
 	TDataValue *pValue = monom.GetCopy();
+	TDataValue *first;
 
 	list.InsertBeforeFirst(pValue);
-
-	TDataValue *first = list.GetDataValue(FIRST);
+	first = list.GetDataValue(FIRST);
 
 	ASSERT_NO_THROW(list.DeleteFirst());
 	EXPECT_TRUE(list.IsEmpty());
@@ -670,13 +609,13 @@ TEST(TDataList, DeleteFirstInMultiElementList)
 	TDataValue *pValue1 = monom1.GetCopy();
 	TDataValue *pValue2 = monom2.GetCopy();
 	TDataValue *pValue3 = monom3.GetCopy();
+	TDataValue *first;
 
 	list.InsertBeforeFirst(pValue1);
 	list.InsertAfterLast(pValue2);
 	list.InsertBeforeCurrent(pValue3);
 
-	TDataValue *first = list.GetDataValue(FIRST);
-
+	first = list.GetDataValue(FIRST);
 	list.DeleteFirst();
 
 	EXPECT_FALSE(list.IsEmpty());
@@ -685,7 +624,7 @@ TEST(TDataList, DeleteFirstInMultiElementList)
 	EXPECT_NE(first, list.GetDataValue());
 }
 
-TEST(TDataList, CanDeleteCurrentLink)
+TEST(TDataList, CanDeleteCurrent)
 {
 	TDataList list;
 	TMonom monom(-432, 3);
@@ -708,10 +647,11 @@ TEST(TDataList, DeleteCurrentIn1ElementList)
 	TDataList list;
 	TMonom monom(89, 245);
 	TDataValue *pValue = monom.GetCopy();
+	TDataValue *current;
 
 	list.InsertBeforeFirst(pValue);
 
-	TDataValue *current = list.GetDataValue(CURRENT);
+	current = list.GetDataValue(CURRENT);
 
 	ASSERT_NO_THROW(list.DeleteCurrent());
 	EXPECT_TRUE(list.IsEmpty());
@@ -728,13 +668,14 @@ TEST(TDataList, DeleteCurrentInMultiElementList)
 	TDataValue *pValue2 = monom2.GetCopy();
 	TDataValue *pValue3 = monom3.GetCopy();
 	TDataValue *pValue4 = monom4.GetCopy();
+	TDataValue *current;
 
 	list.InsertBeforeCurrent(pValue1);
 	list.InsertBeforeFirst(pValue2);
 	list.InsertAfterLast(pValue3);
 	list.InsertBeforeCurrent(pValue4);
 
-	TDataValue *current = list.GetDataValue(CURRENT);
+	current = list.GetDataValue(CURRENT);
 	list.DeleteCurrent();
 
 	EXPECT_FALSE(list.IsEmpty());
@@ -777,9 +718,9 @@ TEST(TDataList, DeleteListResetEverything)
 	list.DeleteList();
 
 	EXPECT_EQ(list.GetListLength(), 0);
-	//EXPECT_EQ(list.IsListEnded(), true);
-	EXPECT_EQ(list.IsEmpty(), true);
 	EXPECT_EQ(list.GetCurrentPosition(), 0);
+	EXPECT_FALSE(list.IsListEnded());
+	EXPECT_TRUE(list.IsEmpty());
 }
 
 
@@ -788,10 +729,9 @@ TEST(TDataList, DeleteListResetEverything)
 
 TEST(THeadRing, CanCreateHeadRingList)
 {
-	ASSERT_NO_THROW(THeadRing ring);
+	THeadRing ringList;
 	
 	ASSERT_NO_THROW(THeadRing ringList1);
-	THeadRing ringList;
 	EXPECT_EQ(ringList.GetCurrentPosition(), 0);
 	EXPECT_EQ(ringList.GetListLength(), 0);
 	EXPECT_EQ(ringList.GetDataValue(FIRST), nullptr);
@@ -940,13 +880,14 @@ TEST(THeadRing, DeleteFromMultiElementHeadRingList)
 
 TEST(TPolinom, CanCreatePolinom)
 {
+	srand(time(0));
+
 	ASSERT_NO_THROW(TPolinom polinom);
 
-	srand(time(0));
 	int monoms[10][2];
 	for (int i = 0; i < 10; i++)
 	{
-		monoms[i][0] = -999 + rand() % 1999; // [-1000; 1000]
+		monoms[i][0] = -1000 + rand() % 2000;
 		monoms[i][1] = 1 + rand() % 999;
 	}
 
@@ -972,11 +913,10 @@ TEST(TPolinom, CanCopyEmptyPolinom)
 
 TEST(TPolinom, CanCopyPolinom)
 {
-	//srand(time(0));
 	int monoms[10][2];
 	for (int i = 0; i < 10; i++)
 	{
-		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][0] = -1000 + rand() % 2000;
 		monoms[i][1] = 1 + rand() % 999;
 	}
 
@@ -1009,16 +949,16 @@ TEST(TPolinom, CanAddEmptyPolinom)
 	int monoms[10][2];
 	for (int i = 0; i < 10; i++)
 	{
-		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][0] = -1000 + rand() % 2000;
 		monoms[i][1] = 1 + rand() % 999;
 	}
 
 	TPolinom lhs(monoms, 10), rhs;
 	TDataValue *first = lhs.GetDataValue(FIRST);
-	ASSERT_NO_THROW(lhs = lhs + rhs);
 
+	ASSERT_NO_THROW(lhs = lhs + rhs);
 	EXPECT_EQ(first, lhs.GetDataValue(FIRST));
-	EXPECT_EQ(lhs.GetCurrentPosition(), 9);
+	EXPECT_EQ(lhs.GetCurrentPosition(), 0);
 	EXPECT_EQ(lhs.GetListLength(), 10);
 	EXPECT_FALSE(lhs.IsEmpty());
 	EXPECT_FALSE(lhs.IsListEnded());
@@ -1029,16 +969,14 @@ TEST(TPolinom, AddToEmptyPolinom)
 	int monoms[10][2];
 	for (int i = 0; i < 10; i++)
 	{
-		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][0] = -1000 + rand() % 2000;
 		monoms[i][1] = 1 + rand() % 999;
 	}
 
 	TPolinom lhs, rhs(monoms, 10);
 	TDataValue *first = rhs.GetDataValue(FIRST);
 
-	/*ASSERT_NO_THROW(lhs = lhs + rhs);*/
-	lhs = lhs + rhs;
-
+	ASSERT_NO_THROW(lhs = lhs + rhs);
 	EXPECT_EQ(first, lhs.GetDataValue(FIRST));
 	EXPECT_EQ(lhs.GetCurrentPosition(), 9);
 	EXPECT_EQ(lhs.GetListLength(), 10);
@@ -1048,14 +986,13 @@ TEST(TPolinom, AddToEmptyPolinom)
 
 TEST(TPolinom, AddPolinomsWithEqualLength)
 {
-	//int monomsLhs[10][2], monomsRhs[10][2];
-	int monomsLhs[5][2] = {-324, 871,
-							3, 650, 
-							-2,509, 
-							761, 121, 
-							99, 56},
+	int monomsLhs[5][2] = { -324, 871,
+							3, 650,
+							-2,509,
+							761, 121,
+							99, 56 };
 
-		monomsRhs[5][2] = { 97, 811,
+	int	monomsRhs[5][2] = { 97, 811,
 							-22, 509, 
 							992,311, 
 							352, 123,
@@ -1075,9 +1012,9 @@ TEST(TPolinom, AddPolinomsWithDifferentLengthFirstIsBigger)
 							-74, 650,
 							1, 399 ,
 							999, 41,
-							-7, 8},
+							-7, 8 };
 
-		monomsRhs[4][2] = { 97, 702,
+	int	monomsRhs[4][2] = { 97, 702,
 							657, 403,
 							-4,41,
 							3, 9};
@@ -1093,19 +1030,18 @@ TEST(TPolinom, AddPolinomsWithDifferentLengthSecondIsBigger)
 	int monomsLhs[4][2] = { -124, 812,
 							881, 810,
 							-2,751,
-							-82, 661
-							},
+							-82, 661};
 
-		monomsRhs[7][2] = { 11, 902,
+	int	monomsRhs[7][2] = { 11, 902,
 							214, 812,
 							-24, 602,
-							124, 412 ,
+							124, 412,
 							-15, 335,
 							55, 202,
 							99, 52};
 
 	TPolinom lhs(monomsLhs, 4), rhs(monomsRhs, 7), result;
-
+	
 	ASSERT_NO_THROW(result = lhs + rhs);
 	EXPECT_EQ(result.GetListLength(), 10);
 }
@@ -1116,7 +1052,7 @@ TEST(TPolinom, CanEqualEmptyPolinomToFilledPolinom)
 	int monoms[10][2];
 	for (int i = 0; i < 10; i++)
 	{
-		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][0] = -1000 + rand() % 2000;
 		monoms[i][1] = 1 + rand() % 999;
 	}
 
@@ -1137,7 +1073,7 @@ TEST(TPolinom, CanEqualFilledPolinomToEmptyPolinom)
 	int monoms[10][2];
 	for (int i = 0; i < 10; i++)
 	{
-		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][0] = -1000 + rand() % 2000;
 		monoms[i][1] = 1 + rand() % 999;
 	}
 
@@ -1159,10 +1095,10 @@ TEST(TPolinom, CanEqualTwoFilledPolinomsWithDifferentLength)
 	int monomsLhs[10][2], monomsRhs[10][2];
 	for (int i = 0; i < 10; i++)
 	{
-		monomsLhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monomsLhs[i][0] = -1000 + rand() % 2000;
 		monomsLhs[i][1] = 1 + rand() % 999;
 
-		monomsRhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monomsRhs[i][0] = -1000 + rand() % 2000;
 		monomsRhs[i][1] = 1 + rand() % 999;
 	}
 
@@ -1184,10 +1120,10 @@ TEST(TPolinom, CanEqualTwoFilledPolinomsWithEqualLength)
 	int monomsLhs[10][2], monomsRhs[10][2];
 	for (int i = 0; i < 10; i++)
 	{
-		monomsLhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monomsLhs[i][0] = -1000 + rand() % 2000;
 		monomsLhs[i][1] = 1 + rand() % 999;
 
-		monomsRhs[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monomsRhs[i][0] = -1000 + rand() % 2000;
 		monomsRhs[i][1] = 1 + rand() % 999;
 	}
 
@@ -1204,25 +1140,24 @@ TEST(TPolinom, CanEqualTwoFilledPolinomsWithEqualLength)
 	EXPECT_FALSE(rhs.IsListEnded());
 }
 
-//TEST(TPolinom, CanInputPolinom)
-//{
-//	TPolinom polinom;
-//	ASSERT_NO_THROW(polinom.Input());
-//	ASSERT_NO_THROW(polinom.Print());
-//	EXPECT_EQ(1, 0);
-//}
-
 TEST(TPolinom, CanPrintPolinom)
 {
 	int monoms[10][2];
 	for (int i = 0; i < 10; i++)
 	{
-		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][0] = -1000 + rand() % 2000;
 		monoms[i][1] = 1 + rand() % 999;
 
 	}
 
 	TPolinom polinom(monoms, 10);
 
+	ASSERT_NO_THROW(polinom.Print());
+}
+
+TEST(TPolinom, CanPrintEmptyPolinom)
+{
+	TPolinom polinom;
+	
 	ASSERT_NO_THROW(polinom.Print());
 }

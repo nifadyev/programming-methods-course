@@ -13,8 +13,8 @@ public:
 	THeadRing();
 	~THeadRing();
 	
-	virtual void InsertBeforeFirst(pTDataValue pVal = nullptr); // после заголовка
-
+	virtual void InsertBeforeFirst(pTDataValue pVal = nullptr);
+	virtual void InsertAfterLast(pTDataValue pVal = nullptr);
 	virtual void DeleteFirst();
 };
 #endif
