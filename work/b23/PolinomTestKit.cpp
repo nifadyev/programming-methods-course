@@ -1203,3 +1203,26 @@ TEST(TPolinom, CanEqualTwoFilledPolinomsWithEqualLength)
 	EXPECT_FALSE(rhs.IsEmpty());
 	EXPECT_FALSE(rhs.IsListEnded());
 }
+
+//TEST(TPolinom, CanInputPolinom)
+//{
+//	TPolinom polinom;
+//	ASSERT_NO_THROW(polinom.Input());
+//	ASSERT_NO_THROW(polinom.Print());
+//	EXPECT_EQ(1, 0);
+//}
+
+TEST(TPolinom, CanPrintPolinom)
+{
+	int monoms[10][2];
+	for (int i = 0; i < 10; i++)
+	{
+		monoms[i][0] = -1000 + rand() % 2000; // [-1000; 1000]
+		monoms[i][1] = 1 + rand() % 999;
+
+	}
+
+	TPolinom polinom(monoms, 10);
+
+	ASSERT_NO_THROW(polinom.Print());
+}
