@@ -2000,9 +2000,9 @@ TEST(TPolinom, CanCalculatePolinom)
 ```
 
 #### Результат прохождения тестов
-![](https://bytebucket.org/Neaph/lab4-queue/raw/763e2d91282e57009943c46049e460673767fb06/work/b23/IntensityTable.png)
+![](https://bytebucket.org/VadimNifadyev/lab5-polynom/raw/feb0b1e319fa74535e40a30d95c7be488f4dc9a2/work/b23/PolinomTests.png)
 #### Результат работы программы
-![](https://bytebucket.org/Neaph/lab4-queue/raw/763e2d91282e57009943c46049e460673767fb06/work/b23/main.png)
+![](https://bytebucket.org/VadimNifadyev/lab5-polynom/raw/feb0b1e319fa74535e40a30d95c7be488f4dc9a2/work/b23/PolinomMain.png)
 
 ## Вывод
 В рамках данной лабораторной работы были изучены способы представления и хранения полинома в виде кольцевого односвязного списка, были реализованы различные операции над полиномами, а также были получены базовые знания работы с регулярными выражениями.
