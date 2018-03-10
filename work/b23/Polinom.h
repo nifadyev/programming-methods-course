@@ -18,5 +18,6 @@ public:
 
 	TPolinom& Input();
 	void Print();
+	int Calculate(const int x, const int y, const int z);
 };
 #endif

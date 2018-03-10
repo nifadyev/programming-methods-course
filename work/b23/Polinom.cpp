@@ -218,3 +218,30 @@ void TPolinom::Print()
 
 	cout << endl;
 }
+
+int TPolinom::Calculate(const int x, const int y, const int z)
+{
+	Reset();
+
+	if (IsEmpty())
+	{
+		return 0;
+	}
+
+	int result = 0;
+
+	while (!IsListEnded())
+	{
+		result += GetMonom()->GetCoefficient() * pow(x, GetMonom()->GetIndex() / 100)* pow(y, (GetMonom()->GetIndex() % 100) / 10)
+			* pow(z, GetMonom()->GetIndex() % 10);
+		MoveNext();
+
+		if (IsListEnded())
+		{
+			break;
+
+		}
+	}
+
+	return result;
+}
