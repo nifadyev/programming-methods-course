@@ -1158,3 +1158,23 @@ TEST(TPolinom, CanPrintEmptyPolinom)
 	
 	ASSERT_NO_THROW(polinom.Print());
 }
+
+TEST(TPolinom, CalculateEmptyPolinomReturns0)
+{
+	TPolinom polinom;
+
+	ASSERT_NO_THROW(polinom.Calculate(1, 2, 3));
+	EXPECT_EQ(polinom.Calculate(1, 2, 3), 0);
+}
+
+TEST(TPolinom, CanCalculatePolinom)
+{
+	int monoms[4][2] = {34, 863,
+						-8, 702,
+						401, 342,
+						6, 7};
+
+	TPolinom polinom(monoms, 4);
+
+	EXPECT_EQ(polinom.Calculate(-2, 4, 1), 34831366);
+}
