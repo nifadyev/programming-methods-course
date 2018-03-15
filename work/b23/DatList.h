@@ -13,9 +13,9 @@ protected:
 	pTDataLink pLast;
 	pTDataLink pCurrentLink;
 	pTDataLink pPreviousLink;
-	pTDataLink pStop; // Указатель на элемент, означающий конец списка
+	pTDataLink pStop; // вЂќРєР°Р·Р°С‚РµР»СЊ РЅР° СЌР»РµРјРµРЅС‚, РѕР·РЅР°С‡Р°СЋС‰РёР№ РєРѕРЅРµС† СЃРїРёСЃРєР°
 
-	int currentPosition; // Итератор
+	int currentPosition; // В»С‚РµСЂР°С‚РѕСЂ
 	int listLength;
 
 	pTDataLink GetLink(pTDataValue pVal = nullptr, pTDataLink pLink = nullptr);
@@ -36,7 +36,7 @@ public:
 
 	virtual void Reset(); 
 	virtual bool IsListEnded() const;
-	void MoveNext(); // Сдвиг вправо текущего звена 
+	void MoveNext(); // вЂ”РґРІРёРі РІРїСЂР°РІРѕ С‚РµРєСѓС‰РµРіРѕ Р·РІРµРЅР° 
 
 	virtual void InsertBeforeFirst(pTDataValue pVal = nullptr);
 	virtual void InsertAfterLast(pTDataValue pVal = nullptr);
