@@ -1,4 +1,4 @@
-#include "DataValue.h"
+#include "DatValue.h"
 
 #ifndef TROOTLINK
 #define TROOTLINK
@@ -8,10 +8,10 @@ typedef TRootLink *pTRootLink;
 class TRootLink
 {
 protected:
-	pTRootLink pNext; 
+	pTRootLink pNext;
 public:
 	explicit TRootLink(pTRootLink pNxt = nullptr) { pNext = pNxt; }
-	
+
 	pTRootLink GetNextLink() const { return pNext; }
 	void SetNextLink(const pTRootLink pLink) { pNext = pLink; }
 

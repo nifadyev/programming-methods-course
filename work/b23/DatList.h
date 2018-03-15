@@ -1,5 +1,5 @@
 #include <iostream>
-#include "DataLink.h"
+#include "DatLink.h"
 using namespace std;
 
 #ifndef TDATALIST
@@ -25,7 +25,7 @@ protected:
 public:
 	TDataList();
 	~TDataList() { DeleteList(); }
-	 
+
 	pTDataValue GetDataValue(TLinkPos mode = CURRENT) const;
 	virtual bool IsEmpty() const { return  pFirst == pStop; }
 
@@ -34,9 +34,9 @@ public:
 	void SetCurrentPosition(const int& position);
 	int GetCurrentPosition() const;
 
-	virtual void Reset(); 
+	virtual void Reset();
 	virtual bool IsListEnded() const;
-	void MoveNext(); // —двиг вправо текущего звена 
+	void MoveNext(); // —двиг вправо текущего звена
 
 	virtual void InsertBeforeFirst(pTDataValue pVal = nullptr);
 	virtual void InsertAfterLast(pTDataValue pVal = nullptr);

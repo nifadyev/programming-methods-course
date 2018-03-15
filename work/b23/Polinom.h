@@ -1,5 +1,6 @@
 #include <regex>
 #include <string>
+#include <cmath>
 #include "HeadRing.h"
 #include "Monom.h"
 

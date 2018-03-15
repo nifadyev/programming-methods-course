@@ -1,4 +1,4 @@
-#include "DataList.h"
+#include "DatList.h"
 
 pTDataLink TDataList::GetLink(pTDataValue pVal, pTDataLink pLink)
 {
@@ -98,8 +98,8 @@ void TDataList::MoveNext()
 	{
 		throw logic_error("Cannot move to the next link! List has ended");
 	}
-	
-	if (IsListEnded() == false) 
+
+	if (IsListEnded() == false)
 	{
 		pPreviousLink = pCurrentLink;
 		pCurrentLink = pCurrentLink->GetNextDataLink();
@@ -209,7 +209,7 @@ void TDataList::DeleteFirst()
 	DeleteLink(temp);
 	listLength--;
 
-	if (IsEmpty()) 
+	if (IsEmpty())
 	{
 		pLast = pStop;
 		Reset();
@@ -227,14 +227,14 @@ void TDataList::DeleteCurrent()
 	{
 		throw logic_error("Cannot delete current element! List is empty");
 	}
-	
+
 	if (listLength == 1)
 	{
 		DeleteFirst();
 
 		return;
 	}
-	
+
 	if (pCurrentLink == pLast)
 	{
 		DeleteLink(pCurrentLink);
@@ -246,7 +246,7 @@ void TDataList::DeleteCurrent()
 
 		return;
 	}
-	
+
 	TDataLink *temp = pCurrentLink;
 	pCurrentLink = pCurrentLink->GetNextDataLink();
 	DeleteLink(temp);

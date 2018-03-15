@@ -1,15 +1,15 @@
-#include "DataList.h"
+#include "DatList.h"
 
 #ifndef HEADRING
 #define HEADRING
 class THeadRing : public TDataList
 {
 protected:
-	pTDataLink pHead; // заголовок, pFirst - звено за pHead
+	pTDataLink pHead; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, pFirst - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ pHead
 public:
 	THeadRing();
 	~THeadRing();
-	
+
 	virtual void InsertBeforeFirst(pTDataValue pVal = nullptr);
 	virtual void InsertAfterLast(pTDataValue pVal = nullptr);
 	virtual void DeleteFirst();

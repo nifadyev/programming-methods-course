@@ -1,19 +1,19 @@
 #include <iostream>
-#include "DataValue.h"
+#include "DatValue.h"
 using namespace std;
 
 #ifndef TMONOM
 #define TMONOM
 class TMonom : public TDataValue
 {
-protected: 
+protected:
 	int coefficient;
-	int index; // Сумма степеней (x^A * y^B * z^C => index = A * 100+ B * 10 + C)
+	int index; // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (x^A * y^B * z^C => index = A * 100+ B * 10 + C)
 
 public:
 	TMonom(int coef = 1, int ind = 0);
 	//TODO: Add copy constructor
-	virtual TDataValue* GetCopy() const; // Создание копии на основе Монома
+	virtual TDataValue* GetCopy() const; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 
 	void SetCoefficient(const int& coef) { coefficient = coef; }
 	int GetCoefficient() const { return coefficient; }
