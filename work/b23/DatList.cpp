@@ -28,7 +28,7 @@ TDataList::TDataList()
 
 pTDataValue TDataList::GetDataValue(TLinkPos mode) const
 {
-	// Если в списке нет ни одного элемента
+	// Р•СЃР»Рё РІ СЃРїРёСЃРєРµ РЅРµС‚ РЅРё РѕРґРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р°
 	if (pFirst == nullptr)
 	{
 		return nullptr;
