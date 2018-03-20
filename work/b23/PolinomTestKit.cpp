@@ -2,10 +2,10 @@
 #include <ctime>
 
 #include "RootLink.h"
-#include "DataLink.h"
+#include "DatLink.h"
 #include "Monom.h"
 
-#include "DataList.h"
+#include "DatList.h"
 #include "HeadRing.h"
 #include "Polinom.h"
 
