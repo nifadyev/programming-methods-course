@@ -8,6 +8,7 @@
 #include <iostream> 
 #include <string>
 #include "TDatValue.h"
+#include "TText.h"
 using namespace std;
 
 const enum {TextOK, TextWithoutDown = 101, TextWithoutNext, TextWithoutPrevious, TextError = -102, TextWithoutMemory};
@@ -50,12 +51,11 @@ public:
 	void* operator new(const size_t size); // Выделение звена
 	void operator delete(void *pLink); // Освобождение звена
 	friend class Text;
-	static void MemoryCleaner(const Text& text); // Сборка мусора
+	static void MemoryCleaner(Text& text); // Сборка мусора
 
 	/*int*/bool IsAtomic() { return pDown == nullptr; } // Проверка атомарности звена
 	pTextLink GetNext() { return pNext; }
 	pTextLink GetDown() { return pDown; }
 	//pTDataValue* GetCopy() { return new TextLink(string, pNext, pDown); }
-	
 };
 #endif

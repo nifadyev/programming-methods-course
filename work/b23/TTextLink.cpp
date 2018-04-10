@@ -93,6 +93,40 @@ void TextLink::operator delete(void *pLink)
 	MemoryHeader.pFree = temp;
 }
 
-void TextLink::MemoryCleaner(const Text& text)
+void TextLink::MemoryCleaner(Text& text)
 {
+    string str;
+
+    // Маркировка сторк текста маркером "&&&"
+    for (text.Reset(); !text.IsTextEnded(); text.GoNext())
+    {
+        if (str.find("&&&") != 0)
+        {
+            text.SetLine("&&&" + text.GetLine());
+        }
+    }
+
+    // Маркировка списка свободных звеньев
+    pTextLink pLink = MemoryHeader.pFree;
+    for(; pLink != nullptr; pLink = pLink->pNext)
+    {
+        strcpy(pLink->textString, "&&&");
+    }
+
+    // Сборка мусора
+    pLink = MemoryHeader.pFirst;
+    for (; pLink <= MemoryHeader.pLast; pLink++)
+    {
+        // Строка текста или свободное звено
+        if (strstr(pLink->textString, "&&&") != nullptr)
+        {
+            // Снятие маркировки
+            strcpy(pLink->textString, pLink->textString + 3);
+        }
+        else
+        {
+            // Неучтенное звено в список свободных
+            delete pLink;
+        }
+    }
 }
