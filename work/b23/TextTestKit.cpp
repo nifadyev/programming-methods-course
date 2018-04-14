@@ -66,20 +66,21 @@ TEST(TextLink, Can_Print_Free_Links_If_There_Are_No_One)
 {
 	TString string = "asfgsdgsdg";
 	TextLink textLink;
-	textLink.InitMemorySystem(47);
+	textLink.InitMemorySystem(4);
 	ASSERT_NO_THROW(textLink.PrintFreeLinks());
 }
 
 TEST(TextLink, Can_Create_Text_Using_Operator_New)
 {
-	TextLink *textLink;
+	TextLink *textLink; 
 	ASSERT_NO_THROW(textLink = new TextLink[24]);
 	textLink = new TextLink[24];
 	//textLink->InitMemorySystem(24);
 	TString string1 = "sfsdgdgsd", string2 = "hjkhjk";
 	TextLink textLink1(string1), textLink2(string2);
-	textLink[2] = textLink1;
+	textLink[0] = textLink1;
 	textLink[1] = textLink2;
+    //textLink->InitMemorySystem(24);
 	textLink->PrintFreeLinks();
 }
 
@@ -87,4 +88,29 @@ TEST(TextLink, Can_Create_Text_With_One_String_Using_Operator_New)
 {
 	TextLink *textLink;
 	ASSERT_NO_THROW(textLink = new TextLink[0]);
+}
+
+/*-------------------------------Testing_TText_class-------------------------------*/
+
+TEST(Text, Can_Create_Empty_Text)
+{
+    ASSERT_NO_THROW(Text text);
+}
+
+TEST(Text, Can_Create_Text_From_Text_Link)
+{
+    TString string = "qwrprhqwirqwr";
+    pTextLink link = new TextLink(string);
+
+    ASSERT_NO_THROW(Text text(link));
+    //EXPECT_EQ(text.GetLine(), string);
+}
+
+TEST(Text, Can_Read_Text_From_File)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+    ASSERT_NO_THROW(text.Read("input.txt"));
+    text.Read("input.txt");
+    text.Print();
 }

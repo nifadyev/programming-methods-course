@@ -52,7 +52,7 @@ public:
 	int GoNext(void);             // Переход к следующей записи
 	
 	// Работа с файлами
-	void Read(char * pFileName);  // Ввод текста из файла
+	void Read(const char * pFileName);  // Ввод текста из файла
 	void Write(char * pFileName); // Вывод текста в файл
 	void Print(void);             // Печать текста
 };

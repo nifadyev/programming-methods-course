@@ -1,8 +1,10 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
+#define _CRT_SECURE_NO_WARNINGS
 #include "TTextLink.h"
 #include <string.h>
+#include "TText.h"
 TextMemory TextLink::MemoryHeader;
 
 TextLink::TextLink(TString string, pTextLink pNext, pTextLink pDown)
@@ -11,7 +13,8 @@ TextLink::TextLink(TString string, pTextLink pNext, pTextLink pDown)
 	this->pDown = pDown;
 	if (string != nullptr)
 	{
-		strcpy_s(this->textString, string);
+        //strcpy_s breaks up when trying to read from file
+		strcpy(this->textString, string);
 	}
 	else
 	{
@@ -45,9 +48,9 @@ TextLink::TextLink(TString string, pTextLink pNext, pTextLink pDown)
 
 	// ”пор€дочивание списка свободных звеньев по пам€ти
 	pTextLink pLink = MemoryHeader.pFree/*First*/;
-	for (int i = 0; i < size - 1; i++)
+	for (int i = 0; i < size - 1; i++, pLink++)
 	{
-		pLink->pNext = ++pLink;
+		pLink->pNext = pLink + 1;
 	}
 	pLink->pNext = nullptr;
 }
@@ -72,6 +75,9 @@ TextLink::TextLink(TString string, pTextLink pNext, pTextLink pDown)
 			cout << pLink->textString << endl;
 			pLink = pLink->pNext;
 		}
+
+        //for (; pLink != NULL; pLink = pLink->pNext)
+        //    cout << pLink->textString << endl;
 	}
 }
 

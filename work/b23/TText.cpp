@@ -1,26 +1,95 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
+#include <conio.h>
 #include "TText.h"
 
-
+static int TextLevel; // номер текущего уровня текста
+static char stringBuffer[100];
 
 pTextLink Text::GetFirstAtom(pTextLink textLink)
 {
-	return pTextLink();
+    pTextLink temp = textLink;
+    while (!temp->IsAtomic())
+    {
+        Path.push(temp);
+        temp->GetDown();
+    }
+
+    return temp;
 }
 
 void Text::PrintText(pTextLink textLink)
 {
+
+    if (textLink != NULL)
+    {
+        for (size_t i = 0; i < TextLevel; i++)
+        {
+            cout << " ";
+        }
+        cout << textLink->textString << endl;
+
+        TextLevel++; 
+        PrintText(textLink->GetDown());
+
+        TextLevel--; 
+        PrintText(textLink->GetNext());
+    }
 }
 
 pTextLink Text::ReadText(ifstream & textFile)
 {
-	return pTextLink();
+    //FIXME: add extra text level that break text structure
+    //string buffer;
+    pTextLink pLink = new TextLink();
+    pTextLink temp = pLink;
+    while (!textFile.eof())
+    {
+        //getline(textFile, buffer);
+        textFile.getline(stringBuffer, 100, '\n');
+        //if (buffer.front() == '}')
+        if (stringBuffer[0] == '}')
+        {
+            //TextLevel--;
+            break;
+        }
+        //else if (buffer.front() == '{')
+        else if (stringBuffer[0] == '{')
+        {
+            //TextLevel++;
+            pLink->pDown = ReadText(textFile);
+        }
+        else
+        {
+            //pLink->pNext = new TextLink((char*)buffer.c_str());
+            pLink->pNext = new TextLink(stringBuffer);
+            pLink = pLink->pNext;
+        }
+    }
+
+    pLink = temp;
+    if (temp->pDown == /*NULL*/nullptr)
+    {
+        temp = temp->pNext;
+        delete pLink;
+    }
+	return temp;
 }
 
 Text::Text(pTextLink textLink)
 {
+    if (textLink != nullptr)
+    {
+        pFirst = pCurrent = textLink;
+    }
+    else
+    {
+        pFirst = new TextLink();
+        pCurrent = pFirst;
+    }
+    //Path.push(pFirst);
+    //iteratorStack.push(pFirst);
 }
 
 pText Text::GetCopy()
@@ -119,8 +188,12 @@ int Text::GoNext(void)
 	return 0;
 }
 
-void Text::Read(char * pFileName)
+void Text::Read(const char * pFileName)
 {
+    ifstream textFile(pFileName);
+    TextLevel = 0;
+    if (&textFile != NULL)
+        pFirst = ReadText(textFile);
 }
 
 void Text::Write(char * pFileName)
@@ -129,4 +202,6 @@ void Text::Write(char * pFileName)
 
 void Text::Print(void)
 {
+    TextLevel = 0;
+    PrintText(pFirst);
 }

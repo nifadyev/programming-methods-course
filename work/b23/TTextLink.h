@@ -8,13 +8,14 @@
 #include <iostream> 
 #include <string>
 #include "TDatValue.h"
-#include "TText.h"
+//#include "TText.h"
 using namespace std;
 
 const enum {TextOK, TextWithoutDown = 101, TextWithoutNext, TextWithoutPrevious, TextError = -102, TextWithoutMemory};
 const int TextLineLength = 20;
 const int MemorySize = 20;
 
+class Text;
 class TextLink;
 typedef TextLink *pTextLink;
 typedef char TString[TextLineLength];
