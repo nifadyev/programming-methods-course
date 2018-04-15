@@ -47,7 +47,7 @@ public:
 	void DeleteNextSection(void);     // Удаление раздела в том же уровне
 	
 	// Итератор
-	int Reset(void);              // Установить на первую звапись
+	int Reset(void);              // Установить на первую запись
 	/*int*/bool IsTextEnded(void) const;  // Текст завершен?
 	int GoNext(void);             // Переход к следующей записи
 	

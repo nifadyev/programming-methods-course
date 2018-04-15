@@ -1,18 +1,21 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <conio.h>
 #include "TText.h"
 
+const int bufferSize = 100;
 static int TextLevel; // номер текущего уровня текста
-static char stringBuffer[100];
+static char stringBuffer[bufferSize + 1];
 
 pTextLink Text::GetFirstAtom(pTextLink textLink)
 {
     pTextLink temp = textLink;
     while (!temp->IsAtomic())
     {
-        Path.push(temp);
+        iteratorStack.push(temp);
         temp->GetDown();
     }
 
@@ -24,7 +27,7 @@ void Text::PrintText(pTextLink textLink)
 
     if (textLink != NULL)
     {
-        for (size_t i = 0; i < TextLevel; i++)
+        for (int i = 0; i < TextLevel; i++)
         {
             cout << " ";
         }
@@ -40,14 +43,14 @@ void Text::PrintText(pTextLink textLink)
 
 pTextLink Text::ReadText(ifstream & textFile)
 {
-    //FIXME: add extra text level that break text structure
+    //FIXME: adding extra text level that break text structure
     //string buffer;
     pTextLink pLink = new TextLink();
     pTextLink temp = pLink;
     while (!textFile.eof())
     {
         //getline(textFile, buffer);
-        textFile.getline(stringBuffer, 100, '\n');
+        textFile.getline(stringBuffer, bufferSize, '\n');
         //if (buffer.front() == '}')
         if (stringBuffer[0] == '}')
         {
@@ -99,31 +102,101 @@ pText Text::GetCopy()
 
 int Text::GoFirstLink()
 {
+    //Reset();
+    while (!Path.empty())
+    {
+        Path.pop();
+    }
+
+    pCurrent = pFirst;
+    //if (pCurrent == nullptr)
+    if (pCurrent->textString[0] == '\0')
+    {
+        return -1;
+    }
+
 	return 0;
 }
 
 int Text::GoDownLink()
 {
+    if (pCurrent == nullptr)
+    {
+        throw "Error! Current link is empty\n";
+        return -1;
+    }
+
+    if (pCurrent->pDown == nullptr)
+    {
+        throw "Error! Current link has not got down links\n";
+        return -1;
+    }
+
+    Path.push(pCurrent);
+    pCurrent = pCurrent->pDown;
 	return 0;
 }
 
 int Text::GoNextLink()
 {
+    if (pCurrent == nullptr)
+    {
+        throw "Error! Current link is empty\n";
+        return -1;
+    }
+
+    if (pCurrent->pNext == nullptr)
+    {
+        throw "Error! Current link has not got next links\n";
+        return -1;
+    }
+
+    Path.push(pCurrent);
+    pCurrent = pCurrent->pNext;
 	return 0;
 }
 
 int Text::GoPreviousLink()
 {
+    if (Path.empty())
+    {
+        throw "Error! Path is empty\n";
+        return -1;
+    }
+    if (pCurrent == pFirst)
+    {
+        throw "Error! Cannot get previous link. Current link is the first one\n";
+        return -1;
+    }
+
+    pCurrent = Path.top();
+    Path.pop();
 	return 0;
 }
 
 string Text::GetLine(void)
 {
-	return string();
+    if (pCurrent == nullptr)
+    {
+        return "";
+    }
+
+	return pCurrent->textString;
 }
 
 void Text::SetLine(string s)
 {
+    if (s.size() > bufferSize)
+    {
+        throw("Error! Size of the string must be less than ...\n");
+    }
+    //if (s.empty())
+    //{
+
+    //}
+    //strcpy(pCurrent->textString, s.c_str());
+    strncpy(pCurrent->textString, s.c_str(), TextLineLength);
+    pCurrent->textString[TextLineLength - 1] = '\0';
 }
 
 void Text::InsertDownLine(string s)
@@ -180,7 +253,7 @@ int Text::Reset(void)
 
 bool Text::IsTextEnded(void) const
 {
-	return !Path.empty();
+	return !iteratorStack.empty();
 }
 
 int Text::GoNext(void)

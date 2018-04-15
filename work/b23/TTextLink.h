@@ -12,8 +12,8 @@
 using namespace std;
 
 const enum {TextOK, TextWithoutDown = 101, TextWithoutNext, TextWithoutPrevious, TextError = -102, TextWithoutMemory};
-const int TextLineLength = 20;
-const int MemorySize = 20;
+const int TextLineLength = 50;
+const int MemorySize = 50;
 
 class Text;
 class TextLink;

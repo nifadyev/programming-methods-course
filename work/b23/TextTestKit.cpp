@@ -80,7 +80,6 @@ TEST(TextLink, Can_Create_Text_Using_Operator_New)
 	TextLink textLink1(string1), textLink2(string2);
 	textLink[0] = textLink1;
 	textLink[1] = textLink2;
-    //textLink->InitMemorySystem(24);
 	textLink->PrintFreeLinks();
 }
 
@@ -110,7 +109,52 @@ TEST(Text, Can_Read_Text_From_File)
 {
     Text text;
     TextLink::InitMemorySystem();
+
     ASSERT_NO_THROW(text.Read("input.txt"));
+    //text.Read("input.txt");
+    //text.Print();
+}
+
+TEST(Text, Can_Print_Text/*Can_Print_Text_Read_From_File*/)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
     text.Read("input.txt");
-    text.Print();
+
+    ASSERT_NO_THROW(text.Print());
+}
+
+TEST(Text, Can_Go_To_The_First_Link)
+{
+    Text text;
+    string expectedString = "1";
+    
+    TextLink::InitMemorySystem();
+    text.Read("input.txt");
+
+    ASSERT_NO_THROW(text.GoFirstLink());
+
+    text.GoFirstLink();
+    EXPECT_EQ(text.GetLine(), expectedString);
+}
+
+TEST(Text, Go_To_The_First_Link_Returns_0_If_Everything_Is_Correct)
+{
+    Text text;
+
+    TextLink::InitMemorySystem();
+    text.Read("input.txt");
+
+    EXPECT_EQ(text.GoFirstLink(), 0);
+}
+
+TEST(Text, Throw_When_Trying_To_Go_To_The_First_Link_In_Empty_Text)
+{
+    Text text;
+
+    TextLink::InitMemorySystem();
+
+    EXPECT_EQ(text.GoFirstLink(), -1);
+
 }
