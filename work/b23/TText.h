@@ -35,7 +35,7 @@ public:
 
 	// ƒоступ
 	string GetLine(void);   // чтение текущей строки
-	void SetLine(string s); // замена текущей строки 
+	void SetLine(const string &s); // замена текущей строки 
 							// модификаци€
 	void InsertDownLine(string s);    // ¬ставка строки в подуровень
 	void InsertDownSection(string s); // ¬ставка раздела в подуровень

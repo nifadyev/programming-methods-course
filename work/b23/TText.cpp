@@ -3,11 +3,19 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
+#ifdef _WIN32
 #include <conio.h>
+#endif
+#ifdef __linux__
+#include <curses.h>
+#endif
+
+// #include <iostream>
+#include <cstring>
 #include "TText.h"
 
 const int bufferSize = 100;
-static int TextLevel; // номер текущего уровня текста
+static int TextLevel; // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 static char stringBuffer[bufferSize + 1];
 
 pTextLink Text::GetFirstAtom(pTextLink textLink)
@@ -122,14 +130,14 @@ int Text::GoDownLink()
 {
     if (pCurrent == nullptr)
     {
-        throw "Error! Current link is empty\n";
-        return -1;
+        throw logic_error("Error! Current link is empty\n");
+        //return -1;
     }
 
     if (pCurrent->pDown == nullptr)
     {
-        throw "Error! Current link has not got down links\n";
-        return -1;
+        throw logic_error("Error! Current link has not got down links\n");
+       // return -1;
     }
 
     Path.push(pCurrent);
@@ -141,14 +149,14 @@ int Text::GoNextLink()
 {
     if (pCurrent == nullptr)
     {
-        throw "Error! Current link is empty\n";
-        return -1;
+        throw logic_error("Error! Current link is empty\n");
+        //return -1;
     }
 
     if (pCurrent->pNext == nullptr)
     {
-        throw "Error! Current link has not got next links\n";
-        return -1;
+        throw logic_error("Error! Current link has not got next links\n");
+        //return -1;
     }
 
     Path.push(pCurrent);
@@ -160,12 +168,12 @@ int Text::GoPreviousLink()
 {
     if (Path.empty())
     {
-        throw "Error! Path is empty\n";
+        throw logic_error("Error! Path is empty\n");
         return -1;
     }
     if (pCurrent == pFirst)
     {
-        throw "Error! Cannot get previous link. Current link is the first one\n";
+        throw logic_error("Error! Cannot get previous link. Current link is the first one\n");
         return -1;
     }
 
@@ -184,7 +192,7 @@ string Text::GetLine(void)
 	return pCurrent->textString;
 }
 
-void Text::SetLine(string s)
+void Text::SetLine(const string &s)
 {
     if (s.size() > bufferSize)
     {

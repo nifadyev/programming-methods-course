@@ -64,7 +64,7 @@ TEST(TextLink, Can_Initialaze_Memory_System_With_Parameters)
 
 TEST(TextLink, Can_Print_Free_Links_If_There_Are_No_One)
 {
-	TString string = "asfgsdgsdg";
+	//TString string = "asfgsdgsdg";
 	TextLink textLink;
 	textLink.InitMemorySystem(4);
 	ASSERT_NO_THROW(textLink.PrintFreeLinks());
@@ -157,4 +157,137 @@ TEST(Text, Throw_When_Trying_To_Go_To_The_First_Link_In_Empty_Text)
 
     EXPECT_EQ(text.GoFirstLink(), -1);
 
+}
+
+TEST(Text, Can_Go_Down_Link)
+{
+    Text text;
+    string expectedString = "1.1";
+    TextLink::InitMemorySystem();
+    
+    text.Read("input.txt");
+    //text.Reset();
+    text.GoFirstLink();
+
+    ASSERT_NO_THROW(text.GoDownLink());
+    EXPECT_EQ(text.GetLine(), expectedString);
+}
+
+TEST(Text, Go_Down_Link_Returns_0_If_Success)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+    text.GoFirstLink();
+
+    EXPECT_EQ(text.GoDownLink(), 0);
+}
+
+
+TEST(Text, Throws_If_Go_Down_Link_In_Lowest_Level)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+
+    ASSERT_THROW(text.GoDownLink(), logic_error);
+}
+
+TEST(Text, Throws_If_Go_Down_Link_With_Empty_Current_Link)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    ASSERT_THROW(text.GoDownLink(), logic_error);
+}
+
+TEST(Text, Can_Go_Next_Link)
+{
+    Text text;
+    string expectedString = "2";
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+    //text.Reset();
+    text.GoFirstLink();
+
+    ASSERT_NO_THROW(text.GoNextLink());
+    EXPECT_EQ(text.GetLine(), expectedString);
+}
+
+TEST(Text, Go_Next_Link_Returns_0_If_Success)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+    text.GoFirstLink();
+
+    EXPECT_EQ(text.GoNextLink(), 0);
+}
+
+TEST(Text, Throws_If_Go_Next_Link_In_Lowest_Level)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+
+    ASSERT_THROW(text.GoNextLink(), logic_error);
+}
+
+TEST(Text, Throws_If_Go_Next_Link_With_Empty_Current_Link)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    ASSERT_THROW(text.GoNextLink(), logic_error);
+}
+
+TEST(Text, Can_Go_Previous_Link)
+{
+    Text text;
+    string expectedString = "1";
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+    //text.Reset();
+    text.GoFirstLink();
+    text.GoNextLink();
+
+    ASSERT_NO_THROW(text.GoPreviousLink());
+    EXPECT_EQ(text.GetLine(), expectedString);
+}
+
+TEST(Text, Go_Previous_Link_Returns_0_If_Success)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+    text.GoFirstLink();
+    text.GoNextLink();
+
+    EXPECT_EQ(text.GoPreviousLink(), 0);
+}
+
+TEST(Text, Throws_If_Go_Next_Link_In_Highest_Level)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+    text.GoFirstLink();
+
+    ASSERT_THROW(text.GoPreviousLink(), logic_error);
+}
+
+TEST(Text, Throws_If_Go_Previous_Link_With_Empty_Current_Link)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    ASSERT_THROW(text.GoNextLink(), logic_error);
 }
