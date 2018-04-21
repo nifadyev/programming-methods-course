@@ -291,3 +291,102 @@ TEST(Text, Throws_If_Go_Previous_Link_With_Empty_Current_Link)
 
     ASSERT_THROW(text.GoNextLink(), logic_error);
 }
+
+
+TEST(Text, Can_Insert_Down_Line_Into_Empty_Text)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    //text.Read("input.txt");
+
+    ASSERT_NO_THROW(text.InsertDownLine("2.2.1"));
+    text.GoDownLink();
+    EXPECT_EQ(text.GetLine(), "2.2.1");
+}
+
+TEST(Text, DISABLED_Throw_When_Insert_Down_Line_With_Empty_Current_Link)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    //text.Read("input.txt");
+
+    ASSERT_ANY_THROW(text.InsertDownLine("2.2.1"));
+    //EXPECT_EQ(text.GetLine(), "2.2.1");
+}
+
+TEST(Text, Can_Insert_Muptiple_Down_Line)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.InsertDownLine("2");
+    text.InsertDownLine("2.1");
+    text.InsertDownLine("2.1.1");
+    text.GoDownLink();
+
+    EXPECT_EQ(text.GetLine(), "2.1.1");
+}
+
+TEST(Text, Can_Insert_Down_Line_Into_Text)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+    text.GoFirstLink();
+    text.InsertDownLine("1.0");
+    text.GoDownLink();
+    EXPECT_EQ(text.GetLine(), "1.0");
+}
+
+TEST(Text, Can_Insert_Next_Line_Into_Empty_Text)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    //text.Read("input.txt");
+
+    ASSERT_NO_THROW(text.InsertNextLine("A"));
+    text.GoNextLink();
+    EXPECT_EQ(text.GetLine(), "A");
+}
+
+TEST(Text, DISABLED_Throw_When_Insert_Next_Line_With_Empty_Current_Link)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    //text.Read("input.txt");
+    
+    ASSERT_ANY_THROW(text.InsertNextLine("A"));
+    //EXPECT_EQ(text.GetLine(), "2.2.1");
+}
+
+TEST(Text, Can_Insert_Muptiple_Next_Line)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.InsertNextLine("13");
+    text.InsertNextLine("14");
+    text.InsertNextLine("15");
+    text.GoNextLink();
+
+    EXPECT_EQ(text.GetLine(), "15");
+}
+
+TEST(Text, Can_Insert_Next_Line_Into_Text)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+    //text.GoFirstLink();
+    text.InsertNextLine("3");
+    text.GoNextLink();
+    EXPECT_EQ(text.GetLine(), "3");
+}
+
+//TODO: Add tests for deletes
