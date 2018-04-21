@@ -41,11 +41,30 @@ void Text::PrintText(pTextLink textLink)
         }
         cout << textLink->textString << endl;
 
-        TextLevel++; 
+        TextLevel++;
         PrintText(textLink->GetDown());
 
-        TextLevel--; 
+        TextLevel--;
         PrintText(textLink->GetNext());
+    }
+}
+
+void Text::PrintTextInFile(pTextLink textLink, ofstream &output)
+{
+
+    if (textLink != NULL)
+    {
+        for (int i = 0; i < TextLevel; i++)
+        {
+            output << " ";
+        }
+        output << textLink->textString << endl;
+
+        TextLevel++; 
+        PrintTextInFile(textLink->GetDown(), output);
+
+        TextLevel--; 
+        PrintTextInFile(textLink->GetNext(), output);
     }
 }
 
@@ -209,34 +228,148 @@ void Text::SetLine(const string &s)
 
 void Text::InsertDownLine(string s)
 {
+    if (pCurrent == nullptr)
+    {
+        throw logic_error("Error! Current link is empty\n");
+    }
+
+    //if (strcmp(pCurrent->textString, ""))
+    //{
+    //    throw logic_error("Error! Current link is empty\n");
+    //}
+
+    char emptyString[] = "";
+    pTextLink temp = new TextLink(emptyString, pCurrent->pDown);
+
+    strncpy(temp->textString, s.c_str(), TextLineLength);
+    temp->textString[TextLineLength - 1] = '\0';
+    pCurrent->pDown = temp;
 }
 
 void Text::InsertDownSection(string s)
 {
+    if (pCurrent == nullptr)
+    {
+        throw logic_error("Error! Current link is empty\n");
+    }
+
+    //if (strcmp(pCurrent->textString, ""))
+    //{
+    //    throw logic_error("Error! Current link is empty\n");
+    //}
+
+    char emptyString[] = "";
+    pTextLink temp = new TextLink(emptyString, nullptr, pCurrent->pDown);
+
+    strncpy(temp->textString, s.c_str(), TextLineLength);
+    temp->textString[TextLineLength - 1] = '\0';
+    pCurrent->pDown = temp;
 }
 
 void Text::InsertNextLine(string s)
 {
+    if (pCurrent == nullptr)
+    {
+        throw logic_error("Error! Current link is empty\n");
+    }
+
+    //if (strlen(pCurrent->textString) == 0)
+    //{
+    //    throw logic_error("Error! Current link is empty\n");
+    //}
+    char emptyString[] = "";
+    pTextLink temp = new TextLink(emptyString, pCurrent->pNext);
+
+    strncpy(temp->textString, s.c_str(), TextLineLength);
+    temp->textString[TextLineLength - 1] = '\0';
+    pCurrent->pNext = temp;
 }
 
 void Text::InsertNextSection(string s)
 {
+    if (pCurrent == nullptr)
+    {
+        throw logic_error("Error! Current link is empty\n");
+    }
+
+    //if (strlen(pCurrent->textString) == 0)
+    //{
+    //    throw logic_error("Error! Current link is empty\n");
+    //}
+    char emptyString[] = "";
+    pTextLink temp = new TextLink(emptyString, nullptr, pCurrent->pNext);
+
+    strncpy(temp->textString, s.c_str(), TextLineLength);
+    temp->textString[TextLineLength - 1] = '\0';
+    pCurrent->pNext = temp;
 }
 
 void Text::DeleteDownLine(void)
 {
+    if (pCurrent == nullptr)
+    {
+        throw logic_error("Error! Current link is empty\n");
+    }
+    if (pCurrent->pDown == nullptr)
+    {
+        throw logic_error("Error! Current link has not got down links\n");
+    }
+
+    pTextLink temp = pCurrent->pDown->pNext;
+    
+    if (pCurrent->pDown->pDown == nullptr)
+    {
+        pCurrent->pDown = temp;
+    }
+
 }
 
 void Text::DeleteDownSection(void)
 {
+    if (pCurrent == nullptr)
+    {
+        throw logic_error("Error! Current link is empty\n");
+    }
+    if (pCurrent->pDown == nullptr)
+    {
+        throw logic_error("Error! Current link has not got down links\n");
+    }
+
+    pTextLink temp = pCurrent->pDown->pNext;
+
+    pCurrent->pDown = temp;
+
 }
 
 void Text::DeleteNextLine(void)
 {
+    if (pCurrent == nullptr)
+    {
+        throw logic_error("Error! Current link is empty\n");
+    }
+    if (pCurrent->pNext == nullptr)
+    {
+        throw logic_error("Error! Current link has not got next links\n");
+    }
+
+    if (pCurrent->pNext->IsAtomic())
+    {
+        pCurrent->pNext = pCurrent->pNext->pNext;
+    }
 }
 
 void Text::DeleteNextSection(void)
 {
+    if (pCurrent == nullptr)
+    {
+        throw logic_error("Error! Current link is empty\n");
+    }
+    if (pCurrent->pNext == nullptr)
+    {
+        throw logic_error("Error! Current link has not got next links\n");
+    }
+
+    pCurrent->pNext = pCurrent->pNext->pNext;
 }
 
 int Text::Reset(void)
@@ -266,7 +399,17 @@ bool Text::IsTextEnded(void) const
 
 int Text::GoNext(void)
 {
-	return 0;
+    if (!IsTextEnded()) {
+        pCurrent = iteratorStack.top();
+        iteratorStack.pop();
+        if (pCurrent != pFirst) {
+            if (pCurrent->pNext != nullptr)
+                iteratorStack.push(pCurrent->pNext);
+            if (pCurrent->pDown != nullptr)
+                iteratorStack.push(pCurrent->pDown);
+        }
+    }
+    return IsTextEnded();
 }
 
 void Text::Read(const char * pFileName)
@@ -279,6 +422,9 @@ void Text::Read(const char * pFileName)
 
 void Text::Write(char * pFileName)
 {
+    TextLevel = 0;
+    ofstream TextFile(pFileName);
+    PrintTextInFile(pFirst, TextFile);
 }
 
 void Text::Print(void)

@@ -21,6 +21,7 @@ protected:
 
 	pTextLink GetFirstAtom(pTextLink textLink); // Поиск первого атома
 	void PrintText(pTextLink textLink); // Печать текста с указанного звена
+    void PrintTextInFile(pTextLink textLink, ofstream &output); // Печать текста с указанного звена
 	pTextLink ReadText(ifstream &textFile); // Чтение текста из файла
 public:
 	Text(pTextLink textLink = nullptr);
