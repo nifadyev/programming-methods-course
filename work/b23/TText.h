@@ -38,10 +38,12 @@ public:
 	string GetLine(void);   // чтение текущей строки
 	void SetLine(const string &s); // замена текущей строки 
 							// модификация
-	void InsertDownLine(string s);    // Вставка строки в подуровень
-	void InsertDownSection(string s); // Вставка раздела в подуровень
-	void InsertNextLine(string s);    // Вставка строки в том же уровне
-	void InsertNextSection(string s); // Вставка раздела в том же уровне
+    // Section = partition + subpartitions
+    // Line = partition
+	void InsertDownLine(const string &s);    // Вставка строки в подуровень
+	void InsertDownSection(const string &s); // Вставка раздела в подуровень
+	void InsertNextLine(const string &s);    // Вставка строки в том же уровне
+	void InsertNextSection(const string &s); // Вставка раздела в том же уровне
 	void DeleteDownLine(void);        // Удаление строки в подуровне
 	void DeleteDownSection(void);     // Удаление раздела в подуровне
 	void DeleteNextLine(void);        // Удаление строки в том же уровне
