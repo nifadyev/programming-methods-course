@@ -62,7 +62,7 @@ TEST(TextLink, Can_Initialaze_Memory_System_With_Parameters)
 	ASSERT_NO_THROW(textLink.InitMemorySystem(2351));
 }
 
-TEST(TextLink, Can_Print_Free_Links_If_There_Are_No_One)
+TEST(TextLink, DISABLED_Can_Print_Free_Links_If_There_Are_No_One)
 {
 	//TString string = "asfgsdgsdg";
 	TextLink textLink;
@@ -80,7 +80,7 @@ TEST(TextLink, Can_Create_Text_Using_Operator_New)
 	TextLink textLink1(string1), textLink2(string2);
 	textLink[0] = textLink1;
 	textLink[1] = textLink2;
-	textLink->PrintFreeLinks();
+	//textLink->PrintFreeLinks();
 }
 
 TEST(TextLink, Can_Create_Text_With_One_String_Using_Operator_New)
@@ -115,7 +115,7 @@ TEST(Text, Can_Read_Text_From_File)
     //text.Print();
 }
 
-TEST(Text, Can_Print_Text/*Can_Print_Text_Read_From_File*/)
+TEST(Text, DISABLED_Can_Print_Text/*Can_Print_Text_Read_From_File*/)
 {
     Text text;
     TextLink::InitMemorySystem();
@@ -292,7 +292,7 @@ TEST(Text, Throws_If_Go_Previous_Link_With_Empty_Current_Link)
     ASSERT_THROW(text.GoNextLink(), logic_error);
 }
 
-
+//-----------------------Insertions-------------------------
 TEST(Text, Can_Insert_Down_Line_Into_Empty_Text)
 {
     Text text;
@@ -389,4 +389,238 @@ TEST(Text, Can_Insert_Next_Line_Into_Text)
     EXPECT_EQ(text.GetLine(), "3");
 }
 
-//TODO: Add tests for deletes
+
+TEST(Text, Can_Insert_Down_Section_Into_Empty_Text)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    //text.Read("input.txt");
+
+    ASSERT_NO_THROW(text.InsertDownSection("0.1"));
+    text.GoDownLink();
+    EXPECT_EQ(text.GetLine(), "0.1");
+}
+
+TEST(Text, DISABLED_Throw_When_Insert_Down_Section_With_Empty_Current_Link)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    ASSERT_ANY_THROW(text.InsertDownSection("2.2.1"));
+}
+
+TEST(Text, Can_Insert_Muptiple_Down_Sections)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.InsertDownSection("0");
+    text.InsertDownSection("0.1");
+    text.InsertDownSection("0.1.1");
+    text.GoDownLink();
+
+    EXPECT_EQ(text.GetLine(), "0.1.1");
+}
+
+TEST(Text, Can_Insert_Down_Section_Into_Text)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+    text.GoFirstLink();
+    text.InsertDownSection("0.0");
+    text.GoDownLink();
+
+    EXPECT_EQ(text.GetLine(), "0.0");
+}
+
+TEST(Text, Can_Insert_Next_Section_Into_Empty_Text)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    //text.Read("input.txt");
+
+    ASSERT_NO_THROW(text.InsertNextSection("A"));
+    text.GoNextLink();
+    EXPECT_EQ(text.GetLine(), "A");
+}
+
+TEST(Text, DISABLED_Throw_When_Insert_Next_Section_With_Empty_Current_Link)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    //text.Read("input.txt");
+
+    ASSERT_ANY_THROW(text.InsertNextSection("A"));
+    //EXPECT_EQ(text.GetLine(), "2.2.1");
+}
+
+TEST(Text, Can_Insert_Muptiple_Next_Sections)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.InsertNextSection("13");
+    text.InsertNextSection("14");
+    text.InsertNextSection("15");
+    text.GoNextLink();
+
+    EXPECT_EQ(text.GetLine(), "15");
+}
+
+TEST(Text, Can_Insert_Next_Section_Into_Text)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+    //text.GoFirstLink();
+    text.InsertNextSection("3");
+    text.GoNextLink();
+    EXPECT_EQ(text.GetLine(), "3");
+}
+
+//-------------------------Deletions-----------------------------
+TEST(Text, Throw_When_Delete_Down_Line_From_Empty_Text)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    ASSERT_THROW(text.DeleteDownLine(), logic_error);
+}
+
+TEST(Text, Throw_When_Delete_Down_Line_Text_Without_Down_Line)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    text.InsertNextLine("A");
+
+    ASSERT_ANY_THROW(text.DeleteDownLine());
+}
+
+TEST(Text, Can_Delete_Down_Line_From_Text)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+    text.GoFirstLink();
+    text.GoNextLink();
+    text.GoDownLink();
+
+    ASSERT_NO_THROW(text.DeleteDownLine());
+}
+
+TEST(Text, Can_Delete_Muptiple_Down_Lines)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    text.Read("input.txt");
+    text.GoFirstLink();
+
+    ASSERT_NO_THROW(text.DeleteDownLine());
+    ASSERT_NO_THROW(text.DeleteDownLine());
+    ASSERT_NO_THROW(text.DeleteDownLine());
+}
+
+TEST(Text, Throw_When_Delete_Next_Line_From_Empty_Text)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    ASSERT_THROW(text.DeleteNextLine(), logic_error);
+}
+
+TEST(Text, Throw_When_Delete_Next_Line_Text_Without_Next_Line)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    ASSERT_THROW(text.DeleteNextLine(), logic_error);
+}
+
+TEST(Text, Throw_When_Delete_Not_Atomic_Next_Line)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    text.Read("input.txt");
+
+    ASSERT_THROW(text.DeleteNextLine(), logic_error);
+}
+
+TEST(Text, Can_Delete_Next_Line_From_Text)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.InsertNextLine("QWERTY");
+
+    ASSERT_NO_THROW(text.DeleteNextLine());
+    EXPECT_EQ(text.GetLine(), "");
+}
+
+TEST(Text, Can_Delete_Muptiple_Next_Lines)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    text.InsertNextLine("Q");
+    text.InsertNextLine("W");
+    text.InsertNextLine("E");
+
+    ASSERT_NO_THROW(text.DeleteNextLine());
+    ASSERT_NO_THROW(text.DeleteNextLine());
+    ASSERT_NO_THROW(text.DeleteNextLine());
+    EXPECT_EQ(text.GetLine(), "");
+}
+
+
+TEST(Text, Throw_When_Delete_Down_Section_From_Empty_Text)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    ASSERT_THROW(text.DeleteDownSection(), logic_error);
+}
+
+TEST(Text, Throw_When_Delete_Down_Section_Text_Without_Down_Line)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    text.InsertNextLine("A");
+
+    ASSERT_ANY_THROW(text.DeleteDownSection());
+}
+
+TEST(Text, Can_Delete_Down_Section_From_Text)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.Read("input.txt");
+    text.GoFirstLink();
+    text.GoNextLink();
+    text.GoDownLink();
+
+    ASSERT_NO_THROW(text.DeleteDownSection());
+}
+
+TEST(Text, Can_Delete_Muptiple_Down_Section)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    text.Read("input.txt");
+    text.GoFirstLink();
+    text.GoNextLink();
+
+    ASSERT_NO_THROW(text.DeleteDownSection());
+}
