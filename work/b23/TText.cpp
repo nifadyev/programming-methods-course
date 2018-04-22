@@ -226,7 +226,7 @@ void Text::SetLine(const string &s)
     pCurrent->textString[TextLineLength - 1] = '\0';
 }
 
-void Text::InsertDownLine(string s)
+void Text::InsertDownLine(const string &s)
 {
     if (pCurrent == nullptr)
     {
@@ -246,7 +246,7 @@ void Text::InsertDownLine(string s)
     pCurrent->pDown = temp;
 }
 
-void Text::InsertDownSection(string s)
+void Text::InsertDownSection(const string &s)
 {
     if (pCurrent == nullptr)
     {
@@ -266,7 +266,7 @@ void Text::InsertDownSection(string s)
     pCurrent->pDown = temp;
 }
 
-void Text::InsertNextLine(string s)
+void Text::InsertNextLine(const string &s)
 {
     if (pCurrent == nullptr)
     {
@@ -285,7 +285,7 @@ void Text::InsertNextLine(string s)
     pCurrent->pNext = temp;
 }
 
-void Text::InsertNextSection(string s)
+void Text::InsertNextSection(const string &s)
 {
     if (pCurrent == nullptr)
     {
@@ -321,7 +321,6 @@ void Text::DeleteDownLine(void)
     {
         pCurrent->pDown = temp;
     }
-
 }
 
 void Text::DeleteDownSection(void)
@@ -345,6 +344,7 @@ void Text::DeleteNextLine(void)
 {
     if (pCurrent == nullptr)
     {
+        //TODO: Maybe change logic_error to range_error
         throw logic_error("Error! Current link is empty\n");
     }
     if (pCurrent->pNext == nullptr)
@@ -352,10 +352,12 @@ void Text::DeleteNextLine(void)
         throw logic_error("Error! Current link has not got next links\n");
     }
 
-    if (pCurrent->pNext->IsAtomic())
+    if (!pCurrent->pNext->IsAtomic())
     {
-        pCurrent->pNext = pCurrent->pNext->pNext;
+        throw logic_error("Error! Cannot delete link which has down links\n");
     }
+
+    pCurrent->pNext = pCurrent->pNext->pNext;
 }
 
 void Text::DeleteNextSection(void)
