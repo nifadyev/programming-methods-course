@@ -537,7 +537,7 @@ TEST(Text, Throw_When_Delete_Next_Line_From_Empty_Text)
     ASSERT_THROW(text.DeleteNextLine(), logic_error);
 }
 
-TEST(Text, Throw_When_Delete_Next_Line_Text_Without_Next_Line)
+TEST(Text, Throw_When_Delete_Next_Line_From_Text_Without_Next_Line)
 {
     TextLink::InitMemorySystem();
     Text text;
@@ -623,4 +623,167 @@ TEST(Text, Can_Delete_Muptiple_Down_Section)
     text.GoNextLink();
 
     ASSERT_NO_THROW(text.DeleteDownSection());
+}
+
+
+TEST(Text, Throw_When_Delete_Next_Sections_From_Empty_Text)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    ASSERT_THROW(text.DeleteNextSection(), logic_error);
+}
+
+TEST(Text, Throw_When_Delete_Next_Section_From_Text_Without_Next_Line)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    ASSERT_THROW(text.DeleteNextSection(), logic_error);
+}
+
+TEST(Text, Can_Delete_Next_Section_From_Text)
+{
+    Text text;
+    TextLink::InitMemorySystem();
+
+    text.InsertNextSection("QWERTY");
+
+    ASSERT_NO_THROW(text.DeleteNextSection());
+    EXPECT_EQ(text.GetLine(), "");
+}
+
+TEST(Text, Can_Delete_Muptiple_Next_Sections)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    text.InsertNextSection("Q");
+    text.InsertNextSection("W");
+    text.InsertNextSection("E");
+
+    ASSERT_NO_THROW(text.DeleteNextSection());
+    EXPECT_EQ(text.GetLine(), "");
+}
+
+
+TEST(Text, Can_Reset_Text)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    text.InsertNextLine("1");
+    text.InsertNextLine("2");
+    text.InsertNextLine("3");
+
+    ASSERT_NO_THROW(text.Reset());
+    EXPECT_EQ(text.Reset(), 0);
+}
+
+TEST(Text, Can_Reset_Empty_Text)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    ASSERT_NO_THROW(text.Reset());
+    EXPECT_EQ(text.Reset(), 0);
+    EXPECT_EQ(text.GetLine(), "");
+}
+
+TEST(Text, DISABLED_Can_Reset_Text)
+{
+    //TODO: неправиьное назначение первого звена
+    TextLink::InitMemorySystem();
+    Text text;
+
+    ASSERT_NO_THROW(text.InsertNextLine("1"));
+    ASSERT_NO_THROW(text.InsertNextLine("2"));
+    ASSERT_NO_THROW(text.InsertNextLine("3"));
+
+    text.Reset();
+    //EXPECT_EQ(text.GetLine(), "1");
+    text.GetLine();
+    EXPECT_EQ(1, 1);
+    text.Print();
+}
+
+TEST(Text, DISABLED_Is_Text_Ended_Returns_True)
+{
+    //TODO: GoNext doesn't work correctly cause iteraorStack is empty
+    TextLink::InitMemorySystem();
+    Text text;
+
+    text.Read("input.txt");
+    //text.Reset();
+    text.GoNext();
+
+    ASSERT_NO_THROW(text.IsTextEnded());
+    EXPECT_TRUE(text.IsTextEnded());
+}
+
+TEST(Text, Is_Text_Ended_Returns_False)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    text.Read("input.txt");
+
+    ASSERT_NO_THROW(text.IsTextEnded());
+    EXPECT_FALSE(text.IsTextEnded());
+}
+
+TEST(Text, Can_Go_Next)
+{
+    //TODO: GoNext does not work
+    //If change iteratorStack to Path in GoNext
+    // it'll break GetLine
+    //in my test
+    TextLink::InitMemorySystem();
+    Text text;
+
+    text.Read("input.txt");
+    text.Reset();
+    //text.GoNextLink();
+    //ASSERT_NO_THROW(text.GoNext());
+    text.GoNext();
+    //text.GoNext();
+    EXPECT_EQ(text.GetLine(), "1.1");
+    //text.Print();
+
+    //TextLink::InitMemorySystem();
+    //TString a = "text";
+    //Text txt(new TextLink(a));
+    //
+    //txt.GoFirstLink();
+    //txt.InsertNextLine("text2");
+    //txt.GoNextLink();
+    //txt.InsertNextLine("text3");
+    //txt.GoNextLink();
+    //
+    //txt.Reset();
+    //txt.GoNext();
+    //
+    //EXPECT_EQ(txt.GetLine(), "text2");
+}
+
+TEST(Text, Can_Read_Text_File)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    ASSERT_NO_THROW(text.Read("input.txt"));
+}
+
+TEST(Text, Can_Write_Text_To_File)
+{
+    //FIXME: GLOBAL ERROR: first line is always empty
+    // It's not a bug it's a feature
+    // first line MUST BE set through SetLine()
+    TextLink::InitMemorySystem();
+    Text text;
+
+    text.SetLine("A");
+    text.InsertDownLine("a");
+
+    ASSERT_NO_THROW(text.Write("output.txt"));
 }

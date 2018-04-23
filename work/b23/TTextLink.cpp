@@ -38,16 +38,17 @@ TextLink::TextLink(TString string, pTextLink pNext, pTextLink pDown)
 		throw logic_error("Memory initialization failed! Size of memory must be positive\n");
 	}
 
-	MemoryHeader.pFirst = (pTextLink)(new char[sizeof(TextLink) * size]/* { '\0' }*/);
+	MemoryHeader.pFirst = (pTextLink) new char[sizeof(TextLink) * size]/* { '\0' }*/;
 	//for (int i = 0; i < size - 1; i++)
 	//{
 	//	MemoryHeader.pFirst[i] = nullptr;
 	//}
+    MemoryHeader.pFree = MemoryHeader.pFirst;
 	MemoryHeader.pLast = MemoryHeader.pFirst + size - 1; /*&MemoryHeader.pFirst[size - 1]*/
-	MemoryHeader.pFree = MemoryHeader.pFirst;
+	
 
 	// ”пор€дочивание списка свободных звеньев по пам€ти
-	pTextLink pLink = MemoryHeader.pFree/*First*/;
+	pTextLink pLink = MemoryHeader./*pFree*/pFirst;
 	for (int i = 0; i < size - 1; i++, pLink++)
 	{
 		pLink->pNext = pLink + 1;

@@ -3,14 +3,13 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#ifdef _WIN32
-#include <conio.h>
-#endif
-#ifdef __linux__
-#include <curses.h>
-#endif
+//#ifdef _WIN32
+//#include <conio.h>
+//#endif
+//#ifdef __linux__
+//#include <curses.h>
+//#endif
 
-// #include <iostream>
 #include <cstring>
 #include "TText.h"
 
@@ -72,22 +71,22 @@ pTextLink Text::ReadText(ifstream & textFile)
 {
     //FIXME: adding extra text level that break text structure
     //string buffer;
-    pTextLink pLink = new TextLink();
-    pTextLink temp = pLink;
-    while (!textFile.eof())
+    pTextLink pLink, temp;
+    pLink = temp = new TextLink();
+    //pTextLink temp = pLink;
+    //while (!textFile.eof())
+    while (textFile.eof() == 0)
     {
-        //getline(textFile, buffer);
         textFile.getline(stringBuffer, bufferSize, '\n');
-        //if (buffer.front() == '}')
         if (stringBuffer[0] == '}')
         {
-            //TextLevel--;
+            //Works well without textlevel -- & ++
+            TextLevel--;
             break;
         }
-        //else if (buffer.front() == '{')
         else if (stringBuffer[0] == '{')
         {
-            //TextLevel++;
+            TextLevel++;
             pLink->pDown = ReadText(textFile);
         }
         else
@@ -118,6 +117,15 @@ Text::Text(pTextLink textLink)
         pFirst = new TextLink();
         pCurrent = pFirst;
     }
+
+    // Крашит большинство тестов
+    //if (textLink == nullptr)
+    //{
+    //    textLink = new TextLink();
+    //}
+    //pFirst = textLink;
+
+
     //Path.push(pFirst);
     //iteratorStack.push(pFirst);
 }
@@ -136,7 +144,7 @@ int Text::GoFirstLink()
     }
 
     pCurrent = pFirst;
-    //if (pCurrent == nullptr)
+    //if (pCurrent != nullptr)
     if (pCurrent->textString[0] == '\0')
     {
         return -1;
@@ -401,29 +409,54 @@ bool Text::IsTextEnded(void) const
 
 int Text::GoNext(void)
 {
-    if (!IsTextEnded()) {
-        pCurrent = iteratorStack.top();
-        iteratorStack.pop();
-        if (pCurrent != pFirst) {
+    if (!IsTextEnded()) 
+    {
+        //pCurrent = iteratorStack.top();
+        //iteratorStack.pop();
+        //if (pCurrent != pFirst) 
+        //{
+        //    if (pCurrent->pNext != nullptr)
+        //    {
+        //        iteratorStack.push(pCurrent->pNext);
+        //    }
+        //    if (pCurrent->pDown != nullptr)
+        //    {
+        //        iteratorStack.push(pCurrent->pDown);
+        //    }
+        //}
+
+        pCurrent = Path.top();
+        Path.pop();
+        if (pCurrent != pFirst)
+        {
             if (pCurrent->pNext != nullptr)
-                iteratorStack.push(pCurrent->pNext);
+            {
+                Path.push(pCurrent->pNext);
+            }
             if (pCurrent->pDown != nullptr)
-                iteratorStack.push(pCurrent->pDown);
+            {
+                Path.push(pCurrent->pDown);
+            }
         }
     }
     return IsTextEnded();
 }
 
-void Text::Read(const char * pFileName)
+void Text::Read(const char *pFileName)
 {
+    //TODO: add check for correct filename
     ifstream textFile(pFileName);
     TextLevel = 0;
+
     if (&textFile != NULL)
+    {
         pFirst = ReadText(textFile);
+    }
 }
 
-void Text::Write(char * pFileName)
+void Text::Write(const char * pFileName)
 {
+    //TODO: add check for empty text
     TextLevel = 0;
     ofstream TextFile(pFileName);
     PrintTextInFile(pFirst, TextFile);
