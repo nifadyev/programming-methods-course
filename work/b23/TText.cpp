@@ -132,7 +132,28 @@ Text::Text(pTextLink textLink)
 
 pText Text::GetCopy()
 {
-	return pText();
+	return new Text(GetLinkCopy(pFirst));
+}
+
+pTextLink Text::GetLinkCopy(pTextLink link)
+{
+    if (link == nullptr)
+    {
+        throw invalid_argument("Error! Empty agrument\n");
+    }
+
+    pTextLink pNxt = nullptr, pDwn = nullptr;
+
+    if (link->pDown != nullptr)
+    {
+        pDwn = GetLinkCopy(link->pDown);
+    }
+    if (link->pNext != nullptr)
+    {
+        pNxt = GetLinkCopy(link->pNext);
+    }
+
+    return new TextLink(link->textString, pNxt, pDwn);
 }
 
 int Text::GoFirstLink()
@@ -241,11 +262,6 @@ void Text::InsertDownLine(const string &s)
         throw logic_error("Error! Current link is empty\n");
     }
 
-    //if (strcmp(pCurrent->textString, ""))
-    //{
-    //    throw logic_error("Error! Current link is empty\n");
-    //}
-
     char emptyString[] = "";
     pTextLink temp = new TextLink(emptyString, pCurrent->pDown);
 
@@ -260,11 +276,6 @@ void Text::InsertDownSection(const string &s)
     {
         throw logic_error("Error! Current link is empty\n");
     }
-
-    //if (strcmp(pCurrent->textString, ""))
-    //{
-    //    throw logic_error("Error! Current link is empty\n");
-    //}
 
     char emptyString[] = "";
     pTextLink temp = new TextLink(emptyString, nullptr, pCurrent->pDown);
@@ -436,17 +447,25 @@ void Text::Read(const char *pFileName)
 {
     //TODO: add check for correct filename
     ifstream textFile(pFileName);
-    TextLevel = 0;
-
-    if (&textFile != NULL)
+    if (textFile.is_open())
     {
-        pFirst = ReadText(textFile);
+        TextLevel = 0;
+
+        if (&textFile != NULL)
+        {
+            pFirst = ReadText(textFile);
+        }
+        textFile.close();
+    }
+    else
+    {
+        textFile.close();
+        throw invalid_argument("Error! File with this name wasn't found\n");
     }
 }
 
 void Text::Write(const char * pFileName)
 {
-    //TODO: add check for empty text
     TextLevel = 0;
     ofstream TextFile(pFileName);
     PrintTextInFile(pFirst, TextFile);
