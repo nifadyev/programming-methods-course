@@ -1,6 +1,3 @@
-// This is a personal academic project. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-
 #ifndef TEXT_LINK_H
 #define TEXT_LINK_H
 
@@ -8,11 +5,9 @@
 #include <iostream> 
 #include <string>
 #include "TDatValue.h"
-//#include "TText.h"
 using namespace std;
 
-const enum {TextOK, TextWithoutDown = 101, TextWithoutNext, TextWithoutPrevious, TextError = -102, TextWithoutMemory};
-const int TextLineLength = 50;
+const int TextLineLength = 50; // Max line length
 const int MemorySize = 50;
 
 class Text;
@@ -20,25 +15,25 @@ class TextLink;
 typedef TextLink *pTextLink;
 typedef char TString[TextLineLength];
 
-// Фиксация состояния памяти в класск TextLink
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ TextLink
 class TextMemory
 {
-	pTextLink pFirst; // Указатель на первое звено
-	pTextLink pLast; // Указатель на последнее звено
-	pTextLink pFree; // Указатель на первое свободное звено
+	pTextLink pFirst; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+	pTextLink pLast; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+	pTextLink pFree; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
 	friend class TextLink;
 };
 typedef TextMemory *pTextMemory;
 
-// Класс объектов-значений для строк текста
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 class TextLink : public TDataValue
 {
 protected:
-	TString textString; // Поле для хранения строки текста
-	pTextLink pNext; // Указатель на текущий уровень
-	pTextLink pDown; //Указатель на подуровень
-	static TextMemory MemoryHeader; // Система управления памятью
+	TString textString; // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+	pTextLink pNext; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	pTextLink pDown; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	static TextMemory MemoryHeader; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	
 	virtual void Print(ostream &ostream) { ostream << textString; }
 	
@@ -46,17 +41,18 @@ public:
 	TextLink(TString string = nullptr, pTextLink pNext = nullptr, pTextLink pDown = nullptr);
 	~TextLink() {}
 
-	static void InitMemorySystem(int size = MemorySize); // Инициализация памяти
-	static void PrintFreeLinks(); // Печать свободных звеньев
+	static void InitMemorySystem(int size = MemorySize); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+	static void PrintFreeLinks(); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-	void* operator new(const size_t size); // Выделение звена
-	void operator delete(void *pLink); // Освобождение звена
-	friend class Text;
-	static void MemoryCleaner(Text& text); // Сборка мусора
+	void* operator new(const size_t size); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+	void operator delete(void *pLink); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
-	/*int*/bool IsAtomic() { return pDown == nullptr; } // Проверка атомарности звена
+	static void MemoryCleaner(Text& text); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+
+	bool IsAtomic() { return pDown == nullptr; } // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	pTextLink GetNext() { return pNext; }
 	pTextLink GetDown() { return pDown; }
-	//pTDataValue* GetCopy() { return new TextLink(string, pNext, pDown); }
+
+    friend class Text;
 };
 #endif

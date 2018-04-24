@@ -1,10 +1,8 @@
-// This is a personal academic project. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-
 #define _CRT_SECURE_NO_WARNINGS
 #include "TTextLink.h"
 #include <string.h>
 #include "TText.h"
+
 TextMemory TextLink::MemoryHeader;
 
 TextLink::TextLink(TString string, pTextLink pNext, pTextLink pDown)
@@ -13,7 +11,6 @@ TextLink::TextLink(TString string, pTextLink pNext, pTextLink pDown)
 	this->pDown = pDown;
 	if (string != nullptr)
 	{
-        //strcpy_s breaks up when trying to read from file
 		strcpy(this->textString, string);
 	}
 	else
@@ -22,33 +19,19 @@ TextLink::TextLink(TString string, pTextLink pNext, pTextLink pDown)
 	}
 }
 
-/*static*/ void TextLink::InitMemorySystem(const int size)
+void TextLink::InitMemorySystem(const int size)
 {
-	/*
-	 В этом методе выделяется память для хранения текстов. 
-	 Указатель pFirst устанавливается на начало этого массива 
-	 (после приведения типа к типу указателя на звено), 
-	 указатель pLast на последний элемент массива. 
-	 Далее этот массив размечается как список свободных звеньев, 
-	 в самом начале работы список свободных звеньев может быть 
-	 упорядочен по памяти.. 
-	*/
 	if (size < 0)
 	{
 		throw logic_error("Memory initialization failed! Size of memory must be positive\n");
 	}
 
-	MemoryHeader.pFirst = (pTextLink) new char[sizeof(TextLink) * size]/* { '\0' }*/;
-	//for (int i = 0; i < size - 1; i++)
-	//{
-	//	MemoryHeader.pFirst[i] = nullptr;
-	//}
+	MemoryHeader.pFirst = (pTextLink) new char[sizeof(TextLink) * size];
     MemoryHeader.pFree = MemoryHeader.pFirst;
-	MemoryHeader.pLast = MemoryHeader.pFirst + size - 1; /*&MemoryHeader.pFirst[size - 1]*/
-	
+	MemoryHeader.pLast = MemoryHeader.pFirst + size - 1;
 
 	// Упорядочивание списка свободных звеньев по памяти
-	pTextLink pLink = MemoryHeader./*pFree*/pFirst;
+	pTextLink pLink = MemoryHeader.pFirst;
 	for (int i = 0; i < size - 1; i++, pLink++)
 	{
 		pLink->pNext = pLink + 1;
@@ -56,35 +39,22 @@ TextLink::TextLink(TString string, pTextLink pNext, pTextLink pDown)
 	pLink->pNext = nullptr;
 }
 
-/*static*/ void TextLink::PrintFreeLinks()
+void TextLink::PrintFreeLinks()
 {
 	pTextLink pLink = MemoryHeader.pFree;
-	// MemoryHeader.pFree не может быть пустым
-	if (strlen(pLink[0].textString) == 0)
-	{
-		cout << "List of free links is empty\n";
-	}
-	//if (pLink == nullptr)
-	//{
-	//	cout << "List of free links is empty\n";
-	//}
-	else
-	{
-		cout << "List of free links:\n";
-		while (pLink != nullptr)
-		{
-			cout << pLink->textString << endl;
-			pLink = pLink->pNext;
-		}
 
-        //for (; pLink != NULL; pLink = pLink->pNext)
-        //    cout << pLink->textString << endl;
+	cout << "List of free links:\n";
+	while (pLink != nullptr)
+	{
+		cout << pLink->textString << endl;
+		pLink = pLink->pNext;
 	}
 }
 
-void *TextLink::operator new(const size_t size)
+void* TextLink::operator new(const size_t size)
 {
 	pTextLink temp = MemoryHeader.pFree;
+
 	if (MemoryHeader.pFree != nullptr)
 	{
 		MemoryHeader.pFree = temp->pNext;
