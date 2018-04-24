@@ -1,9 +1,2 @@
 A
  a
-  a
-  b
-  c
-B
- b
- c
-D

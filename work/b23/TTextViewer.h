@@ -1,8 +1,3 @@
-#pragma once
-class TextViewer
-{
-public:
-	TextViewer();
-	~TextViewer();
-};
-
+#ifndef TEXT_VIEWER_H
+#define TEXT_VIEWER_H
+#endif
