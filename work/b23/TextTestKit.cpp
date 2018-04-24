@@ -727,6 +727,7 @@ TEST(Text, Is_Text_Ended_Returns_False)
     Text text;
 
     text.Read("input.txt");
+    text.Reset();
 
     ASSERT_NO_THROW(text.IsTextEnded());
     EXPECT_FALSE(text.IsTextEnded());
@@ -738,32 +739,21 @@ TEST(Text, Can_Go_Next)
     //If change iteratorStack to Path in GoNext
     // it'll break GetLine
     //in my test
+
     TextLink::InitMemorySystem();
-    Text text;
-
-    text.Read("input.txt");
-    text.Reset();
-    //text.GoNextLink();
-    //ASSERT_NO_THROW(text.GoNext());
-    text.GoNext();
-    //text.GoNext();
-    EXPECT_EQ(text.GetLine(), "1.1");
-    //text.Print();
-
-    //TextLink::InitMemorySystem();
-    //TString a = "text";
-    //Text txt(new TextLink(a));
-    //
-    //txt.GoFirstLink();
-    //txt.InsertNextLine("text2");
-    //txt.GoNextLink();
-    //txt.InsertNextLine("text3");
-    //txt.GoNextLink();
-    //
-    //txt.Reset();
-    //txt.GoNext();
-    //
-    //EXPECT_EQ(txt.GetLine(), "text2");
+    TString a = "1";
+    Text txt(new TextLink(a));
+    
+    txt.GoFirstLink();
+    txt.InsertNextLine("2");
+    txt.GoNextLink();
+    txt.InsertNextLine("3");
+    txt.GoNextLink();
+    
+    txt.Reset();
+    txt.GoNext();
+    
+    EXPECT_EQ(txt.GetLine(), "2");
 }
 
 TEST(Text, Can_Read_Text_File)

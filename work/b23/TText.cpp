@@ -384,58 +384,48 @@ void Text::DeleteNextSection(void)
 
 int Text::Reset(void)
 {
+    while (!iteratorStack.empty())
+    {
+        iteratorStack.pop();
+    }
 	pCurrent = pFirst;
 
 	if (pCurrent != nullptr)
 	{
-		Path.push(pCurrent);
+        iteratorStack.push(pCurrent);
 		if (pCurrent->pNext != nullptr)
 		{
-			Path.push(pCurrent->pNext);
+            iteratorStack.push(pCurrent->pNext);
 		}
 
 		if (pCurrent->pDown != nullptr)
 		{
-			Path.push(pCurrent->pDown);
+            iteratorStack.push(pCurrent->pDown);
 		}
 	}
-	return 0;
+	return IsTextEnded();
 }
 
 bool Text::IsTextEnded(void) const
 {
-	return !iteratorStack.empty();
+	return !iteratorStack.size();
 }
 
 int Text::GoNext(void)
 {
     if (!IsTextEnded()) 
     {
-        //pCurrent = iteratorStack.top();
-        //iteratorStack.pop();
-        //if (pCurrent != pFirst) 
-        //{
-        //    if (pCurrent->pNext != nullptr)
-        //    {
-        //        iteratorStack.push(pCurrent->pNext);
-        //    }
-        //    if (pCurrent->pDown != nullptr)
-        //    {
-        //        iteratorStack.push(pCurrent->pDown);
-        //    }
-        //}
-
-        pCurrent = Path.top();
-        Path.pop();
-        if (pCurrent != pFirst)
+        pCurrent = iteratorStack.top();
+        iteratorStack.pop();
+        if (pCurrent != pFirst) 
         {
             if (pCurrent->pNext != nullptr)
             {
-                Path.push(pCurrent->pNext);
+                iteratorStack.push(pCurrent->pNext);
             }
             if (pCurrent->pDown != nullptr)
             {
-                Path.push(pCurrent->pDown);
+                iteratorStack.push(pCurrent->pDown);
             }
         }
     }
