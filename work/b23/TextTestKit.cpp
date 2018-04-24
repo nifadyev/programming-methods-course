@@ -1,7 +1,6 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
-
 #include <gtest/gtest.h>
 #include"TTextLink.h"
 #include "TText.h"
@@ -20,28 +19,50 @@ TEST(TextLink, Can_Create_TextLink_Without_Parameters)
 
 TEST(TextLink, Can_Create_TextLink_With_First_Parameter)
 {
-	TString string = "safhtrhrgafasf";
+	TString string = "qwerty";
 	TextLink textLink;
 
 	ASSERT_NO_THROW(TextLink textLink(string));
-	EXPECT_EQ(textLink.GetDown(), nullptr);
-	EXPECT_EQ(textLink.GetNext(), nullptr);
-	EXPECT_TRUE(textLink.IsAtomic());
 }
 
-//TODO: make tests for standard constructor in TextLink with 2,3 and all params
-TEST(TextLink, DISABLED_Can_Create_TextLink_With_Second_Parameter)
-{}
+TEST(TextLink, Can_Create_TextLink_With_Second_Parameter)
+{
+    TString string = "qwerty", emptyString = "";
+    pTextLink textLinkNext = new TextLink(string);
+    TextLink textLink(emptyString, textLinkNext);
+   
+    EXPECT_EQ(textLink.GetDown(), nullptr);
+    EXPECT_EQ(textLink.GetNext(), textLinkNext);
+    EXPECT_TRUE(textLink.IsAtomic());
+}
 
-TEST(TextLink, DISABLED_Can_Create_TextLink_With_Third_Parameter)
-{}
+TEST(TextLink, Can_Create_TextLink_With_Third_Parameter)
+{
+    TString string = "qwerty", emptyString = "";
+    pTextLink textLinkDown = new TextLink(string);
+    TextLink textLink(emptyString, nullptr, textLinkDown);
+   
+    EXPECT_EQ(textLink.GetNext(), nullptr);
+    EXPECT_EQ(textLink.GetDown(), textLinkDown);
+    EXPECT_TRUE(textLink.IsAtomic());
+}
 
-TEST(TextLink, DISABLED_Can_Create_TextLink_With_All_Parameters)
-{}
+TEST(TextLink, Can_Create_TextLink_With_All_Parameters)
+{
+    TString string = "qwerty", emptyString = "";
+    pTextLink textLinkNext = new TextLink(string);
+    pTextLink textLinkDown = new TextLink(string);
+    TextLink textLink(emptyString, textLinkNext, textLinkDown);
+   
+    EXPECT_EQ(textLink.GetNext(), textLinkNext);
+    EXPECT_EQ(textLink.GetDown(), textLinkDown);
+    EXPECT_TRUE(textLink.IsAtomic());
+}
 
 TEST(TextLink, Can_Initialaze_Memory_System_Without_Parameters)
 {
 	TextLink textLink;
+
 	ASSERT_NO_THROW(textLink.InitMemorySystem());
 }
 
@@ -62,31 +83,12 @@ TEST(TextLink, Can_Initialaze_Memory_System_With_Parameters)
 	ASSERT_NO_THROW(textLink.InitMemorySystem(2351));
 }
 
-TEST(TextLink, DISABLED_Can_Print_Free_Links_If_There_Are_No_One)
+TEST(TextLink, Can_Create_Text_Link_Using_Operator_New)
 {
-	//TString string = "asfgsdgsdg";
-	TextLink textLink;
-	textLink.InitMemorySystem(4);
-	ASSERT_NO_THROW(textLink.PrintFreeLinks());
-}
-
-TEST(TextLink, Can_Create_Text_Using_Operator_New)
-{
+    TextLink::InitMemorySystem();
 	TextLink *textLink; 
-	ASSERT_NO_THROW(textLink = new TextLink[24]);
-	textLink = new TextLink[24];
-	//textLink->InitMemorySystem(24);
-	TString string1 = "sfsdgdgsd", string2 = "hjkhjk";
-	TextLink textLink1(string1), textLink2(string2);
-	textLink[0] = textLink1;
-	textLink[1] = textLink2;
-	//textLink->PrintFreeLinks();
-}
 
-TEST(TextLink, Can_Create_Text_With_One_String_Using_Operator_New)
-{
-	TextLink *textLink;
-	ASSERT_NO_THROW(textLink = new TextLink[0]);
+	ASSERT_NO_THROW(textLink = new TextLink[24]);
 }
 
 /*-------------------------------Testing_TText_class-------------------------------*/
@@ -98,51 +100,36 @@ TEST(Text, Can_Create_Empty_Text)
 
 TEST(Text, Can_Create_Text_From_Text_Link)
 {
-    TString string = "qwrprhqwirqwr";
+    TString string = "wasd";
     pTextLink link = new TextLink(string);
 
     ASSERT_NO_THROW(Text text(link));
-    //EXPECT_EQ(text.GetLine(), string);
 }
 
 TEST(Text, Can_Read_Text_From_File)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
 
     ASSERT_NO_THROW(text.Read("input.txt"));
-    //text.Read("input.txt");
-    //text.Print();
-}
-
-TEST(Text, DISABLED_Can_Print_Text/*Can_Print_Text_Read_From_File*/)
-{
-    Text text;
-    TextLink::InitMemorySystem();
-
-    text.Read("input.txt");
-
-    ASSERT_NO_THROW(text.Print());
 }
 
 TEST(Text, Can_Go_To_The_First_Link)
 {
+    TextLink::InitMemorySystem();
     Text text;
     string expectedString = "1";
-    
-    TextLink::InitMemorySystem();
+   
     text.Read("input.txt");
+    text.GoFirstLink();
 
     ASSERT_NO_THROW(text.GoFirstLink());
-
-    text.GoFirstLink();
     EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 TEST(Text, Go_To_The_First_Link_Returns_0_If_Everything_Is_Correct)
 {
     Text text;
-
     TextLink::InitMemorySystem();
     text.Read("input.txt");
 
@@ -151,22 +138,19 @@ TEST(Text, Go_To_The_First_Link_Returns_0_If_Everything_Is_Correct)
 
 TEST(Text, Throw_When_Trying_To_Go_To_The_First_Link_In_Empty_Text)
 {
+    TextLink::InitMemorySystem();
     Text text;
 
-    TextLink::InitMemorySystem();
-
     EXPECT_EQ(text.GoFirstLink(), -1);
-
 }
 
 TEST(Text, Can_Go_Down_Link)
 {
+    TextLink::InitMemorySystem();
     Text text;
     string expectedString = "1.1";
-    TextLink::InitMemorySystem();
     
     text.Read("input.txt");
-    //text.Reset();
     text.GoFirstLink();
 
     ASSERT_NO_THROW(text.GoDownLink());
@@ -175,8 +159,8 @@ TEST(Text, Can_Go_Down_Link)
 
 TEST(Text, Go_Down_Link_Returns_0_If_Success)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
 
     text.Read("input.txt");
     text.GoFirstLink();
@@ -187,8 +171,8 @@ TEST(Text, Go_Down_Link_Returns_0_If_Success)
 
 TEST(Text, Throws_If_Go_Down_Link_In_Lowest_Level)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
 
     text.Read("input.txt");
 
@@ -197,20 +181,19 @@ TEST(Text, Throws_If_Go_Down_Link_In_Lowest_Level)
 
 TEST(Text, Throws_If_Go_Down_Link_With_Empty_Current_Link)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
 
     ASSERT_THROW(text.GoDownLink(), logic_error);
 }
 
 TEST(Text, Can_Go_Next_Link)
 {
+    TextLink::InitMemorySystem();
     Text text;
     string expectedString = "2";
-    TextLink::InitMemorySystem();
 
     text.Read("input.txt");
-    //text.Reset();
     text.GoFirstLink();
 
     ASSERT_NO_THROW(text.GoNextLink());
@@ -219,8 +202,8 @@ TEST(Text, Can_Go_Next_Link)
 
 TEST(Text, Go_Next_Link_Returns_0_If_Success)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
 
     text.Read("input.txt");
     text.GoFirstLink();
@@ -230,8 +213,8 @@ TEST(Text, Go_Next_Link_Returns_0_If_Success)
 
 TEST(Text, Throws_If_Go_Next_Link_In_Lowest_Level)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
 
     text.Read("input.txt");
 
@@ -240,20 +223,19 @@ TEST(Text, Throws_If_Go_Next_Link_In_Lowest_Level)
 
 TEST(Text, Throws_If_Go_Next_Link_With_Empty_Current_Link)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
 
     ASSERT_THROW(text.GoNextLink(), logic_error);
 }
 
 TEST(Text, Can_Go_Previous_Link)
 {
+    TextLink::InitMemorySystem();
     Text text;
     string expectedString = "1";
-    TextLink::InitMemorySystem();
 
     text.Read("input.txt");
-    //text.Reset();
     text.GoFirstLink();
     text.GoNextLink();
 
@@ -263,8 +245,8 @@ TEST(Text, Can_Go_Previous_Link)
 
 TEST(Text, Go_Previous_Link_Returns_0_If_Success)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
 
     text.Read("input.txt");
     text.GoFirstLink();
@@ -275,8 +257,8 @@ TEST(Text, Go_Previous_Link_Returns_0_If_Success)
 
 TEST(Text, Throws_If_Go_Next_Link_In_Highest_Level)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
 
     text.Read("input.txt");
     text.GoFirstLink();
@@ -286,205 +268,172 @@ TEST(Text, Throws_If_Go_Next_Link_In_Highest_Level)
 
 TEST(Text, Throws_If_Go_Previous_Link_With_Empty_Current_Link)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
 
     ASSERT_THROW(text.GoNextLink(), logic_error);
 }
 
-//-----------------------Insertions-------------------------
+
 TEST(Text, Can_Insert_Down_Line_Into_Empty_Text)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
+    TString expectedString = "example";
 
-    //text.Read("input.txt");
+    ASSERT_NO_THROW(text.InsertDownLine("example"));
 
-    ASSERT_NO_THROW(text.InsertDownLine("2.2.1"));
     text.GoDownLink();
-    EXPECT_EQ(text.GetLine(), "2.2.1");
-}
-
-TEST(Text, DISABLED_Throw_When_Insert_Down_Line_With_Empty_Current_Link)
-{
-    Text text;
-    TextLink::InitMemorySystem();
-
-    //text.Read("input.txt");
-
-    ASSERT_ANY_THROW(text.InsertDownLine("2.2.1"));
-    //EXPECT_EQ(text.GetLine(), "2.2.1");
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 TEST(Text, Can_Insert_Muptiple_Down_Line)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
+    TString expectedString = "1.1.1";
 
-    text.InsertDownLine("2");
-    text.InsertDownLine("2.1");
-    text.InsertDownLine("2.1.1");
+    text.InsertDownLine("1");
+    text.InsertDownLine("1.1");
+    text.InsertDownLine("1.1.1");
     text.GoDownLink();
 
-    EXPECT_EQ(text.GetLine(), "2.1.1");
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 TEST(Text, Can_Insert_Down_Line_Into_Text)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
+    TString expectedString = "1.0";
 
     text.Read("input.txt");
     text.GoFirstLink();
     text.InsertDownLine("1.0");
     text.GoDownLink();
-    EXPECT_EQ(text.GetLine(), "1.0");
+
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 TEST(Text, Can_Insert_Next_Line_Into_Empty_Text)
 {
-    Text text;
     TextLink::InitMemorySystem();
-
-    //text.Read("input.txt");
+    Text text;
 
     ASSERT_NO_THROW(text.InsertNextLine("A"));
+
     text.GoNextLink();
     EXPECT_EQ(text.GetLine(), "A");
 }
 
-TEST(Text, DISABLED_Throw_When_Insert_Next_Line_With_Empty_Current_Link)
-{
-    Text text;
-    TextLink::InitMemorySystem();
-
-    //text.Read("input.txt");
-    
-    ASSERT_ANY_THROW(text.InsertNextLine("A"));
-    //EXPECT_EQ(text.GetLine(), "2.2.1");
-}
-
 TEST(Text, Can_Insert_Muptiple_Next_Line)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
+    TString expectedString = "15";
 
     text.InsertNextLine("13");
     text.InsertNextLine("14");
     text.InsertNextLine("15");
     text.GoNextLink();
 
-    EXPECT_EQ(text.GetLine(), "15");
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 TEST(Text, Can_Insert_Next_Line_Into_Text)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
+    TString expectedString = "A";
 
     text.Read("input.txt");
-    //text.GoFirstLink();
-    text.InsertNextLine("3");
+    text.InsertNextLine("A");
     text.GoNextLink();
-    EXPECT_EQ(text.GetLine(), "3");
+
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 
 TEST(Text, Can_Insert_Down_Section_Into_Empty_Text)
 {
-    Text text;
     TextLink::InitMemorySystem();
-
-    //text.Read("input.txt");
+    Text text;
+    TString expectedString = "0.1";
 
     ASSERT_NO_THROW(text.InsertDownSection("0.1"));
+
     text.GoDownLink();
-    EXPECT_EQ(text.GetLine(), "0.1");
-}
-
-TEST(Text, DISABLED_Throw_When_Insert_Down_Section_With_Empty_Current_Link)
-{
-    Text text;
-    TextLink::InitMemorySystem();
-
-    ASSERT_ANY_THROW(text.InsertDownSection("2.2.1"));
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 TEST(Text, Can_Insert_Muptiple_Down_Sections)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
+    TString expectedString = "0.1.1";
 
     text.InsertDownSection("0");
     text.InsertDownSection("0.1");
     text.InsertDownSection("0.1.1");
     text.GoDownLink();
 
-    EXPECT_EQ(text.GetLine(), "0.1.1");
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 TEST(Text, Can_Insert_Down_Section_Into_Text)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
+    TString expectedString = "0.0";
 
     text.Read("input.txt");
     text.GoFirstLink();
     text.InsertDownSection("0.0");
     text.GoDownLink();
 
-    EXPECT_EQ(text.GetLine(), "0.0");
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 TEST(Text, Can_Insert_Next_Section_Into_Empty_Text)
 {
-    Text text;
     TextLink::InitMemorySystem();
-
-    //text.Read("input.txt");
+    Text text;
+    TString expectedString = "A";
 
     ASSERT_NO_THROW(text.InsertNextSection("A"));
+
     text.GoNextLink();
-    EXPECT_EQ(text.GetLine(), "A");
-}
-
-TEST(Text, DISABLED_Throw_When_Insert_Next_Section_With_Empty_Current_Link)
-{
-    Text text;
-    TextLink::InitMemorySystem();
-
-    //text.Read("input.txt");
-
-    ASSERT_ANY_THROW(text.InsertNextSection("A"));
-    //EXPECT_EQ(text.GetLine(), "2.2.1");
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 TEST(Text, Can_Insert_Muptiple_Next_Sections)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
+    TString expectedString = "15";
 
     text.InsertNextSection("13");
     text.InsertNextSection("14");
     text.InsertNextSection("15");
     text.GoNextLink();
 
-    EXPECT_EQ(text.GetLine(), "15");
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 TEST(Text, Can_Insert_Next_Section_Into_Text)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
+    TString expectedString = "3";
 
     text.Read("input.txt");
-    //text.GoFirstLink();
     text.InsertNextSection("3");
     text.GoNextLink();
-    EXPECT_EQ(text.GetLine(), "3");
+
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
-//-------------------------Deletions-----------------------------
+
 TEST(Text, Throw_When_Delete_Down_Line_From_Empty_Text)
 {
     TextLink::InitMemorySystem();
@@ -505,8 +454,8 @@ TEST(Text, Throw_When_Delete_Down_Line_Text_Without_Down_Line)
 
 TEST(Text, Can_Delete_Down_Line_From_Text)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
 
     text.Read("input.txt");
     text.GoFirstLink();
@@ -557,19 +506,21 @@ TEST(Text, Throw_When_Delete_Not_Atomic_Next_Line)
 
 TEST(Text, Can_Delete_Next_Line_From_Text)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
+    TString expectedString = "";
 
     text.InsertNextLine("QWERTY");
 
     ASSERT_NO_THROW(text.DeleteNextLine());
-    EXPECT_EQ(text.GetLine(), "");
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 TEST(Text, Can_Delete_Muptiple_Next_Lines)
 {
     TextLink::InitMemorySystem();
     Text text;
+    TString expectedString = "";
 
     text.InsertNextLine("Q");
     text.InsertNextLine("W");
@@ -578,7 +529,7 @@ TEST(Text, Can_Delete_Muptiple_Next_Lines)
     ASSERT_NO_THROW(text.DeleteNextLine());
     ASSERT_NO_THROW(text.DeleteNextLine());
     ASSERT_NO_THROW(text.DeleteNextLine());
-    EXPECT_EQ(text.GetLine(), "");
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 
@@ -602,8 +553,8 @@ TEST(Text, Throw_When_Delete_Down_Section_Text_Without_Down_Line)
 
 TEST(Text, Can_Delete_Down_Section_From_Text)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
 
     text.Read("input.txt");
     text.GoFirstLink();
@@ -644,26 +595,28 @@ TEST(Text, Throw_When_Delete_Next_Section_From_Text_Without_Next_Line)
 
 TEST(Text, Can_Delete_Next_Section_From_Text)
 {
-    Text text;
     TextLink::InitMemorySystem();
+    Text text;
+    TString expectedString = "";
 
     text.InsertNextSection("QWERTY");
 
     ASSERT_NO_THROW(text.DeleteNextSection());
-    EXPECT_EQ(text.GetLine(), "");
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 TEST(Text, Can_Delete_Muptiple_Next_Sections)
 {
     TextLink::InitMemorySystem();
     Text text;
+    TString expectedString = "";
 
     text.InsertNextSection("Q");
     text.InsertNextSection("W");
     text.InsertNextSection("E");
 
     ASSERT_NO_THROW(text.DeleteNextSection());
-    EXPECT_EQ(text.GetLine(), "");
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
 
@@ -684,37 +637,19 @@ TEST(Text, Can_Reset_Empty_Text)
 {
     TextLink::InitMemorySystem();
     Text text;
+    TString expectedString = "";
 
     ASSERT_NO_THROW(text.Reset());
     EXPECT_EQ(text.Reset(), 0);
-    EXPECT_EQ(text.GetLine(), "");
+    EXPECT_EQ(text.GetLine(), expectedString);
 }
 
-TEST(Text, DISABLED_Can_Reset_Text)
+TEST(Text, Is_Text_Ended_Returns_True)
 {
-    //TODO: неправиьное назначение первого звена
-    TextLink::InitMemorySystem();
-    Text text;
-
-    ASSERT_NO_THROW(text.InsertNextLine("1"));
-    ASSERT_NO_THROW(text.InsertNextLine("2"));
-    ASSERT_NO_THROW(text.InsertNextLine("3"));
-
-    text.Reset();
-    //EXPECT_EQ(text.GetLine(), "1");
-    text.GetLine();
-    EXPECT_EQ(1, 1);
-    text.Print();
-}
-
-TEST(Text, DISABLED_Is_Text_Ended_Returns_True)
-{
-    //TODO: GoNext doesn't work correctly cause iteraorStack is empty
     TextLink::InitMemorySystem();
     Text text;
 
     text.Read("input.txt");
-    //text.Reset();
     text.GoNext();
 
     ASSERT_NO_THROW(text.IsTextEnded());
@@ -735,25 +670,19 @@ TEST(Text, Is_Text_Ended_Returns_False)
 
 TEST(Text, Can_Go_Next)
 {
-    //TODO: GoNext does not work
-    //If change iteratorStack to Path in GoNext
-    // it'll break GetLine
-    //in my test
-
     TextLink::InitMemorySystem();
-    TString a = "1";
+    TString a = "1", expectedString = "2";
     Text txt(new TextLink(a));
     
     txt.GoFirstLink();
     txt.InsertNextLine("2");
     txt.GoNextLink();
     txt.InsertNextLine("3");
-    txt.GoNextLink();
-    
+    txt.GoNextLink();   
     txt.Reset();
     txt.GoNext();
     
-    EXPECT_EQ(txt.GetLine(), "2");
+    EXPECT_EQ(txt.GetLine(), expectedString);
 }
 
 TEST(Text, Can_Read_Text_File)
@@ -764,11 +693,16 @@ TEST(Text, Can_Read_Text_File)
     ASSERT_NO_THROW(text.Read("input.txt"));
 }
 
+TEST(Text, Throw_If_Trying_To_Read_From_Non_Existing_File)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+
+    ASSERT_THROW(text.Read("nput.txt"), invalid_argument);
+}
+
 TEST(Text, Can_Write_Text_To_File)
 {
-    //FIXME: GLOBAL ERROR: first line is always empty
-    // It's not a bug it's a feature
-    // first line MUST BE set through SetLine()
     TextLink::InitMemorySystem();
     Text text;
 
@@ -776,4 +710,19 @@ TEST(Text, Can_Write_Text_To_File)
     text.InsertDownLine("a");
 
     ASSERT_NO_THROW(text.Write("output.txt"));
+}
+
+TEST(Text, Can_Get_Copy)
+{
+    TextLink::InitMemorySystem();
+    Text text;
+    pText copiedText = nullptr;
+
+    text.SetLine("A");
+    text.InsertDownLine("a");
+    text.InsertDownLine("b");
+    text.InsertDownLine("c");
+    text.InsertNextLine("B");
+    
+    ASSERT_NO_THROW(copiedText = text.GetCopy());
 }
