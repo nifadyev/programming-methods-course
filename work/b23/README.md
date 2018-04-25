@@ -1471,8 +1471,8 @@ TEST(Text, Can_Get_Copy)
 ```
 
 #### Результат прохождения тестов
-![](https://bytebucket.org/VadimNifadyev/lab5-polynom/raw/feb0b1e319fa74535e40a30d95c7be488f4dc9a2/work/b23/PolinomTests.png)
+![](https://bytebucket.org/VadimNifadyev/lab6-texts/raw/8d7d980f7acb2060a98f7634a2b11d9e01651a81/work/b23/TestResult.png)
 #### Результат работы программы
-![](https://bytebucket.org/VadimNifadyev/lab5-polynom/raw/feb0b1e319fa74535e40a30d95c7be488f4dc9a2/work/b23/PolinomMain.png)
+![](https://bytebucket.org/VadimNifadyev/lab6-texts/raw/8d7d980f7acb2060a98f7634a2b11d9e01651a81/work/b23/MainResult.png)
 ## Вывод
 В рамках данной лабораторной работы были изучены способы представления и хранения текста с использованием стека и списка, были реализованы различные операции над текстом.
