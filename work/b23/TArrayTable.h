@@ -8,35 +8,35 @@ enum TDataPos { FIRST_POS, CURRENT_POS, LAST_POS };
 
 class  TArrayTable : public TTable {
 protected:
-    pTTabRecord *pRecords; // Память для записей таблицы
-    int maxTableSize;      // Макс. возм.количество записей в таблице
-    int currentPosition;   // Номер текущей записи (нумерация с 0)
+    pTTabRecord *pRecords; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    int maxTableSize;      // пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅ.пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    int currentPosition;   // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 0)
 public:
     TArrayTable(int size = TABLE_MAX_SIZE);
-    ~TArrayTable() {};
+    ~TArrayTable();
 
-    //-----------------------------Информационные методы-----------------------------
+    //-----------------------------пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ-----------------------------
     virtual /*int*/bool IsFull() const;
     int GetTableSize() const;
 
-    //-----------------------------Доступ-----------------------------
+    //-----------------------------пїЅпїЅпїЅпїЅпїЅпїЅ-----------------------------
     virtual TKey GetKey(void) const;
     virtual pTDataValue GetValuePTR(void) const;
 
     virtual TKey GetKey(TDataPos mode) const;
     virtual pTDataValue GetValuePTR(TDataPos mode) const;
 
-    //-----------------------------Основные методы-----------------------------
+    //-----------------------------пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ-----------------------------
     virtual pTDataValue FindRecord(TKey key) = 0;
     virtual void InsertRecord(TKey key, pTDataValue value) = 0;
     virtual void DeleteRecord(TKey key) = 0;
 
-    //-----------------------------Навигация-----------------------------
-    virtual /*int*/void Reset(void);   // Установить на первую запись
+    //-----------------------------пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ-----------------------------
+    virtual /*int*/void Reset(void);   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     virtual /*int*/bool IsTableEnded(void) const;
-    virtual /*int*/void GoNext(void); // Переход к следующей записи, (=1 после применения для последней записи таблицы)
+    virtual /*int*/void GoNext(void); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, (=1 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
     
-    virtual int SetCurrentPosition(int position);
+    virtual /*int*/void SetCurrentPosition(int position);
     int GetCurrentPosition(void) const;
     friend class TSortTable;
 };

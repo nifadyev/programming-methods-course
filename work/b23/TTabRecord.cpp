@@ -2,47 +2,54 @@
 
 TTabRecord::TTabRecord(TKey key, pTDataValue value)
 {
+    this->key = key;
+    this->pValue = value;
 }
 
 void TTabRecord::SetKey(TKey key)
 {
+    this->key = key;
 }
 
 TKey TTabRecord::GetKey(void)
 {
-    return TKey();
+    return key;
 }
 
 void TTabRecord::SetValuePtr(pTDataValue ptr)
 {
+    pValue = ptr;
 }
 
 pTDataValue TTabRecord::GetValuePTR(void)
 {
-    return pTDataValue();
+    return pValue;
 }
 
 TDataValue* TTabRecord::GetCopy()
 {
-    return (pTDataValue*)nullptr;
+    return new TTabRecord(key, pValue);
 }
 
-TTabRecord & TTabRecord::operator=(TTabRecord & record)
+TTabRecord& TTabRecord::operator=(const TTabRecord &record)
 {
-    // TODO: вставьте здесь оператор return
+    key = record.key;
+    pValue = record.pValue;
+
+    return *this;
 }
 
-int TTabRecord::operator==(const TTabRecord & record)
+/* int */bool TTabRecord::operator==(const TTabRecord & record)
 {
-    return 0;
+    return key == record.key;
 }
 
-int TTabRecord::operator<(const TTabRecord & record)
+/* int */bool TTabRecord::operator<(const TTabRecord & record)
 {
-    return 0;
+    return key < record.key;
 }
 
-int TTabRecord::operator>(const TTabRecord & record)
+/* int */bool TTabRecord::operator>(const TTabRecord & record)
 {
-    return 0;
+    return key > record.key;
 }

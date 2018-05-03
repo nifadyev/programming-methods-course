@@ -5,32 +5,32 @@ using namespace std;
 #ifndef TTAB_RECORD_INCLUDE_TTAB_RECORD_H
 #define TTAB_RECORD_INCLUDE_TTAB_RECORD_H
 
-typedef string TKey;    // Тип ключа записи
-typedef TTabRecord *pTTabRecord;
+typedef string TKey;    // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 
-//----------------Класс объектов-значений для записей таблицы----------------   
+
+//----------------пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ----------------   
 class TTabRecord : public TDataValue
 {
-protected:
-    TKey key;             // Ключ записи
-    pTDataValue pValue;   // Указатель на значение
-public:
+ protected:
+    TKey key;             // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    pTDataValue pValue;   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ public:
     TTabRecord(TKey key = "", pTDataValue value = nullptr);
 
     void SetKey(TKey key);
     TKey GetKey(void);
 
-    void SetValuePtr(pTDataValue ptr); // Установить указатель на данные
-    pTDataValue GetValuePTR(void);     // Получить указатель на данные
+    void SetValuePtr(pTDataValue ptr); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    pTDataValue GetValuePTR(void);     // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 
     virtual TDataValue* GetCopy();
 
-    TTabRecord & operator = (TTabRecord &record);
-    virtual int operator == (const TTabRecord &record);
-    virtual int operator < (const TTabRecord &record);
-    virtual int operator > (const TTabRecord &record);
+    TTabRecord & operator = (const TTabRecord &record);
+    virtual /* int */bool operator == (const TTabRecord &record);
+    virtual /* int */bool operator < (const TTabRecord &record);
+    virtual /* int */bool operator > (const TTabRecord &record);
 
-    //----------------Дружественные классы для различных типов таблиц----------------
+    //----------------пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ----------------
     friend class TArrayTable;
     friend class TScanTable;
     friend class TSortTable;
@@ -39,5 +39,5 @@ public:
     friend class TArrayHash;
     friend class TListHash;
 };
-
+typedef TTabRecord *pTTabRecord;
 #endif // TTAB_RECORD_INCLUDE_TTAB_RECORD_H
