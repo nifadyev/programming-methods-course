@@ -275,7 +275,7 @@ TEST(ArrayTable, Throw_When_Trying_To_Get_Key_From_Empty_Table)
     ASSERT_THROW(scanTable.GetKey(), runtime_error);
 }
 
-TEST(ArrayTable, Throw_When_Trying_To_Get_Key_Using_Invalid_Position)
+TEST(ArrayTable, DISABLED_Throw_When_Trying_To_Get_Key_Using_Invalid_Position)
 {
     TScanTable scanTable(5);
     TTabRecord record("qwerty");
@@ -285,7 +285,7 @@ TEST(ArrayTable, Throw_When_Trying_To_Get_Key_Using_Invalid_Position)
     ASSERT_THROW(scanTable.GetKey(), invalid_argument);
 }
 
-TEST(ArrayTable, DISABLED_Get_Key_Returns_Correct_Value)
+TEST(ArrayTable, Get_Key_Returns_Correct_Value)
 {
     TScanTable scanTable(5);
     TTabRecord record("qwerty");
@@ -295,9 +295,12 @@ TEST(ArrayTable, DISABLED_Get_Key_Returns_Correct_Value)
     EXPECT_EQ(scanTable.GetKey(), "qwerty");
 }
 
-TEST(ArrayTable, DISABLED_Can_Get_Value)
+TEST(ArrayTable, Can_Get_Value)
 {
-    TScanTable scanTable;
+    TScanTable scanTable(6);
+    TTabRecord record("example");
+
+    scanTable.InsertRecord(record.GetKey(), record.GetCopy());
 
     ASSERT_NO_THROW(scanTable.GetKey());
 }
@@ -309,7 +312,7 @@ TEST(ArrayTable, Throw_When_Trying_To_Get_Value_From_Empty_Table)
     ASSERT_THROW(scanTable.GetValuePTR(), runtime_error);
 }
 
-TEST(ArrayTable, Throw_When_Trying_To_Get_Value_Using_Invalid_Position)
+TEST(ArrayTable, DISABLED_Throw_When_Trying_To_Get_Value_Using_Invalid_Position)
 {
     TScanTable scanTable(5);
     TTabRecord record("qwerty");
@@ -319,12 +322,231 @@ TEST(ArrayTable, Throw_When_Trying_To_Get_Value_Using_Invalid_Position)
     ASSERT_THROW(scanTable.GetValuePTR(), invalid_argument);
 }
 
-TEST(ArrayTable, DISABLED_Get_Value_Returns_Correct_Value)
+TEST(ArrayTable, Get_Value_Returns_Correct_Value)
 {
     TScanTable scanTable(5);
+    TTabRecord record("qwerty");
+    pTDataValue copy = record.GetCopy();
+
+    scanTable.InsertRecord(record.GetKey(), copy);
+
+    EXPECT_EQ(scanTable.GetValuePTR(), copy);
+}
+
+TEST(ArrayTable, Can_Reset)
+{
+    TScanTable scanTable;
+
+    ASSERT_NO_THROW(scanTable.Reset());
+}
+
+TEST(ArrayTable, Reset_Set_Correct_Position)
+{
+    TScanTable scanTable;
+
+    scanTable.SetCurrentPosition(3);
+    scanTable.Reset();
+
+    EXPECT_EQ(scanTable.GetCurrentPosition(), 0);
+}
+
+TEST(ArrayTable, Is_Table_Ended_Returns_True)
+{
+    TScanTable scanTable;
+
+    EXPECT_TRUE(scanTable.IsTableEnded());
+}
+
+TEST(ArrayTable, Is_Table_Ended_Returns_False)
+{
+    TScanTable scanTable(3);
     TTabRecord record("qwerty");
 
     scanTable.InsertRecord(record.GetKey(), record.GetCopy());
 
+    EXPECT_FALSE(scanTable.IsTableEnded());
+}
+
+TEST(ArrayTable, Can_Go_Next)
+{
+    TScanTable scanTable(3);
+    TTabRecord record1("qwerty"), record2("example");
+
+    scanTable.InsertRecord(record1.GetKey(), record1.GetCopy());
+    scanTable.InsertRecord(record2.GetKey(), record2.GetCopy());
+    scanTable.Reset();
+
+    ASSERT_NO_THROW(scanTable.GoNext());
+}
+
+TEST(ArrayTable, Throw_When_Trying_To_Go_Next_In_Ended_Table)
+{
+    TScanTable scanTable;
+
+    ASSERT_THROW(scanTable.GoNext(), logic_error);
+}
+
+TEST(ArrayTable, Can_Set_Current_Position)
+{
+    TScanTable scanTable(5);
+
+    ASSERT_NO_THROW(scanTable.SetCurrentPosition(3));
+}
+
+TEST(ArrayTable, Set_Correct_Value_As_Current_Position)
+{
+    TScanTable scanTable(17);
+
+    scanTable.SetCurrentPosition(9);
+
+    EXPECT_EQ(scanTable.GetCurrentPosition(), 9);
+}
+
+TEST(ArrayTable, Throw_When_Trying_To_Set_Negative_Current_Position)
+{
+    TScanTable scanTable;
+
+    ASSERT_THROW(scanTable.SetCurrentPosition(-3), invalid_argument);
+}
+
+TEST(ArrayTable, Throw_When_Trying_To_Set_Too_Big_Current_Position)
+{
+    TScanTable scanTable;
+
+    ASSERT_THROW(scanTable.SetCurrentPosition(26), invalid_argument);
+}
+
+TEST(ArrayTable, Can_Get_Current_Position)
+{
+    TScanTable scanTable;
+
+    ASSERT_NO_THROW(scanTable.GetCurrentPosition());
+}
+
+TEST(ArrayTable, Get_Correct_Value_Of_Current_Position)
+{
+    TScanTable scanTable;
+
+    scanTable.GetCurrentPosition();
+
+    EXPECT_EQ(scanTable.GetCurrentPosition(), 0);
+}
+
+//----------------Testing class TScanTable----------------
+TEST(ScanTable, Can_Find_Record)
+{
+    TScanTable scanTable;
+    TKey key = "qwerty";
+    TTabRecord record(key);
+
+    scanTable.InsertRecord(record.GetKey(), record.GetCopy());
+
+    ASSERT_NO_THROW(scanTable.FindRecord(key));
+}
+
+TEST(ScanTable, Find_Record_Returns_Correct_Value)
+{
+    TScanTable scanTable;
+    TKey key = "wasd";
+    TTabRecord record(key);
+
+    scanTable.InsertRecord(record.GetKey(), record.GetValuePTR());
+
+    EXPECT_EQ(scanTable.FindRecord(key), record.GetValuePTR());
+}
+
+TEST(ScanTable, Throw_When_Trying_To_Find_Wrong_Record)
+{
+    TScanTable scanTable;
+    TKey key = "wasf";
+    TTabRecord record("wasd");
+
+    scanTable.InsertRecord(record.GetKey(), record.GetValuePTR());
+
+    ASSERT_THROW(scanTable.FindRecord(key), runtime_error);
+}
+
+TEST(ScanTable, Can_Insert_Record)
+{
+    TScanTable scanTable;
+    TTabRecord record("example");
+
+    ASSERT_NO_THROW(scanTable.InsertRecord(record.GetKey(), record.GetValuePTR()));
+}
+
+TEST(ScanTable, Inserted_Record_Is_Correctly_Paste)
+{
+    TScanTable scanTable;
+    TKey expectedKey = "example";
+    TTabRecord record(expectedKey);
+
+    scanTable.InsertRecord(record.GetKey(), record.GetValuePTR());
+
+    EXPECT_EQ(scanTable.GetKey(), expectedKey);
     EXPECT_EQ(scanTable.GetValuePTR(), nullptr);
+    EXPECT_EQ(scanTable.GetDataCount(), 1);
+}
+
+TEST(ScanTable, Throw_When_Trying_To_Insert_Record_Into_Full_Table)
+{
+    TScanTable scanTable(1);
+    TTabRecord record1("qwerty"), record2("wasd");
+
+    scanTable.InsertRecord(record1.GetKey(), record1.GetValuePTR());
+
+    ASSERT_THROW(scanTable.InsertRecord(record2.GetKey(), record2.GetValuePTR()), logic_error);
+}
+
+TEST(ScanTable, Throw_When_Trying_To_Insert_Record_Already_Existing_Record)
+{
+    TScanTable scanTable;
+    TTabRecord record("wasd");
+
+    scanTable.InsertRecord(record.GetKey(), record.GetValuePTR());
+
+    ASSERT_THROW(scanTable.InsertRecord(record.GetKey(), record.GetValuePTR()), runtime_error);
+}
+
+TEST(ScanTable, Can_Delete_Record)
+{
+    TScanTable scanTable;
+    TKey key = "qwerty";
+    TTabRecord record(key);
+
+    scanTable.InsertRecord(record.GetKey(), record.GetValuePTR());
+
+    ASSERT_NO_THROW(scanTable.DeleteRecord(key));
+}
+
+TEST(ScanTable, Deleted_Record_Is_Correctly_Removed)
+{
+    TScanTable scanTable;
+    TKey expectedKey = "example";
+    TTabRecord record1(expectedKey), record2("wasd");
+
+    scanTable.InsertRecord(record1.GetKey(), record1.GetValuePTR());
+    scanTable.InsertRecord(record2.GetKey(), record2.GetValuePTR());
+    scanTable.DeleteRecord("wasd");
+
+    EXPECT_EQ(scanTable.GetKey(), expectedKey);
+    EXPECT_EQ(scanTable.GetValuePTR(), nullptr);
+    EXPECT_EQ(scanTable.GetDataCount(), 1);
+}
+
+TEST(ScanTable, Throw_When_Trying_To_Delete_Record_From_Empty_Table)
+{
+    TScanTable scanTable;
+
+    ASSERT_THROW(scanTable.DeleteRecord("example"), logic_error);
+}
+
+TEST(ScanTable, Throw_When_Trying_To_Delete_Non_Existing_Record)
+{
+    TScanTable scanTable;
+    TKey wrongKey = "qqwerty";
+    TTabRecord record("qwerty");
+
+    scanTable.InsertRecord(record.GetKey(), record.GetValuePTR());
+
+    ASSERT_THROW(scanTable.DeleteRecord(wrongKey), runtime_error);
 }
