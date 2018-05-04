@@ -28,7 +28,7 @@ void TScanTable::InsertRecord(TKey key, pTDataValue value)
 {
     if (IsFull())
     {
-        throw runtime_error("Error! Cannot insert record into full table");
+        throw logic_error("Error! Cannot insert record into full table");
     }
 
     int i = 0;
@@ -52,7 +52,7 @@ void TScanTable::DeleteRecord(TKey key)
 {
     if (IsEmpty())
     {
-        throw runtime_error("Error! Table is empty");
+        throw logic_error("Error! Table is empty");
     }
 
     for(int i = 0; i < dataCount; i++)
