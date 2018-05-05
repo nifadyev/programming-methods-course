@@ -1,6 +1,7 @@
 #include "TTabRecord.h"
 #include "TArrayTable.h"
 #include "TScanTable.h"
+#include "TSortTable.h"
 #include <gtest/gtest.h>
 
 //----------------Testing class TTabRecord----------------
@@ -549,4 +550,246 @@ TEST(ScanTable, Throw_When_Trying_To_Delete_Non_Existing_Record)
     scanTable.InsertRecord(record.GetKey(), record.GetValuePTR());
 
     ASSERT_THROW(scanTable.DeleteRecord(wrongKey), runtime_error);
+}
+
+//----------------Testing class TSortTable----------------
+TEST(SortTable, Can_Create_Default_Sort_Table)
+{
+    ASSERT_NO_THROW(TSortTable sortTable);
+}
+
+TEST(SortTable, Can_Create_Sort_Table_With_Custom_Parameter)
+{
+    ASSERT_NO_THROW(TSortTable sortTable(22));
+}
+
+TEST(SortTable, Can_Create_Sort_Table_Based_On_Scan_Table)
+{
+    TScanTable sourceTable(11);
+
+    sourceTable.InsertRecord("qwerty", nullptr);
+    sourceTable.InsertRecord("wasd", nullptr);
+    sourceTable.InsertRecord("example", nullptr);
+
+    ASSERT_NO_THROW(TSortTable copiedTable(sourceTable));
+}
+
+TEST(SortTable, Can_Equal_Sort_Table_And_Scan_Table)
+{
+    TScanTable scanTable;
+    TSortTable sortTable;
+
+    scanTable.InsertRecord("example", nullptr);
+
+    ASSERT_NO_THROW(sortTable = scanTable);
+}
+
+TEST(SortTable, Equal_Sort_Table_And_Scan_Table_Correctly_Appoints_Values)
+{
+    TScanTable scanTable;
+    TSortTable sortTable;
+    TKey expectedKey = "example";
+
+    scanTable.InsertRecord("example", nullptr);
+    scanTable.InsertRecord("qwerty", nullptr);
+    scanTable.InsertRecord("wasd", nullptr);
+    scanTable.InsertRecord("dsaw", nullptr);
+
+    sortTable = scanTable;
+
+    EXPECT_EQ(sortTable.GetDataCount(), 4);
+    EXPECT_EQ(sortTable.GetKey(), expectedKey);
+}
+
+TEST(SortTable, Can_Equal_Sort_Table_And_Empty_Scan_Table)
+{
+    TScanTable scanTable;
+    TSortTable sortTable;
+
+    ASSERT_NO_THROW(sortTable = scanTable);
+}
+
+TEST(SortTable, Can_Get_Sort_Method)
+{
+    TSortTable sortTable;
+
+    ASSERT_NO_THROW(sortTable.GetSortMethod());
+}
+
+TEST(SortTable, Get_Correct_Sort_Method)
+{
+    TSortTable sortTable;
+
+    EXPECT_EQ(sortTable.GetSortMethod(), INSERT_SORT);
+}
+
+TEST(SortTable, Can_Set_Sort_Method)
+{
+    TSortTable sortTable;
+
+    ASSERT_NO_THROW(sortTable.SetSortMethod(MERGE_SORT));
+}
+
+TEST(SortTable, Set_Correct_Sort_Method)
+{
+    TSortTable sortTable;
+
+    sortTable.SetSortMethod(QUICK_SORT);
+
+    EXPECT_EQ(sortTable.GetSortMethod(), QUICK_SORT);
+}
+
+TEST(SortTable, Throw_When_Trying_To_Set_Unexisting_Sort_Method)
+{
+    TSortTable sortTable;
+    TSortMethod MERJE_SORT;
+
+    ASSERT_THROW(sortTable.SetSortMethod(MERJE_SORT), invalid_argument);
+}
+
+TEST(SortTable, Can_Find_Record)
+{
+    TSortTable sortTable;
+    TKey requestedKey = "qwerty";
+
+    sortTable.InsertRecord("qwerty", nullptr);
+
+    ASSERT_NO_THROW(sortTable.FindRecord(requestedKey));
+}
+
+TEST(SortTable, Find_Correct_Record)
+{
+    TSortTable sortTable(5);
+    TKey requestedKey = "wasd";
+    TTabRecord requestedRecord("wasd", nullptr);
+    pTDataValue requestedValue = requestedRecord.GetValuePTR();
+
+    sortTable.InsertRecord("qwerty", nullptr);
+    sortTable.InsertRecord("wasd", nullptr);
+    sortTable.InsertRecord("example", nullptr);
+
+    EXPECT_EQ(sortTable.FindRecord(requestedKey), requestedValue);
+}
+
+TEST(SortTable, Throw_When_Trying_To_Find_Record_In_Empty_Table)
+{
+    TSortTable sortTable;
+
+    ASSERT_THROW(sortTable.FindRecord("example"), logic_error);
+}
+
+TEST(SortTable, Throw_When_Trying_To_Find_Record_Using_Unexisting_Key)
+{
+    TSortTable sortTable(7);
+
+    sortTable.InsertRecord("qwerty", nullptr);
+    sortTable.InsertRecord("wasd", nullptr);
+    sortTable.InsertRecord("example", nullptr);
+
+    ASSERT_THROW(sortTable.FindRecord("exampl"), runtime_error);
+}
+
+TEST(SortTable, Throw_When_Trying_To_Find_Record_Using_Too_Long_Key)
+{
+    TSortTable sortTable(9);
+
+    sortTable.InsertRecord("qwerty", nullptr);
+    sortTable.InsertRecord("wasd", nullptr);
+    sortTable.InsertRecord("example", nullptr);
+
+    ASSERT_THROW(sortTable.FindRecord("qwertyui"), runtime_error);
+}
+
+TEST(SortTable, Throw_When_Trying_To_Find_Record_Using_Too_Short_Key)
+{
+    TSortTable sortTable(9);
+
+    sortTable.InsertRecord("qwerty", nullptr);
+    sortTable.InsertRecord("wasd", nullptr);
+    sortTable.InsertRecord("example", nullptr);
+
+    ASSERT_THROW(sortTable.FindRecord("was"), runtime_error);
+}
+
+TEST(SortTable, Can_Insert_Record)
+{
+    TSortTable sortTable;
+
+    ASSERT_NO_THROW(sortTable.InsertRecord("example", nullptr));
+}
+
+TEST(SortTable, Inserted_Record_Is_Correct)
+{
+    TSortTable sortTable(5);
+    TKey expectedKey = "example";
+
+    sortTable.InsertRecord("example", nullptr);
+
+    EXPECT_EQ(sortTable.GetDataCount(), 1);
+    EXPECT_EQ(sortTable.GetKey(), expectedKey);
+    EXPECT_EQ(sortTable.GetValuePTR(), nullptr);
+}
+
+TEST(SortTable, Throw_When_Trying_To_Insert_Record_Into_Full_Table)
+{
+    TSortTable sortTable(2);
+
+    sortTable.InsertRecord("qwerty", nullptr);
+    sortTable.InsertRecord("wasd", nullptr);
+
+    ASSERT_THROW(sortTable.InsertRecord("example", nullptr), logic_error);
+}
+
+TEST(SortTable, DISABLED_Throw_When_Trying_To_Insert_Already_Existing_Record)
+{
+    TSortTable sortTable(7);
+
+    sortTable.InsertRecord("qwerty", nullptr);
+    sortTable.InsertRecord("wasd", nullptr);
+    sortTable.InsertRecord("example", nullptr);
+
+    ASSERT_THROW(sortTable.InsertRecord("example", nullptr), runtime_error);
+}
+
+TEST(SortTable, Can_Delete_Record)
+{
+    TSortTable sortTable;
+
+    sortTable.InsertRecord("wasd", nullptr);
+
+    ASSERT_NO_THROW(sortTable.DeleteRecord("wasd"));
+}
+
+TEST(SortTable, DISABLED_Delete_Record_Change_The_Table)
+{
+    TSortTable sortTable(5);
+    TKey expectedKey = "wasd";
+
+    sortTable.InsertRecord("qwerty", nullptr);
+    sortTable.InsertRecord("wasd", nullptr);
+    sortTable.InsertRecord("example", nullptr);
+
+    sortTable.DeleteRecord("qwerty");
+
+    EXPECT_EQ(sortTable.GetDataCount(), 2);
+    EXPECT_EQ(sortTable.GetKey(), expectedKey);
+    EXPECT_EQ(sortTable.GetValuePTR(), nullptr);
+}
+
+TEST(SortTable, Throw_When_Trying_To_Delete_Record_From_Empty_Table)
+{
+    TSortTable sortTable;
+
+    ASSERT_THROW(sortTable.DeleteRecord("qwerty"), logic_error);
+}
+
+TEST(SortTable, Throw_When_Trying_To_Delete_Non_Existing_Record)
+{
+    TSortTable sortTable(7);
+
+    sortTable.InsertRecord("qwerty", nullptr);
+    sortTable.InsertRecord("wasd", nullptr);
+    sortTable.InsertRecord("example", nullptr);
+
+    ASSERT_THROW(sortTable.DeleteRecord("examplr"), runtime_error);
 }
