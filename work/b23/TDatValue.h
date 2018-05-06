@@ -7,7 +7,7 @@ class TDataValue
 public:
     ~TDataValue() {}
     virtual TDataValue* GetCopy() = 0;
-    ~TDataValue() {}
+    //~TDataValue() {}
 };
 typedef TDataValue *pTDataValue;
 

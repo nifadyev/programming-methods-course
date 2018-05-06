@@ -28,8 +28,8 @@ public:
     virtual void DeleteRecord(TKey key) = 0;
 
     //-----------------------------���������-----------------------------
-    virtual /*int*/void Reset(void) = 0;   // ���������� �� ������ ������
+    virtual void Reset(void) = 0;   // ���������� �� ������ ������
     virtual /*int*/bool IsTableEnded(void) const = 0;
-    virtual /*int*/void GoNext(void) = 0; // ������� � ��������� ������, (=1 ����� ���������� ��� ��������� ������ �������)
+    virtual void GoNext(void) = 0; // ������� � ��������� ������, (=1 ����� ���������� ��� ��������� ������ �������)
 };
 #endif // TTABLE_INCLUDE_TTABLE_H
