@@ -8,31 +8,31 @@
 class  TTreeTable : public TTable 
 {
 protected:
-    pTTreeNode pRoot;             // Указатель на корень дерева
+    pTTreeNode pRoot;             // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     //TODO: Rename
-    pTTreeNode *ppRef;            // Адрес указателя на вершину-результата в FindRecord
-    pTTreeNode pCurrent;          // Указатель на текущую вершину
-    int currentPosition;          // Номер текущей вершины
-    stack <pTTreeNode> iterators; // Стек для итератора
+    pTTreeNode /* * */ppRef;            // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ FindRecord
+    pTTreeNode pCurrent;          // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    int currentPosition;          // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    stack <pTTreeNode> iterators; // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-    void DeleteTreeTable(pTTreeNode pNode); // Удаление
+    void DeleteTreeTable(pTTreeNode pNode); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 public:
     TTreeTable() : TTable() { currentPosition = 0; pRoot = pCurrent = nullptr; ppRef = nullptr; }
     ~TTreeTable() { DeleteTreeTable(pRoot); }
-    //-----------------------------Информационные методы-----------------------------
+    //-----------------------------пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ-----------------------------
     virtual /*int*/bool IsFull() const;
 
-    //-----------------------------Основные методы-----------------------------
-    virtual pTTreeNode FindRecord(TKey key);
+    //-----------------------------пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ-----------------------------
+    virtual pTDataValue FindRecord(TKey key);
     virtual void InsertRecord(TKey key, pTDataValue value);
     virtual void DeleteRecord(TKey key);
 
-    //-----------------------------Навигация-----------------------------
+    //-----------------------------пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ-----------------------------
     virtual TKey GetKey(void) const;
     virtual pTDataValue GetValuePTR(void) const;
-    virtual /*int*/void Reset(void);   // Установить на первую запись
-    virtual /*int*/bool IsTableEnded(void) const;
-    virtual /*int*/void GoNext(void); // Переход к следующей записи, (=1 после применения для последней записи таблицы)
+    virtual void Reset(void);   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    virtual bool IsTableEnded(void) const;
+    virtual void GoNext(void); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, (=1 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
 };
 
 #endif // TTREE_TABLE_INCLUDE_TTREE_TABLE_H
