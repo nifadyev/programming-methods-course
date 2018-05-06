@@ -9,14 +9,14 @@ typedef  TTreeNode *pTTreeNode;
 
 class  TTreeNode : public TTabRecord 
 {
-protected:
-    pTTreeNode pLeft, pRight; // Указатели на поддеревья
-public:
-    TTreeNode(TKey key = "", pTDataValue value = nullptr, pTTreeNode pLeft = nullptr,
-        pTTreeNode pRight = nullptr) : TTabRecord(key, value), pLeft(pLeft), pRight(pRight) {};
+ protected:
+    pTTreeNode pLeft, pRight; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ public:
+    TTreeNode(TKey key = "", pTDataValue value = nullptr, pTTreeNode pLft = nullptr,
+        pTTreeNode pRght = nullptr) : TTabRecord(key, value), pLeft(pLft), pRight(pRght) {}
 
-    pTTreeNode GetLeft(void) const; // Указатель на левое поддерево
-    pTTreeNode GetRight(void) const; // Указатель на правое поддерево
+    pTTreeNode GetLeft(void) const; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    pTTreeNode GetRight(void) const; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
     virtual TDataValue *GetCopy();
     friend class TTreeTable;
