@@ -2,6 +2,9 @@
 #include "TArrayTable.h"
 #include "TScanTable.h"
 #include "TSortTable.h"
+#include "TTreeNode.h"
+#include "TTreeTable.h"
+
 #include <gtest/gtest.h>
 
 //----------------Testing class TTabRecord----------------
@@ -793,3 +796,154 @@ TEST(SortTable, Throw_When_Trying_To_Delete_Non_Existing_Record)
 
     ASSERT_THROW(sortTable.DeleteRecord("examplr"), runtime_error);
 }
+
+//----------------Testing class TTreeNode----------------
+TEST(TreeNode, Can_Create_Default_Tree_Node)
+{
+    ASSERT_NO_THROW(TTreeNode treeNode);
+}
+
+TEST(TreeNode, Can_Create_Tree_Node_With_Custom_Parameters)
+{
+    pTTreeNode left = new TTreeNode("left");
+    pTTreeNode right = new TTreeNode("right");
+
+    ASSERT_NO_THROW(TTreeNode treeNode("root", nullptr, left, right));
+}
+
+TEST(TreeNode, Can_Get_Left)
+{
+    TTreeNode treeNode;
+
+    ASSERT_NO_THROW(treeNode.GetLeft());
+}
+
+TEST(TreeNode, Get_Left_Returns_Correct_Value)
+{
+    pTTreeNode left = new TTreeNode("left");
+    TTreeNode treeNode("root", nullptr, left);
+
+    EXPECT_EQ(treeNode.GetLeft(), left);
+}
+
+TEST(TreeNode, Can_Get_Right)
+{
+    TTreeNode treeNode;
+
+    ASSERT_NO_THROW(treeNode.GetRight());
+}
+
+TEST(TreeNode, Get_Right_Returns_Correct_Value)
+{
+    pTTreeNode right = new TTreeNode("right");
+    TTreeNode treeNode("root", nullptr, nullptr, right);
+
+    EXPECT_EQ(treeNode.GetRight(), right);
+}
+
+TEST(TreeNode, Can_Get_Copy_If_Value_Is_Nullptr)
+{
+    TTreeNode source;
+
+    ASSERT_NO_THROW(source.GetCopy());
+}
+
+TEST(TreeNode, Can_Get_Copy_If_Value_Is_Not_Nullptr)
+{
+    TTreeNode copy;
+    pTDataValue value = copy.GetCopy();
+    TTreeNode source("source", value);
+
+    ASSERT_NO_THROW(source.GetCopy());
+}
+
+//----------------Testing class TTreeTable----------------
+TEST(TreeTable, Can_Create_Default_Tree_Table)
+{
+    ASSERT_NO_THROW(TTreeTable treeTable);
+}
+
+// TEST(TreeTable, DISABLED_Is_Full_Returns_True)
+// {
+//     TTreeTable treeTable();
+
+//     EXPECT_TRUE(treeTable.IsFull());
+// }
+
+TEST(TreeTable, Is_Full_Returns_False)
+{
+    TTreeTable treeTable;
+
+    EXPECT_FALSE(treeTable.IsFull());
+}
+
+TEST(TreeTable, DISABLED_Can_Find_Record)
+{
+    // FIXME: FindRecord works incorrect
+    TTreeTable treeTable;
+    TTabRecord record1("w");
+    pTDataValue copy1 = record1.GetCopy() /* , copy2 = record2.GetCopy() */;
+    TTabRecord record2("was", copy1), record3("wa", record2.GetCopy());
+
+    /*     treeTable.InsertRecord("w", nullptr);
+    treeTable.InsertRecord("was", nullptr);
+    treeTable.InsertRecord("wa", nullptr); */
+
+    treeTable.InsertRecord(record1.GetKey(), record1.GetValuePTR());
+    treeTable.InsertRecord(record2.GetKey(), record2.GetValuePTR());
+    treeTable.InsertRecord(record3.GetKey(), record3.GetValuePTR());
+
+    ASSERT_NO_THROW(treeTable.FindRecord(record3.GetKey()));
+}
+
+TEST(TreeTable, DISABLED_Find_Record_Returns_Corrent_Record)
+{
+    TTreeTable treeTable;
+
+    treeTable.InsertRecord("qwe", nullptr);
+    treeTable.InsertRecord("q", nullptr);
+    treeTable.InsertRecord("qwert", nullptr);
+
+    EXPECT_EQ(treeTable.FindRecord("qwert"), nullptr);
+}
+
+TEST(TreeTable, Throw_When_Trying_To_Find_Non_Existing_Record)
+{
+    TTreeTable treeTable;
+
+    treeTable.InsertRecord("qwe", nullptr);
+    treeTable.InsertRecord("q", nullptr);
+    treeTable.InsertRecord("qwert", nullptr);
+
+    ASSERT_THROW(treeTable.FindRecord("qwer"), runtime_error);
+}
+
+TEST(TreeTable, Can_Insert_Record)
+{
+    TTreeTable treeTable;
+
+    ASSERT_NO_THROW(treeTable.InsertRecord("example", nullptr));
+}
+
+// TEST(TreeTable, Inserted_Record_Is_Correct)
+// {
+// PTTreeNode pNode = pRoot;
+// ppRef = &pRoot;
+// Efficiency =0;
+// while(pNode != nullptr)
+// {
+// 	Efficiency++;
+// 	if(stricmp(pNode->Key, k))
+// 		break;
+// 	if(pNode->Key < k)
+// 		ppRef = &pNode->pRight;
+// 	else
+// 		ppRef = &pNode->pLeft;
+// 	pNode = *ppRef;
+// }
+// if(pNode == nullptr)
+// 	SetRetCode(TabNoRec);
+// else
+// 	SetRetCode(TabOK);
+// return (pNode == nullptr) ? nullptr : pNode->pValue;
+// }
