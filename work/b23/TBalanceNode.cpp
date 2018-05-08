@@ -1,15 +1,28 @@
 #include "TBalanceNode.h"
 
-TDataValue * TBalanceNode::GetCopy()
+TDataValue* TBalanceNode::GetCopy()
 {
-    return nullptr;
+    if (pValue != nullptr)
+    {
+        return (pTDataValue)(new TBalanceNode(key, pValue->GetCopy(), nullptr, nullptr, balanceIndex));
+    }
+    else
+    {
+        return (pTDataValue)(new TBalanceNode(key, nullptr, nullptr, nullptr, balanceIndex));
+    }
 }
 
 int TBalanceNode::GetBalance(void) const
 {
-    return 0;
+    return balanceIndex;
 }
 
 void TBalanceNode::SetBalance(int balance)
 {
+    if (balance != BALANCE_LEFT && balance != BALANCE_OK && balance != BALANCE_RIGHT)
+    {
+        throw invalid_argument("Error! The balance value must be -1, 0 or 1");
+    }
+    
+    balanceIndex = balance;
 }
