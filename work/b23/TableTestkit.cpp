@@ -879,7 +879,7 @@ TEST(TreeTable, Is_Full_Returns_False)
     EXPECT_FALSE(treeTable.IsFull());
 }
 
-TEST(TreeTable, DISABLED_Can_Find_Record)
+TEST(TreeTable, Can_Find_Record)
 {
     // FIXME: FindRecord works incorrect
     TTreeTable treeTable;
@@ -898,7 +898,7 @@ TEST(TreeTable, DISABLED_Can_Find_Record)
     ASSERT_NO_THROW(treeTable.FindRecord(record3.GetKey()));
 }
 
-TEST(TreeTable, DISABLED_Find_Record_Returns_Corrent_Record)
+TEST(TreeTable, Find_Record_Returns_Corrent_Record)
 {
     TTreeTable treeTable;
 
@@ -927,8 +927,16 @@ TEST(TreeTable, Can_Insert_Record)
     ASSERT_NO_THROW(treeTable.InsertRecord("example", nullptr));
 }
 
-TEST(TreeTable, DISABLED_Inserted_Record_Is_Correct)
+TEST(TreeTable, Inserted_Record_Is_Correct)
 {
+    TTreeTable treeTable;
+
+    treeTable.InsertRecord("example", nullptr);
+    treeTable.Reset();
+
+    EXPECT_EQ(treeTable.GetKey(), "example");
+    EXPECT_EQ(treeTable.GetValuePTR(), nullptr);
+    EXPECT_EQ(treeTable.GetDataCount(), 1);
 }
 
 TEST(TreeTable, DISABLED_Throw_When_Trying_To_Insert_Record_Into_Full_Table)
@@ -954,7 +962,7 @@ TEST(TreeTable, Can_Delete_Record)
     ASSERT_NO_THROW(treeTable.DeleteRecord("exampl"));
 }
 
-TEST(TreeTable, Delete_Record_Changes_Table)
+TEST(TreeTable, DISABLED_Delete_Record_Changes_Table)
 {
     TTreeTable treeTable;
 
@@ -1040,7 +1048,7 @@ TEST(TreeTable, Can_Reset)
     ASSERT_NO_THROW(treeTable.Reset());
 }
 
-TEST(TreeTable, Reset_Works_Correctly)
+TEST(TreeTable, DISABLED_Reset_Works_Correctly)
 {
     TTreeTable treeTable;
 
@@ -1150,4 +1158,32 @@ TEST(BalanceNode, Throw_When_Trying_To_Set_Incorrect_Balance)
 TEST(BalanceTree, Can_Create_Default_Balance_Tree)
 {
     ASSERT_NO_THROW(TBalanceTree balanceTree);
+}
+
+TEST(BalanceTree, Can_Insert_Record)
+{
+    TBalanceTree balanceTree;
+
+    ASSERT_NO_THROW(balanceTree.InsertRecord("example", nullptr));
+}
+
+TEST(BalanceTree, DISABLED_Throw_When_Trying_To_Insert_Record_Into_Full_Balance_Tree)
+{
+    TBalanceTree balanceTree;
+
+    for (int i = 0; i < 24; i++)
+    {
+        ASSERT_NO_THROW(balanceTree.InsertRecord("abc", nullptr));
+    }
+
+    ASSERT_ANY_THROW(balanceTree.InsertRecord("abc", nullptr));
+}
+
+TEST(BalanceTree, DISABLED_Throw_When_Trying_To_Insert_Already_Existing_Record)
+{
+    TBalanceTree balanceTree;
+
+    balanceTree.InsertRecord("wasd", nullptr);
+
+    ASSERT_THROW(balanceTree.InsertRecord("wasd", nullptr), runtime_error);
 }
