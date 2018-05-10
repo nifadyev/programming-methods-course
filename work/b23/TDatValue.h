@@ -1,5 +1,5 @@
-#ifndef TDATAVALUE
-#define TDATAVALUE
+#ifndef DATAVALUE
+#define DATAVALUE
 class TDataValue
 {
 public:
