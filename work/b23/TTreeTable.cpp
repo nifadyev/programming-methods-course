@@ -106,7 +106,7 @@ void TTreeTable::InsertRecord(TKey key, pTDataValue value)
         }
         else
         {
-            if (ppRef->key < key)
+            if (ppRef->key > key)
             {
                 ppRef->pLeft = new TTreeNode(key, value);
             }
