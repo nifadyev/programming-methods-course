@@ -4,8 +4,6 @@
 #include "TTreeTable.h"
 #include "TBalanceNode.h"
 
-
-
 class  TBalanceTree : public TTreeTable 
 {
 protected:
@@ -13,7 +11,7 @@ protected:
     int LeftTreeBalancing(pTBalanceNode pNode);
     int RightTreeBalancing(pTBalanceNode pNode);
 public:
-    TBalanceTree() :TTreeTable() {}
+    TBalanceTree() : TTreeTable() {}
 
     //-----------------------------�������� ������-----------------------------
     virtual void InsertRecord(TKey key, pTDataValue value);
