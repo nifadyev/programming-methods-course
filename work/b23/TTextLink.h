@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream> 
 #include <string>
-#include "TDatValue.h"
+#include "DatValue.h"
 using namespace std;
 
 const int TextLineLength = 50; // Max line length
