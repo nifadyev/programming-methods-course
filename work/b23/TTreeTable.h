@@ -1,13 +1,13 @@
+#ifndef TTREE_TABLE_INCLUDE_TTREE_TABLE_H
+#define TTREE_TABLE_INCLUDE_TTREE_TABLE_H
+
 #include "TTable.h"
 #include "TTreeNode.h"
 #include <stack>
 
-#ifndef TTREE_TABLE_INCLUDE_TTREE_TABLE_H
-#define TTREE_TABLE_INCLUDE_TTREE_TABLE_H
-
 class  TTreeTable : public TTable 
 {
-protected:
+ protected:
     pTTreeNode pRoot;             // ��������� �� ������ ������
     //TODO: Rename
     pTTreeNode /* * */ppRef;            // ����� ��������� �� �������-���������� � FindRecord
@@ -16,8 +16,8 @@ protected:
     stack <pTTreeNode> iterators; // ���� ��� ���������
 
     void DeleteTreeTable(pTTreeNode pNode); // ��������
-public:
-    TTreeTable() : TTable() { currentPosition = 0; pRoot = pCurrent = nullptr; ppRef = nullptr; }
+ public:
+    TTreeTable() : TTable(), currentPosition(0), pRoot(nullptr), pCurrent(nullptr), ppRef(nullptr) {}
     ~TTreeTable() { DeleteTreeTable(pRoot); }
     //-----------------------------�������������� ������-----------------------------
     virtual /*int*/bool IsFull() const;
