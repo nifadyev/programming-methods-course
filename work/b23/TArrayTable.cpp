@@ -74,9 +74,8 @@ TKey TArrayTable::GetKey(TDataPos mode) const
     case LAST_POS:
         tempPosition = dataCount - 1;
         break;
-    default:
-        throw invalid_argument("Error! Requested position did not found");
-        break;
+        // Impossible to get wrong position because
+        // it is already checked in SetCurrentPosition or in GoNext
     }
 
     return (pRecords[tempPosition] == nullptr) ? TKey("") : pRecords[tempPosition]->key;
@@ -101,9 +100,8 @@ pTDataValue TArrayTable::GetValuePTR(TDataPos mode) const
     case LAST_POS:
         tempPosition = dataCount - 1;
         break;
-    default:
-        throw invalid_argument("Error! Requested position did not found");
-        break;
+        // Impossible to get wrong position because
+        // it is already checked in SetCurrentPosition or in GoNext
     }
 
     return (pRecords[tempPosition] == nullptr) ? nullptr : pRecords[tempPosition]->pValue;
@@ -125,11 +123,11 @@ void TArrayTable::GoNext(void)
     {
         throw logic_error("Error! Cannot go next in ended table");
     }
-    
+
     currentPosition++;
 }
 
-/*int*/void TArrayTable::SetCurrentPosition(int position)
+/*int*/ void TArrayTable::SetCurrentPosition(int position)
 {
     if (position < 0 || position > TABLE_MAX_SIZE)
     {
