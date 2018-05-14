@@ -4,58 +4,57 @@
 #include "TTextLink.h"
 #include <stack>
 
-class Text;
 typedef Text *pText;
 
 class Text
 {
 protected:
-	pTextLink pFirst;               // Указатель корня дерева
-	pTextLink pCurrent;             // Указатель текущей строки
-	stack<pTextLink> Path;          // Стек траектории движения по тексту
-	stack<pTextLink> iteratorStack; // Стек для итератора
+	pTextLink pFirst;               // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+	pTextLink pCurrent;             // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+	stack<pTextLink> Path;          // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+	stack<pTextLink> iteratorStack; // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-	pTextLink GetFirstAtom(pTextLink textLink); // Поиск первого атома
-	void PrintText(pTextLink textLink);         // Печать текста с указанного звена
-    void WriteText(pTextLink textLink, ofstream &output); // Печать текста с указанного звена
-	pTextLink ReadText(ifstream &textFile);     // Чтение текста из файла
+	pTextLink GetFirstAtom(pTextLink textLink); // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+	void PrintText(pTextLink textLink);         // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+    void WriteText(pTextLink textLink, ofstream &output); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+	pTextLink ReadText(ifstream &textFile);     // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     pTextLink GetLinkCopy(pTextLink link);
 public:
 	Text(pTextLink textLink = nullptr);
 	~Text() { pFirst = nullptr; }
 	pText GetCopy();
 
-	// Навигация
-	int GoFirstLink();    // Переход к первой строке
-	int GoDownLink();     // Переход к следующей строке по Down
-	int GoNextLink();     // Переход к следующей строке по Next
-	int GoPreviousLink(); // Переход к предыдущей позиции в тексте
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	int GoFirstLink();    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+	int GoDownLink();     // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ Down
+	int GoNextLink();     // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ Next
+	int GoPreviousLink(); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 
-	// Доступ
-	string GetLine(void);          // чтение текущей строки
-	void SetLine(const string &s); // замена текущей строки 
+	// пїЅпїЅпїЅпїЅпїЅпїЅ
+	string GetLine(void);          // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+	void SetLine(const string &s); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ 
 	
-    // модификация
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     // Section = partition + subpartitions
     // Line = partition
-	void InsertDownLine(const string &s);    // Вставка строки в подуровень
-	void InsertDownSection(const string &s); // Вставка раздела в подуровень
-	void InsertNextLine(const string &s);    // Вставка строки в том же уровне
-	void InsertNextSection(const string &s); // Вставка раздела в том же уровне
+	void InsertDownLine(const string &s);    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	void InsertDownSection(const string &s); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	void InsertNextLine(const string &s);    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+	void InsertNextSection(const string &s); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	
-    void DeleteDownLine(void);               // Удаление строки в подуровне
-	void DeleteDownSection(void);            // Удаление раздела в подуровне
-	void DeleteNextLine(void);               // Удаление строки в том же уровне
-	void DeleteNextSection(void);            // Удаление раздела в том же уровне
+    void DeleteDownLine(void);               // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	void DeleteDownSection(void);            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	void DeleteNextLine(void);               // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+	void DeleteNextSection(void);            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	
-	// Итератор
-	int Reset(void);               // Установить на первую запись
-	bool IsTextEnded(void) const;  // Текст завершен?
-	int GoNext(void);              // Переход к следующей записи
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	int Reset(void);               // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+	bool IsTextEnded(void) const;  // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ?
+	int GoNext(void);              // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	
-	// Работа с файлами
-	void Read(const char *pFileName);  // Ввод текста из файла
-	void Write(const char *pFileName); // Вывод текста в файл
-	void Print(void);                   // Печать текста
+	// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	void Read(const char *pFileName);  // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+	void Write(const char *pFileName); // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ
+	void Print(void);                   // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 };
 #endif

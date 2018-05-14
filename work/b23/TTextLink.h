@@ -3,7 +3,7 @@
 
 #include <fstream>
 #include <iostream> 
-#include <string>
+#include <cstring>
 #include "DatValue.h"
 using namespace std;
 

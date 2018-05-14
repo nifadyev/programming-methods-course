@@ -6,6 +6,7 @@
 /*-------------------------------Testing_TextLink_class-------------------------------*/
 TEST(TextLink, Can_Create_TextLink_Without_Parameters)
 {
+    TextLink::InitMemorySystem();
 	TextLink textLink;
 
 	ASSERT_NO_THROW(TextLink textLink);
@@ -30,7 +31,6 @@ TEST(TextLink, Can_Create_TextLink_With_Second_Parameter)
    
     EXPECT_EQ(textLink.GetDown(), nullptr);
     EXPECT_EQ(textLink.GetNext(), textLinkNext);
-    EXPECT_TRUE(textLink.IsAtomic());
 }
 
 TEST(TextLink, Can_Create_TextLink_With_Third_Parameter)
@@ -41,7 +41,6 @@ TEST(TextLink, Can_Create_TextLink_With_Third_Parameter)
    
     EXPECT_EQ(textLink.GetNext(), nullptr);
     EXPECT_EQ(textLink.GetDown(), textLinkDown);
-    EXPECT_TRUE(textLink.IsAtomic());
 }
 
 TEST(TextLink, Can_Create_TextLink_With_All_Parameters)
@@ -53,7 +52,6 @@ TEST(TextLink, Can_Create_TextLink_With_All_Parameters)
    
     EXPECT_EQ(textLink.GetNext(), textLinkNext);
     EXPECT_EQ(textLink.GetDown(), textLinkDown);
-    EXPECT_TRUE(textLink.IsAtomic());
 }
 
 TEST(TextLink, Can_Initialaze_Memory_System_Without_Parameters)
