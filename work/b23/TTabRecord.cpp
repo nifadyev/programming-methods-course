@@ -39,17 +39,17 @@ TTabRecord& TTabRecord::operator=(const TTabRecord &record)
     return *this;
 }
 
-/* int */bool TTabRecord::operator==(const TTabRecord & record)
+int TTabRecord::operator==(const TTabRecord & record)
 {
     return key == record.key;
 }
 
-/* int */bool TTabRecord::operator<(const TTabRecord & record)
+int TTabRecord::operator<(const TTabRecord & record)
 {
     return key < record.key;
 }
 
-/* int */bool TTabRecord::operator>(const TTabRecord & record)
+int TTabRecord::operator>(const TTabRecord & record)
 {
     return key > record.key;
 }

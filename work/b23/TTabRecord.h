@@ -26,9 +26,9 @@ class TTabRecord : public TDataValue
     virtual TDataValue* GetCopy();
 
     TTabRecord & operator = (const TTabRecord &record);
-    virtual /* int */bool operator == (const TTabRecord &record);
-    virtual /* int */bool operator < (const TTabRecord &record);
-    virtual /* int */bool operator > (const TTabRecord &record);
+    virtual int operator == (const TTabRecord &record);
+    virtual int operator < (const TTabRecord &record);
+    virtual int operator > (const TTabRecord &record);
 
     //----------------������������� ������ ��� ��������� ����� ������----------------
     friend class TArrayTable;
