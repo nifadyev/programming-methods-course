@@ -210,15 +210,16 @@ pTDataValue TSortTable::FindRecord(TKey key)
     {
         throw logic_error("Error! Cannot find record in empty table");
     }
-    if (key < pRecords[0]->GetKey() || key > pRecords[dataCount - 1]->GetKey())
-    {
-        // Is it really needed?
-        if (key > pRecords[dataCount - 1]->GetKey())
-        {
-            currentPosition = dataCount;
-        }
-        throw runtime_error("Error! Required record is out of range");
-    }
+    // FIXME: GLOBAL ERROR- string comparison using <, > or ==
+    // if (key < pRecords[0]->GetKey() || key > pRecords[dataCount - 1]->GetKey())
+    // {
+    //     // Is it really needed?
+    //     if (key > pRecords[dataCount - 1]->GetKey())
+    //     {
+    //         currentPosition = dataCount;
+    //     }
+    //     throw runtime_error("Error! Required record is out of range");
+    // }
 
     Reset();
     efficiency = 0;
@@ -263,7 +264,7 @@ void TSortTable::InsertRecord(TKey key, pTDataValue value)
     }
     catch (...)
     {
-        for (int i = dataCount; i > currentPosition; i--)
+        for (int i = dataCount; i > currentPosition; --i)
         {
             pRecords[i] = pRecords[i - 1];
         }
@@ -271,8 +272,18 @@ void TSortTable::InsertRecord(TKey key, pTDataValue value)
         dataCount++;
         return;
     }
-
+    // FIXME: This throw is never ran
     throw runtime_error("Error! Record with such data has already existed");
+    // pTDataValue temp = FindRecord(key);
+    // if (temp != nullptr)
+    // {
+    //     for (int i = dataCount; i > currentPosition; --i)
+    //     {
+    //         pRecords[i] = pRecords[i - 1];
+    //     }
+    //     pRecords[currentPosition] = new TTabRecord(key, value);
+    //     dataCount++;
+    // }
 }
 
 void TSortTable::DeleteRecord(TKey key)
