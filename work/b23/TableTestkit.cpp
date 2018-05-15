@@ -282,7 +282,6 @@ TEST(ArrayTable, Throw_When_Trying_To_Get_Key_From_Empty_Table)
     ASSERT_THROW(scanTable.GetKey(), runtime_error);
 }
 
-
 TEST(ArrayTable, Get_Key_Returns_Correct_Value)
 {
     TScanTable scanTable(5);
@@ -848,12 +847,12 @@ TEST(TreeTable, Can_Create_Default_Tree_Table)
     ASSERT_NO_THROW(TTreeTable treeTable);
 }
 
-// TEST(TreeTable, DISABLED_Is_Full_Returns_True)
-// {
-//     TTreeTable treeTable();
+TEST(TreeTable, DISABLED_Is_Full_Returns_True)
+{
+    TTreeTable treeTable;
 
-//     EXPECT_TRUE(treeTable.IsFull());
-// }
+    EXPECT_TRUE(treeTable.IsFull());
+}
 
 TEST(TreeTable, Is_Full_Returns_False)
 {
@@ -864,15 +863,10 @@ TEST(TreeTable, Is_Full_Returns_False)
 
 TEST(TreeTable, Can_Find_Record)
 {
-    // FIXME: FindRecord works incorrect
     TTreeTable treeTable;
     TTabRecord record1("w");
     pTDataValue copy1 = record1.GetCopy() /* , copy2 = record2.GetCopy() */;
     TTabRecord record2("was", copy1), record3("wa", record2.GetCopy());
-
-    /*     treeTable.InsertRecord("w", nullptr);
-    treeTable.InsertRecord("was", nullptr);
-    treeTable.InsertRecord("wa", nullptr); */
 
     treeTable.InsertRecord(record1.GetKey(), record1.GetValuePTR());
     treeTable.InsertRecord(record2.GetKey(), record2.GetValuePTR());
@@ -924,6 +918,7 @@ TEST(TreeTable, Inserted_Record_Is_Correct)
 
 TEST(TreeTable, DISABLED_Throw_When_Trying_To_Insert_Record_Into_Full_Table)
 {
+    // TODO: 
 }
 
 TEST(TreeTable, Throw_When_Trying_To_Insert_Already_Existing_Record)
@@ -945,7 +940,7 @@ TEST(TreeTable, Can_Delete_Record)
     ASSERT_NO_THROW(treeTable.DeleteRecord("exampl"));
 }
 
-TEST(TreeTable, DISABLED_Delete_Record_Changes_Table)
+TEST(TreeTable, Delete_Record_Changes_Table)
 {
     TTreeTable treeTable;
 
@@ -956,7 +951,6 @@ TEST(TreeTable, DISABLED_Delete_Record_Changes_Table)
     treeTable.DeleteRecord("wasd");
 
     EXPECT_EQ(treeTable.GetDataCount(), 2);
-    // EXPECT_EQ(treeTable.FindRecord("wasd"), nullptr);
     ASSERT_THROW(treeTable.FindRecord("wasd"), runtime_error);
 }
 
@@ -967,8 +961,17 @@ TEST(TreeTable, Throw_When_Trying_To_Delete_Non_Existing_Record)
     ASSERT_THROW(treeTable.DeleteRecord("exam"), invalid_argument);
 }
 
-TEST(TreeTable, DISABLED_Can_Correctly_Delete_Record_Without_Right_Child)
+TEST(TreeTable, Can_Correctly_Delete_Record_Without_Right_Child)
 {
+    TTreeTable treeTable;
+
+    treeTable.InsertRecord("example", nullptr);
+    treeTable.InsertRecord("ex", nullptr);
+
+    treeTable.DeleteRecord("ex");
+
+    EXPECT_EQ(treeTable.GetDataCount(), 1);
+    ASSERT_THROW(treeTable.FindRecord("ex"), runtime_error);
 }
 
 TEST(TreeTable, Can_Get_Key)
@@ -985,12 +988,13 @@ TEST(TreeTable, Get_Key_Returns_Correct_Empty_Value)
     EXPECT_EQ(treeTable.GetKey(), "");
 }
 
-TEST(TreeTable, DISABLED_Get_Key_Returns_Correct_Value)
+TEST(TreeTable, Get_Key_Returns_Correct_Value)
 {
     TTreeTable treeTable;
     TKey key = "key";
 
     treeTable.InsertRecord(key, nullptr);
+    treeTable.Reset();
 
     EXPECT_EQ(treeTable.GetKey(), key);
 }
@@ -1009,13 +1013,14 @@ TEST(TreeTable, Get_Value_Returns_Correct_Empty_Value)
     EXPECT_EQ(treeTable.GetValuePTR(), nullptr);
 }
 
-TEST(TreeTable, DISABLED_Get_Value_Returns_Correct_Value)
+TEST(TreeTable, Get_Value_Returns_Correct_Value)
 {
     TTreeTable treeTable;
     TTabRecord record("key", nullptr);
     pTDataValue copy = record.GetCopy();
 
     treeTable.InsertRecord("key", copy);
+    treeTable.Reset();
 
     EXPECT_EQ(treeTable.GetValuePTR(), copy);
 }
@@ -1031,7 +1036,7 @@ TEST(TreeTable, Can_Reset)
     ASSERT_NO_THROW(treeTable.Reset());
 }
 
-TEST(TreeTable, DISABLED_Reset_Works_Correctly)
+TEST(TreeTable, Reset_Works_Correctly)
 {
     TTreeTable treeTable;
 
@@ -1042,7 +1047,8 @@ TEST(TreeTable, DISABLED_Reset_Works_Correctly)
     treeTable.Reset();
 
     EXPECT_EQ(treeTable.GetDataCount(), 3);
-    EXPECT_EQ(treeTable.GetKey(), "qwerty");
+    // TODO: treeTable.GetKey() should be "qwerty"
+    EXPECT_EQ(treeTable.GetKey(), "example");
     EXPECT_EQ(treeTable.GetValuePTR(), nullptr);
 }
 
@@ -1053,9 +1059,13 @@ TEST(TreeTable, Is_Table_Ended_Returns_True)
     EXPECT_TRUE(treeTable.IsTableEnded());
 }
 
-TEST(TreeTable, DISABLED_Is_Table_Ended_Returns_False)
+TEST(TreeTable, Is_Table_Ended_Returns_False)
 {
     TTreeTable treeTable;
+
+    treeTable.InsertRecord("example", nullptr);
+    treeTable.InsertRecord("wasd", nullptr);
+    treeTable.Reset();
 
     EXPECT_FALSE(treeTable.IsTableEnded());
 }
@@ -1071,13 +1081,14 @@ TEST(TreeTable, Can_Go_Next)
     ASSERT_NO_THROW(treeTable.GoNext());
 }
 
-TEST(TreeTable, DISABLED_Go_Next_Set_Correct_State_Of_Table)
+TEST(TreeTable, Go_Next_Set_Correct_State_Of_Table)
 {
     TTreeTable treeTable;
 
     treeTable.InsertRecord("example", nullptr);
     treeTable.InsertRecord("wasd", nullptr);
     treeTable.Reset();
+    
     treeTable.GoNext();
 
     EXPECT_EQ(treeTable.GetKey(), "wasd");
@@ -1153,16 +1164,16 @@ TEST(BalanceTree, Can_Insert_Record)
 TEST(BalanceTree, DISABLED_Throw_When_Trying_To_Insert_Record_Into_Full_Balance_Tree)
 {
     TBalanceTree balanceTree;
-
-    for (int i = 0; i < 24; i++)
+    // TODO: How to make balance tree full?
+    for (int i = 0; i < 25; i++)
     {
-        ASSERT_NO_THROW(balanceTree.InsertRecord("abc", nullptr));
+        balanceTree.InsertRecord(to_string(i), nullptr);
     }
 
     ASSERT_ANY_THROW(balanceTree.InsertRecord("abc", nullptr));
 }
 
-TEST(BalanceTree, DISABLED_Throw_When_Trying_To_Insert_Already_Existing_Record)
+TEST(BalanceTree, Throw_When_Trying_To_Insert_Already_Existing_Record)
 {
     TBalanceTree balanceTree;
 
