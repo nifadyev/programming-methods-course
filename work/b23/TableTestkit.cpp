@@ -918,7 +918,7 @@ TEST(TreeTable, Inserted_Record_Is_Correct)
 
 TEST(TreeTable, DISABLED_Throw_When_Trying_To_Insert_Record_Into_Full_Table)
 {
-    // TODO: 
+    // TODO:
 }
 
 TEST(TreeTable, Throw_When_Trying_To_Insert_Already_Existing_Record)
@@ -1088,7 +1088,7 @@ TEST(TreeTable, Go_Next_Set_Correct_State_Of_Table)
     treeTable.InsertRecord("example", nullptr);
     treeTable.InsertRecord("wasd", nullptr);
     treeTable.Reset();
-    
+
     treeTable.GoNext();
 
     EXPECT_EQ(treeTable.GetKey(), "wasd");
@@ -1161,6 +1161,17 @@ TEST(BalanceTree, Can_Insert_Record)
     ASSERT_NO_THROW(balanceTree.InsertRecord("example", nullptr));
 }
 
+TEST(BalanceTree, Inserted_Record_Is_Correctly_Paste)
+{
+    TBalanceTree balanceTree;
+
+    balanceTree.InsertRecord("qwerty", nullptr);
+    balanceTree.InsertRecord("wasd", nullptr);
+    balanceTree.InsertRecord("example", nullptr);
+
+    ASSERT_NO_THROW(balanceTree.FindRecord("wasd"));
+}
+
 TEST(BalanceTree, DISABLED_Throw_When_Trying_To_Insert_Record_Into_Full_Balance_Tree)
 {
     TBalanceTree balanceTree;
@@ -1180,4 +1191,33 @@ TEST(BalanceTree, Throw_When_Trying_To_Insert_Already_Existing_Record)
     balanceTree.InsertRecord("wasd", nullptr);
 
     ASSERT_THROW(balanceTree.InsertRecord("wasd", nullptr), runtime_error);
+}
+
+TEST(BalanceTree, Can_Delete_Record)
+{
+    TBalanceTree balanceTree;
+
+    balanceTree.InsertRecord("example", nullptr);
+
+    ASSERT_NO_THROW(balanceTree.DeleteRecord("example"));
+}
+
+TEST(BalanceTree, Deleted_Record_Is_Correctly_Removed)
+{
+    TBalanceTree balanceTree;
+
+    balanceTree.InsertRecord("qwerty", nullptr);
+    balanceTree.InsertRecord("wasd", nullptr);
+    balanceTree.InsertRecord("example", nullptr);
+
+    balanceTree.DeleteRecord("example");
+
+    ASSERT_THROW(balanceTree.FindRecord("example"), runtime_error);
+}
+
+TEST(BalanceTree, Throw_When_Trying_To_Delete_Record_From_Empty_Balance_Tree)
+{
+    TBalanceTree balanceTree;
+
+    ASSERT_THROW(balanceTree.DeleteRecord("qwerty"), logic_error);
 }
