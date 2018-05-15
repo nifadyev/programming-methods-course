@@ -1,6 +1,6 @@
 #include "TBalanceTree.h"
 
-int TBalanceTree::InsertBalanceTree(pTBalanceNode pNode, TKey key, pTBalanceNode value)
+int TBalanceTree::InsertBalanceTree(pTBalanceNode &pNode, TKey key, pTDataValue value)
 {
     bool isHeightIncreased = false;
 
@@ -10,18 +10,101 @@ int TBalanceTree::InsertBalanceTree(pTBalanceNode pNode, TKey key, pTBalanceNode
         isHeightIncreased = true;
         dataCount++;
     }
-    else if ((pNode->key > key) && InsertBalanceTree((TBalanceNode *)pNode->pLeft, key, value))
+    else if ((pNode->key > key) && InsertBalanceTree((pTBalanceNode &)(pNode->pLeft), key, value))
     {
         isHeightIncreased = LeftTreeBalancing(pNode);
     }
-    else if ((pNode->key < key) && InsertBalanceTree((TBalanceNode *)pNode->pRight, key, value))
+    else if ((pNode->key < key) && InsertBalanceTree((pTBalanceNode &)(pNode->pRight), key, value))
     {
         isHeightIncreased = RightTreeBalancing(pNode);
+    }
+    else
+    {
+        throw runtime_error("Error! Record with such key has alreadey existed");
     }
 
     return isHeightIncreased;
 }
 
+bool TBalanceTree::DeleteBalanceTree(pTBalanceNode pNode, TKey key, pTBalanceNode pParent)
+{
+    bool needBalancing = false;
+
+    if (pNode == nullptr)
+    {
+        throw logic_error("Error! Cannot delete unexisting record");
+    }
+
+    else if (pNode->key > key)
+    {
+        DeleteBalanceTree((pTBalanceNode)(pNode->pLeft), key, pNode);
+    }
+    else if (pNode->key < key)
+    {
+        DeleteBalanceTree((pTBalanceNode)(pNode->pRight), key, pNode);
+    }
+    else
+    {
+        if (pNode->pRight == nullptr)
+        {
+            if (pParent == nullptr)
+            {
+                pRoot = pNode->pLeft;
+            }
+            else if (pNode == pParent->pLeft)
+            {
+                // Right tree balancing
+                pParent->pLeft = pNode->pLeft;
+            }
+            else
+            {
+                // Left tree balancing
+                pParent->pRight = pNode->pLeft;
+            }
+
+            pNode->pLeft = nullptr;
+            if (pNode->pValue != nullptr)
+            {
+                delete pNode->pValue;
+            }
+            delete pNode;
+        }
+
+        else
+        {
+            pTBalanceNode mostLeftNode = (pTBalanceNode)(pNode->pRight);
+            pTBalanceNode previous = nullptr;
+
+            while (mostLeftNode->pLeft != nullptr)
+            {
+                previous = mostLeftNode;
+                mostLeftNode = (pTBalanceNode)(mostLeftNode->pLeft);
+            }
+
+            if (previous != nullptr)
+            {
+                previous->pLeft = mostLeftNode->pRight;
+            }
+            else
+            {
+                pNode->pRight = mostLeftNode->pRight;
+            }
+
+            if (pNode->pValue != nullptr)
+            {
+                delete pNode->pValue;
+            }
+            pNode->pValue = mostLeftNode->pValue;
+            mostLeftNode->pValue = nullptr;
+            pNode->key = mostLeftNode->key;
+            delete mostLeftNode;
+        }
+
+        dataCount--;
+    }
+
+    return needBalancing;
+}
 int TBalanceTree::LeftTreeBalancing(pTBalanceNode pNode)
 {
     bool isHeightIncreased = false;
@@ -149,17 +232,7 @@ void TBalanceTree::InsertRecord(TKey key, pTDataValue value)
         throw logic_error("Error! Cannot insert record into full tree table");
     }
 
-    try
-    {
-        FindRecord(key);
-    }
-    catch (...)
-    {
-        InsertBalanceTree((pTBalanceNode)pRoot, key, (pTBalanceNode)value);
-        return;
-    }
-
-    throw runtime_error("Error! Record with such key has alreadey existed");
+    InsertBalanceTree((pTBalanceNode &)pRoot, key, value);
 }
 
 void TBalanceTree::DeleteRecord(TKey key)
@@ -169,12 +242,5 @@ void TBalanceTree::DeleteRecord(TKey key)
         throw logic_error("Error! Cannot delete record from empty table");
     }
 
-    try
-    {
-        FindRecord(key);
-    }
-    catch (...)
-    {
-        throw;
-    }
+    DeleteBalanceTree((pTBalanceNode)pRoot, key, nullptr);
 }
