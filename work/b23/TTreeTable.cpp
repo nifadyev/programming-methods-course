@@ -50,7 +50,7 @@ pTDataValue TTreeTable::FindRecord(TKey key)
         efficiency++;
         if (currentNode->key == key)
         {
-            cout << "I AM HERE\n";
+            // cout << "I AM HERE\n";
             return currentNode->GetValuePTR();
         }
         else
@@ -157,12 +157,6 @@ void TTreeTable::DeleteRecord(TKey key)
         if (ppRef == nullptr)
         {
             pRoot = pTemp->pLeft;
-            // pTemp->pLeft = nullptr;
-            // if (pTemp->pValue != nullptr)
-            // {
-            //     delete pTemp->pValue;
-            // }
-            // delete pTemp;
         }
         else
         {
@@ -174,12 +168,6 @@ void TTreeTable::DeleteRecord(TKey key)
             {
                 ppRef->pRight = pTemp->pLeft;
             }
-            // pTemp->pLeft = nullptr;
-            // if (pTemp->pValue != nullptr)
-            // {
-            //     delete pTemp->pValue;
-            // }
-            // delete pTemp;
         }
 
         pTemp->pLeft = nullptr;
@@ -193,7 +181,7 @@ void TTreeTable::DeleteRecord(TKey key)
     // pTemp has right child
     else
     {
-        pTTreeNode mostLeftNode = pTemp->pLeft; // Most left node in right subtree
+        pTTreeNode mostLeftNode = pTemp->pRight; // Most left node in right subtree
         ppRef = nullptr;
 
         while (mostLeftNode->pLeft != nullptr)
