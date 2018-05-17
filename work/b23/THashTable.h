@@ -6,7 +6,7 @@
 class  THashTable : public TTable 
 {
 protected:
-    virtual unsigned long HashFunction(const TKey key);
+    virtual unsigned long HashFunction(const TKey& key);
 public:
     THashTable() : TTable() {}
 };
