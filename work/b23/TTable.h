@@ -3,7 +3,7 @@
 #ifndef TTABLE_INCLUDE_TTABLE_H
 #define TTABLE_INCLUDE_TTABLE_H
 
-class  TTable
+class TTable
 {
 protected:
     int dataCount;  // ���������� ������� � �������
@@ -28,8 +28,8 @@ public:
     virtual void DeleteRecord(TKey key) = 0;
 
     //-----------------------------���������-----------------------------
-    virtual void Reset(void) = 0;   // ���������� �� ������ ������
+    virtual int Reset(void) = 0;   // ���������� �� ������ ������
     virtual /*int*/bool IsTableEnded(void) const = 0;
-    virtual void GoNext(void) = 0; // ������� � ��������� ������, (=1 ����� ���������� ��� ��������� ������ �������)
+    virtual int GoNext(void) = 0; // ������� � ��������� ������, (=1 ����� ���������� ��� ��������� ������ �������)
 };
 #endif // TTABLE_INCLUDE_TTABLE_H

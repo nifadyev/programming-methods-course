@@ -32,9 +32,9 @@ public:
     virtual void DeleteRecord(TKey key) = 0;
 
     //-----------------------------���������-----------------------------
-    virtual /*int*/void Reset(void);   // ���������� �� ������ ������
+    virtual int Reset(void);   // ���������� �� ������ ������
     virtual /*int*/bool IsTableEnded(void) const;
-    virtual /*int*/void GoNext(void); // ������� � ��������� ������, (=1 ����� ���������� ��� ��������� ������ �������)
+    virtual int GoNext(void); // ������� � ��������� ������, (=1 ����� ���������� ��� ��������� ������ �������)
     
     virtual /*int*/void SetCurrentPosition(int position);
     int GetCurrentPosition(void) const;

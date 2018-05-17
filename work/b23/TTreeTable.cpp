@@ -305,7 +305,7 @@ pTDataValue TTreeTable::GetValuePTR(void) const
 
 // After applying this method
 // pCurrent leads to the most left tree node
-void TTreeTable::Reset(void)
+int TTreeTable::Reset(void)
 {
     while (!iterators.empty())
     {
@@ -320,7 +320,7 @@ void TTreeTable::Reset(void)
         currentNode = currentNode->pLeft;
     }
 
-    currentPosition = 0;
+    return currentPosition = 0;
 }
 
 bool TTreeTable::IsTableEnded(void) const
@@ -328,7 +328,7 @@ bool TTreeTable::IsTableEnded(void) const
     return currentPosition == dataCount;
 }
 
-void TTreeTable::GoNext(void)
+int TTreeTable::GoNext(void)
 {
     if (!IsTableEnded() && (pCurrent != nullptr))
     {
@@ -346,10 +346,8 @@ void TTreeTable::GoNext(void)
         {
             pCurrent = iterators.top();
         }
-        ++currentPosition;
+        return ++currentPosition;
     }
-    // else
-    // {
-    //     throw;
-    // }
+
+    return 1;
 }

@@ -30,9 +30,9 @@ class  TTreeTable : public TTable
     //-----------------------------���������-----------------------------
     virtual TKey GetKey(void) const;
     virtual pTDataValue GetValuePTR(void) const;
-    virtual void Reset(void);   // ���������� �� ������ ������
+    virtual int Reset(void);   // ���������� �� ������ ������
     virtual bool IsTableEnded(void) const;
-    virtual void GoNext(void); // ������� � ��������� ������, (=1 ����� ���������� ��� ��������� ������ �������)
+    virtual int GoNext(void); // ������� � ��������� ������, (=1 ����� ���������� ��� ��������� ������ �������)
 };
 
 #endif // TTREE_TABLE_INCLUDE_TTREE_TABLE_H

@@ -107,9 +107,9 @@ pTDataValue TArrayTable::GetValuePTR(TDataPos mode) const
     return (pRecords[tempPosition] == nullptr) ? nullptr : pRecords[tempPosition]->pValue;
 }
 
-void TArrayTable::Reset(void)
+int TArrayTable::Reset(void)
 {
-    currentPosition = 0;
+    return currentPosition = 0;
 }
 
 bool TArrayTable::IsTableEnded(void) const
@@ -117,14 +117,14 @@ bool TArrayTable::IsTableEnded(void) const
     return currentPosition == dataCount;
 }
 
-void TArrayTable::GoNext(void)
+int TArrayTable::GoNext(void)
 {
     if (IsTableEnded())
     {
         throw logic_error("Error! Cannot go next in ended table");
     }
 
-    currentPosition++;
+    return currentPosition++;
 }
 
 /*int*/ void TArrayTable::SetCurrentPosition(int position)
