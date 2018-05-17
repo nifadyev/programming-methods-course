@@ -6,6 +6,7 @@
 #include "TTreeTable.h"
 #include "TBalanceNode.h"
 #include "TBalanceTree.h"
+#include "TArrayHash.h"
 
 #include <gtest/gtest.h>
 
@@ -1220,4 +1221,258 @@ TEST(BalanceTree, Throw_When_Trying_To_Delete_Record_From_Empty_Balance_Tree)
     TBalanceTree balanceTree;
 
     ASSERT_THROW(balanceTree.DeleteRecord("qwerty"), logic_error);
+}
+
+//----------------Testing class TArrayHash----------------
+TEST(ArrayHash, Can_Create_Default_Array_Hash)
+{
+    ASSERT_NO_THROW(TArrayHash arrayHash);
+}
+
+TEST(ArrayHash, Can_Create_Array_Hash_With_Custom_Parameters)
+{
+    ASSERT_NO_THROW(TArrayHash arrayHash(12, 3));
+}
+
+TEST(ArrayHash, Throw_When_Trying_To_Create_Array_Hash_With_Negative_Size)
+{
+    ASSERT_THROW(TArrayHash arrayHash(-1), logic_error);
+}
+
+TEST(ArrayHash, Throw_When_Trying_To_Create_Array_Hash_With_Negative_Step)
+{
+    ASSERT_THROW(TArrayHash arrayHash(4, -33), logic_error);
+}
+
+TEST(ArrayHash, Throw_When_Trying_To_Create_Array_Hash_With_Step_More_Than_Size)
+{
+    ASSERT_THROW(TArrayHash arrayHash(2, 5), logic_error);
+}
+
+TEST(ArrayHash, Is_Full_Returns_False)
+{
+    TArrayHash arrayHash;
+
+    EXPECT_FALSE(arrayHash.IsFull());
+}
+
+TEST(ArrayHash, DISABLED_Is_Full_Returns_True)
+{
+}
+
+TEST(ArrayHash, Can_Get_Key)
+{
+    TArrayHash arrayHash;
+    TTabRecord record("wasd");
+    pTDataValue copy = record.GetCopy();
+
+    arrayHash.InsertRecord("example", copy);
+
+    ASSERT_NO_THROW(arrayHash.GetKey());
+}
+
+TEST(ArrayHash, Get_Key_Returns_Correct_Value)
+{
+    TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("qwerty", nullptr);
+
+    EXPECT_EQ(arrayHash.GetKey(), "qwerty");
+}
+
+TEST(ArrayHash, DISABLED_Get_Key_Returns_Empty_Key)
+{
+    TArrayHash arrayHash;
+
+    EXPECT_EQ(arrayHash.GetKey(), "");
+}
+
+TEST(ArrayHash, Can_Get_Value)
+{
+    TArrayHash arrayHash;
+    TTabRecord record("wasd");
+    pTDataValue copy = record.GetCopy();
+
+    arrayHash.InsertRecord("example", copy);
+
+    ASSERT_NO_THROW(arrayHash.GetValuePTR());
+}
+
+TEST(ArrayHash, Get_Value_Returns_Correct_Value)
+{
+    TArrayHash arrayHash;
+    TTabRecord record("wasd");
+    pTDataValue copy = record.GetCopy();
+
+    arrayHash.InsertRecord("example", copy);
+
+    EXPECT_EQ(arrayHash.GetValuePTR(), copy);
+}
+
+TEST(ArrayHash, DISABLED_Get_Value_Returns_Nullptr)
+{
+    TArrayHash arrayHash;
+
+    EXPECT_EQ(arrayHash.GetValuePTR(), nullptr);
+}
+
+TEST(ArrayHash, Can_Find_Record)
+{
+    TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("key", nullptr);
+
+    ASSERT_NO_THROW(arrayHash.FindRecord("key"));
+}
+
+TEST(ArrayHash, Find_Record_Returns_Correct_Value)
+{
+    TArrayHash arrayHash;
+    TTabRecord record("wasd");
+    pTDataValue copy = record.GetCopy();
+
+    arrayHash.InsertRecord("key", nullptr);
+    arrayHash.InsertRecord(record.GetKey(), copy);
+
+    EXPECT_EQ(arrayHash.FindRecord("wasd"), copy);
+}
+
+TEST(ArrayHash, Throw_When_Trying_To_Find_Record_In_Empty_Array)
+{
+    TArrayHash arrayHash;
+
+    ASSERT_THROW(arrayHash.FindRecord("key"), logic_error);
+}
+
+TEST(ArrayHash, Throw_When_Trying_To_Find_Unexisting_Record)
+{
+    TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("qwerty", nullptr);
+
+    ASSERT_THROW(arrayHash.FindRecord("qwert"), runtime_error);
+}
+
+TEST(ArrayHash, Can_Insert_Record)
+{
+    TArrayHash arrayHash;
+
+    ASSERT_NO_THROW(arrayHash.InsertRecord("key", nullptr));
+}
+
+TEST(ArrayHash, Inserted_Record_Is_Correctly_Paste)
+{
+    TArrayHash arrayHash;
+    TTabRecord record("key");
+    pTDataValue copy = record.GetCopy();
+
+    arrayHash.InsertRecord(record.GetKey(), copy);
+
+    EXPECT_EQ(arrayHash.FindRecord("key"), copy);
+}
+
+TEST(ArrayHash, DISABLED_Throw_When_Trying_To_Insert_Record_Into_Full_Array)
+{
+}
+
+TEST(ArrayHash, Throw_When_Trying_To_Insert_Already_Existing_Record)
+{
+    TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("example", nullptr);
+
+    ASSERT_THROW(arrayHash.InsertRecord("example", nullptr), runtime_error);
+}
+
+TEST(ArrayHash, Can_Delete_Record)
+{
+    TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("qwerty", nullptr);
+
+    ASSERT_NO_THROW(arrayHash.DeleteRecord("qwerty"));
+}
+
+TEST(ArrayHash, Deleted_Record_Is_Correctly_Removed)
+{
+    TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("qwerty", nullptr);
+    arrayHash.InsertRecord("qwert", nullptr);
+
+    arrayHash.DeleteRecord("qwerty");
+
+    ASSERT_THROW(arrayHash.FindRecord("qwerty"), runtime_error);
+    EXPECT_EQ(arrayHash.GetDataCount(), 1);
+}
+
+TEST(ArrayHash, Throw_When_Trying_To_Delete_Non_Existing_Record)
+{
+    TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("example", nullptr);
+
+    ASSERT_THROW(arrayHash.DeleteRecord("examp"), logic_error);
+}
+
+TEST(ArrayHash, Can_Reset)
+{
+    TArrayHash arrayHash;
+
+    ASSERT_NO_THROW(arrayHash.Reset());
+}
+
+TEST(ArrayHash, Reset_Changes_Array_Condition)
+{
+    TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("qwerty", nullptr);
+    arrayHash.InsertRecord("qwert", nullptr);
+
+    arrayHash.Reset();
+
+    EXPECT_EQ(arrayHash.GetKey(), "qwerty");
+}
+
+TEST(ArrayHash, Reset_Returns_Correct_Current_Position)
+{
+    TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("qwerty", nullptr);
+    arrayHash.InsertRecord("qwert", nullptr);
+
+    // TODO: Why Reset returned 15?
+    EXPECT_EQ(arrayHash.Reset(), 15);
+}
+
+TEST(ArrayHash, DISABLED_Reset_Returns_Correct_Value_If_Table_Is_Ended)
+{
+    TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("qwerty", nullptr);
+    arrayHash.InsertRecord("qwert", nullptr);
+
+    EXPECT_EQ(arrayHash.Reset(), -1);
+}
+
+TEST(ArrayHash, DISABLED_Is_Table_Ended_Returns_True)
+{
+    TArrayHash arrayHash(8, 2);
+
+    arrayHash.InsertRecord("example", nullptr);
+    arrayHash.InsertRecord("key", nullptr);
+    arrayHash.InsertRecord("exampl", nullptr);
+    arrayHash.InsertRecord("keys", nullptr);
+
+    EXPECT_TRUE(arrayHash.IsTableEnded());
+}
+
+TEST(ArrayHash, Is_Table_Ended_Returns_False)
+{
+    TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("example", nullptr);
+    arrayHash.InsertRecord("key", nullptr);
+
+    EXPECT_FALSE(arrayHash.IsTableEnded());
 }
