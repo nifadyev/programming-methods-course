@@ -5,31 +5,31 @@
 #define TLIST_HASH_INCLUDE_TLIST_HASH_H
 
 #define TABLE_MAX_SIZE 25
-class  TListHash : public THashTable 
+class TListHash : public THashTable
 {
-protected:
-    pTDataList *pList; // Память для массива указателей на списки записей 
-    int tableSize;        // Размер массива указателей
-    int currentList;       // Список, в котором выполнялся поиск
-public:
-    TListHash(int Size = TABLE_MAX_SIZE);
+ protected:
+    pTDataList *pList; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    int tableSize;     // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    int currentList;   // пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+ public:
+    TListHash(int size = TABLE_MAX_SIZE);
     ~TListHash();
-    //-----------------------------Информационные методы-----------------------------
-    virtual /*int*/bool IsFull() const;
+    //-----------------------------пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ-----------------------------
+    virtual bool IsFull() const;
 
-    //-----------------------------Доступ-----------------------------
+    //-----------------------------пїЅпїЅпїЅпїЅпїЅпїЅ-----------------------------
     virtual TKey GetKey(void) const;
     virtual pTDataValue GetValuePTR(void) const;
 
-    //-----------------------------Основные методы-----------------------------
+    //-----------------------------пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ-----------------------------
     virtual pTDataValue FindRecord(TKey key);
     virtual void InsertRecord(TKey key, pTDataValue value);
     virtual void DeleteRecord(TKey key);
 
-    //-----------------------------Навигация-----------------------------
-    virtual /*int*/void Reset(void);   // Установить на первую запись
-    virtual /*int*/bool IsTableEnded(void) const;
-    virtual /*int*/void GoNext(void); // Переход к следующей записи, (=1 после применения для последней записи таблицы)
+    //-----------------------------пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ-----------------------------
+    virtual int Reset(void); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    virtual /*int*/ bool IsTableEnded(void) const;
+    virtual int GoNext(void); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, (=1 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
 };
 
 #endif // TLIST_HASH_INCLUDE_TLIST_HASH_H
