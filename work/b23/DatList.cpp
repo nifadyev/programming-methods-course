@@ -50,7 +50,7 @@ pTDataValue TDataList::GetDataValue(TLinkPos mode) const
     return (temp == nullptr) ? nullptr : temp;
 }
 
-void  TDataList::SetCurrentPosition(const int& position)
+void TDataList::SetCurrentPosition(const int &position)
 {
     if (position < 0)
     {
@@ -74,11 +74,17 @@ int TDataList::GetCurrentPosition() const
     return currentPosition;
 }
 
-void TDataList::Reset()
+int TDataList::Reset()
 {
-    currentPosition = 0;
-    pCurrentLink = pFirst;
-    pPreviousLink = pStop;
+    if (!IsEmpty())
+    {
+        currentPosition = 0;
+        pCurrentLink = pFirst;
+        pPreviousLink = pStop;
+        return 1;
+    }
+
+    return -1;
 }
 
 bool TDataList::IsListEnded() const
@@ -185,7 +191,7 @@ void TDataList::InsertBeforeCurrent(pTDataValue pVal)
         return;
     }
 
-    TDataLink* temp = pCurrentLink;
+    TDataLink *temp = pCurrentLink;
     pCurrentLink = new TDataLink(pVal);
     pCurrentLink->SetNextLink(temp);
     pPreviousLink->SetNextLink(pCurrentLink);
