@@ -1,15 +1,17 @@
-#include "TDatValue.h"
-
 #ifndef TROOT_LINK_INCLUDE_TROOT_LINK_H
 #define TROOT_LINK_INCLUDE_TROOT_LINK_H
+
+#include "DatValue.h"
+
 class TRootLink;
 typedef TRootLink *pTRootLink;
 
 class TRootLink
 {
-protected:
+ protected:
     pTRootLink pNext;
-public:
+
+ public:
     explicit TRootLink(pTRootLink pNxt = nullptr) { pNext = pNxt; }
 
     pTRootLink GetNextLink() const { return pNext; }
@@ -30,4 +32,5 @@ public:
 
     friend class TDataList;
 };
-#endif // TROOT_LINK_INCLUDE_TROOT_LINK_H
+
+#endif  // TROOT_LINK_INCLUDE_TROOT_LINK_H
