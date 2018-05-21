@@ -1,5 +1,6 @@
 #include <iostream>
-#include "TDatValue.h"
+// #include "TDatValue.h"
+#include "DatValue.h"
 using namespace std;
 
 #ifndef TTAB_RECORD_INCLUDE_TTAB_RECORD_H
@@ -40,4 +41,4 @@ class TTabRecord : public TDataValue
     friend class TListHash;
 };
 typedef TTabRecord *pTTabRecord;
-#endif // TTAB_RECORD_INCLUDE_TTAB_RECORD_H
+#endif  // TTAB_RECORD_INCLUDE_TTAB_RECORD_H

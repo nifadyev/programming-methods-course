@@ -1,16 +1,16 @@
-#include "RootLink.h"
-
 #ifndef DATA_LINK_INCLUDE_DATA_LINK_H
 #define DATA_LINK_INCLUDE_DATA_LINK_H
+
+#include "RootLink.h"
 
 class TDataLink;
 typedef TDataLink *pTDataLink;
 
 class TDataLink : public TRootLink
 {
-protected:
+ protected:
     pTDataValue pValue;
-public:
+ public:
     TDataLink(pTDataValue pVal = nullptr, pTRootLink pNxt = nullptr) : TRootLink(pNxt)
     {
         pValue = pVal;
@@ -24,4 +24,4 @@ public:
     friend class TDataList;
 };
 
-#endif // DATA_LINK_INCLUDE_DATA_LINK_H
+#endif  // DATA_LINK_INCLUDE_DATA_LINK_H
