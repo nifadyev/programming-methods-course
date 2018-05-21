@@ -1,11 +1,10 @@
+#ifndef TDATA_LIST_INCLUDE_TDATA_LIST_H
+#define TDATA_LIST_INCLUDE_TDATA_LIST_H
+
 #include <iostream>
 #include "DatLink.h"
 using namespace std;
 
-#ifndef TDATA_LIST_INCLUDE_TDATA_LIST_H
-#define TDATA_LIST_INCLUDE_TDATA_LIST_H
-// class TDataList;
-// typedef TDataList *pTDataList;
 enum TLinkPos
 {
     FIRST,
@@ -15,7 +14,7 @@ enum TLinkPos
 
 class TDataList
 {
-  protected:
+ protected:
     pTDataLink pFirst;
     pTDataLink pLast;
     pTDataLink pCurrentLink;
@@ -30,7 +29,7 @@ class TDataList
 
     void InsertIntoEmptyList(pTDataValue pVal);
 
-  public:
+ public:
     TDataList();
     ~TDataList() { DeleteList(); }
 
@@ -56,4 +55,4 @@ class TDataList
 };
 
 typedef TDataList *pTDataList;
-#endif // TDATA_LIST_INCLUDE_TDATA_LIST_H
+#endif  // TDATA_LIST_INCLUDE_TDATA_LIST_H

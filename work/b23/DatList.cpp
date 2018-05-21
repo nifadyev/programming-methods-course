@@ -8,7 +8,14 @@ pTDataLink TDataList::GetLink(pTDataValue pVal, pTDataLink pLink)
 
 void TDataList::DeleteLink(pTDataLink pLink)
 {
-    delete pLink;
+    if (pLink != nullptr)
+    {
+        if (pLink->pValue != nullptr)
+        {
+            delete pLink->pValue;
+        }
+        delete pLink;
+    }
 }
 
 void TDataList::InsertIntoEmptyList(pTDataValue pVal)
@@ -20,39 +27,33 @@ void TDataList::InsertIntoEmptyList(pTDataValue pVal)
 
 TDataList::TDataList()
 {
-    pFirst = pLast = pCurrentLink = pPreviousLink = nullptr;
-    pStop = nullptr;
+    pFirst = pLast = pCurrentLink = pPreviousLink = pStop = nullptr;
     listLength = 0;
-    currentPosition = 0;
+    //currentPosition = 0;
 }
 
 pTDataValue TDataList::GetDataValue(TLinkPos mode) const
 {
-    if (pFirst == nullptr)
-    {
-        return nullptr;
-    }
-
-    TDataValue *temp = nullptr;
+    pTDataLink temp = nullptr;
     switch (mode)
     {
     case FIRST:
-        temp = pFirst->GetDataValue();
+        temp = pFirst;
         break;
     case LAST:
-        temp = pLast->GetDataValue();
+        temp = pLast;
         break;
     case CURRENT:
-        temp = pCurrentLink->GetDataValue();
+        temp = pCurrentLink;
         break;
     }
 
-    return (temp == nullptr) ? nullptr : temp;
+    return (temp == nullptr) ? nullptr : temp->pValue;
 }
 
 void TDataList::SetCurrentPosition(const int &position)
 {
-    if (position < 0)
+    if (position < 0 /* || position >= listLength */)
     {
         throw range_error("Cannot set position! Position must be positive");
     }
@@ -67,6 +68,8 @@ void TDataList::SetCurrentPosition(const int &position)
     {
         GoNext();
     }
+    currentPosition = position;
+    // return 1;
 }
 
 int TDataList::GetCurrentPosition() const
@@ -89,58 +92,61 @@ int TDataList::Reset()
 
 bool TDataList::IsListEnded() const
 {
-    if (pPreviousLink == pLast && pCurrentLink == pStop && !IsEmpty())
-    {
-        return true;
-    }
+    // if (pPreviousLink == pLast && pCurrentLink == pStop && !IsEmpty())
+    // {
+    //     return true;
+    // }
 
-    return false;
+    // return false;
+    return pCurrentLink == pStop;
 }
 
 void TDataList::GoNext()
 {
-    if (pCurrentLink == pStop)
-    {
-        throw logic_error("Cannot move to the next link! List has ended");
-    }
+    // if (pCurrentLink == pStop)
+    // {
+    //     throw logic_error("Cannot move to the next link! List has ended");
+    // }
 
-    if (IsListEnded() == false)
+    // if (IsListEnded() == false)
+    // {
+    //     pPreviousLink = pCurrentLink;
+    //     pCurrentLink = pCurrentLink->GetNextDataLink();
+    //     currentPosition++;
+    // }
+    // if (pCurrentLink == pStop)
+    // {
+    //     currentPosition = -1;
+    // }
+
+    if (!IsEmpty())
     {
         pPreviousLink = pCurrentLink;
         pCurrentLink = pCurrentLink->GetNextDataLink();
         currentPosition++;
+        //return 1;
     }
-    if (pCurrentLink == pStop)
-    {
-        currentPosition = -1;
-    }
+    // else
+    //     return -1;
 }
 
 void TDataList::InsertBeforeFirst(pTDataValue pVal)
 {
-    if (IsListEnded())
-    {
-        throw "Cannot insert before first! List is ended";
-    }
-
+    pTDataLink n_node = GetLink(pVal, pFirst);
+    pFirst = n_node;
     listLength++;
-    Reset();
-
-    if (IsEmpty())
+    if (pLast == pStop) // List was empty
     {
-        InsertIntoEmptyList(pVal);
-        return;
+        pLast = pCurrentLink = n_node;
+        currentPosition = 0;
     }
-
-    TDataLink *temp = pFirst;
-    pFirst = new TDataLink(pVal);
-    pFirst->SetNextLink(temp);
-    pCurrentLink = pFirst;
-
-    if (temp->GetNextLink() == nullptr)
+    else if (currentPosition == 0) // Current node was the first
     {
-        pLast = temp;
+        pPreviousLink = pFirst;
+        currentPosition = 1;
     }
+    else
+        currentPosition++;
 }
 
 void TDataList::InsertAfterLast(pTDataValue pVal)
@@ -150,55 +156,68 @@ void TDataList::InsertAfterLast(pTDataValue pVal)
         throw "Cannot insert after last! List is ended";
     }
 
+    pTDataLink n_node = GetLink(pVal, pStop);
+    pTDataLink old_last = pLast;
+    pLast = n_node;
     listLength++;
 
-    if (IsEmpty())
+    if (pFirst == pStop) // List was empty
     {
-        InsertIntoEmptyList(pVal);
-        return;
+        pFirst = pCurrentLink = n_node;
+        currentPosition = 0;
     }
-
-    TDataLink *temp = pLast;
-    temp->SetNextLink(pStop);
-    pLast = new TDataLink(pVal);
-    pLast->SetNextLink(pStop);
-    pCurrentLink = pLast;
-    pPreviousLink = temp;
-    pPreviousLink->SetNextLink(pCurrentLink);
-    currentPosition = listLength - 1;
-
-    if (pFirst == temp)
+    else
     {
-        pFirst = temp;
-        pFirst->SetNextLink(pLast);
+        old_last->SetNextLink(pLast);
+    }
+    if (IsListEnded())
+    {
+        pCurrentLink = pLast;
     }
 }
 
 void TDataList::InsertBeforeCurrent(pTDataValue pVal)
 {
-    listLength++;
+    // listLength++;
 
-    if (IsEmpty())
-    {
-        InsertIntoEmptyList(pVal);
-        return;
-    }
+    // if (IsEmpty())
+    // {
+    //     InsertIntoEmptyList(pVal);
+    //     return;
+    // }
 
-    if (pCurrentLink == pFirst)
+    // if (pCurrentLink == pFirst)
+    // {
+    //     InsertBeforeFirst(pVal);
+    //     listLength--;
+    //     return;
+    // }
+
+    // TDataLink *temp = pCurrentLink;
+    // pCurrentLink = new TDataLink(pVal);
+    // pCurrentLink->SetNextLink(temp);
+    // pPreviousLink->SetNextLink(pCurrentLink);
+
+    // if (pLast == temp)
+    // {
+    //     pLast = temp;
+    // }
+
+    if (IsEmpty() || currentPosition == 0)
     {
         InsertBeforeFirst(pVal);
-        listLength--;
-        return;
     }
-
-    TDataLink *temp = pCurrentLink;
-    pCurrentLink = new TDataLink(pVal);
-    pCurrentLink->SetNextLink(temp);
-    pPreviousLink->SetNextLink(pCurrentLink);
-
-    if (pLast == temp)
+    else if (IsListEnded())
     {
-        pLast = temp;
+        InsertAfterLast(pVal);
+    }
+    else
+    {
+        pTDataLink n_node = GetLink(pVal, pCurrentLink);
+        pPreviousLink->SetNextLink(n_node);
+        pPreviousLink = n_node;
+        currentPosition++;
+        listLength++;
     }
 }
 
@@ -209,21 +228,42 @@ void TDataList::DeleteFirst()
         throw logic_error("Cannot delete first element! List is empty");
     }
 
-    TDataLink *temp = pFirst;
-    pFirst = pFirst->GetNextDataLink();
-    DeleteLink(temp);
-    listLength--;
+    // TDataLink *temp = pFirst;
+    // pFirst = pFirst->GetNextDataLink();
+    // DeleteLink(temp);
+    // listLength--;
 
+    // if (IsEmpty())
+    // {
+    //     pLast = pStop;
+    //     Reset();
+    // }
+    // else if (currentPosition == 0)
+    //     pCurrentLink = pFirst;
+
+    // if (currentPosition)
+    //     currentPosition--;
+
+    pTDataLink old_first = pFirst;
+    pFirst = pFirst->GetNextDataLink();
+    listLength--;
+    DeleteLink(old_first);
     if (IsEmpty())
     {
-        pLast = pStop;
-        Reset();
+        pPreviousLink = pCurrentLink = pFirst = pLast = pStop;
     }
     else if (currentPosition == 0)
+    {
         pCurrentLink = pFirst;
-
-    if (currentPosition)
+    } // Current node was the first
+    else if (currentPosition == 1)
+    {
+        pPreviousLink = pStop;
+    } // Current node was the second
+    else
+    {
         currentPosition--;
+    }
 }
 
 void TDataList::DeleteCurrent()
@@ -233,36 +273,59 @@ void TDataList::DeleteCurrent()
         throw logic_error("Cannot delete current element! List is empty");
     }
 
-    if (listLength == 1)
+    // if (listLength == 1)
+    // {
+    //     DeleteFirst();
+
+    //     return;
+    // }
+
+    // if (pCurrentLink == pLast)
+    // {
+    //     DeleteLink(pCurrentLink);
+    //     SetCurrentPosition(currentPosition - 1);
+    //     pLast = pCurrentLink;
+    //     pLast->SetNextLink(pStop);
+    //     listLength--;
+    //     currentPosition++;
+
+    //     return;
+    // }
+
+    // TDataLink *temp = pCurrentLink;
+    // pCurrentLink = pCurrentLink->GetNextDataLink();
+    // DeleteLink(temp);
+    // pPreviousLink->SetNextLink(pCurrentLink);
+    // listLength--;
+
+    if (pCurrentLink == pFirst)
     {
         DeleteFirst();
-
-        return;
-    }
-
-    if (pCurrentLink == pLast)
+    } // Current node was the first
+    else
     {
-        DeleteLink(pCurrentLink);
-        SetCurrentPosition(currentPosition - 1);
-        pLast = pCurrentLink;
-        pLast->SetNextLink(pStop);
+        auto old_cur = pCurrentLink;
+        pCurrentLink = pCurrentLink->GetNextDataLink();
+        pPreviousLink->SetNextLink(pCurrentLink);
+        if (old_cur == pLast)
+        {
+            pLast = pPreviousLink;
+        }
+        DeleteLink(old_cur);
         listLength--;
-        currentPosition++;
-
-        return;
     }
-
-    TDataLink *temp = pCurrentLink;
-    pCurrentLink = pCurrentLink->GetNextDataLink();
-    DeleteLink(temp);
-    pPreviousLink->SetNextLink(pCurrentLink);
-    listLength--;
 }
 
 void TDataList::DeleteList()
 {
-    while (listLength != 0)
+    // while (listLength != 0)
+    // {
+    //     DeleteFirst();
+    // }
+
+    while (!IsEmpty())
     {
         DeleteFirst();
     }
+    pPreviousLink = pCurrentLink = pFirst = pLast = pStop;
 }
