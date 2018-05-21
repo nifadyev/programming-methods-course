@@ -1568,7 +1568,246 @@ TEST(ListHash, Get_Key_Returns_Empty_Key)
 {
     TListHash listHash;
 
-    //listHash.InsertRecord("example", nullptr);
-
     EXPECT_EQ(listHash.GetKey(), "");
+}
+
+TEST(ListHash, Can_Get_Value)
+{
+    TListHash listHash;
+
+    listHash.InsertRecord("example", nullptr);
+
+    ASSERT_NO_THROW(listHash.GetValuePTR());
+}
+
+TEST(ListHash, Get_Value_Returns_Correct_Value)
+{
+    TListHash listHash;
+    TTabRecord record("qwerty");
+    pTDataValue copy = record.GetCopy();
+
+    listHash.InsertRecord("qwerty", copy);
+
+    EXPECT_EQ(listHash.GetValuePTR(), copy);
+}
+
+TEST(ListHash, Get_Key_Returns_Nullptr_Value)
+{
+    TListHash listHash;
+
+    EXPECT_EQ(listHash.GetValuePTR(), nullptr);
+}
+
+TEST(ListHash, Can_Find_Record)
+{
+    TListHash listHash;
+    TTabRecord record1("qwerty");
+    TTabRecord record2("key");
+
+    listHash.InsertRecord("wasd", record1.GetCopy());
+    listHash.InsertRecord("example", record2.GetCopy());
+
+    ASSERT_NO_THROW(listHash.FindRecord("example"));
+}
+
+TEST(ListHash, Find_Record_Returns_Correct_Value)
+{
+    TListHash listHash;
+    TTabRecord record1("qwerty");
+    TTabRecord record2("key");
+    pTDataValue copy = record2.GetCopy();
+
+    listHash.InsertRecord("wasd", record1.GetCopy());
+    listHash.InsertRecord("key", copy);
+
+    EXPECT_EQ(listHash.FindRecord("key"), copy);
+}
+
+TEST(ListHash, Throw_When_Trying_To_Find_Record_In_Empty_List)
+{
+    TListHash listHash;
+
+    ASSERT_THROW(listHash.FindRecord("key"), logic_error);
+}
+
+TEST(ListHash, Throw_When_Trying_To_Find_Unexisting_Record)
+{
+    TListHash listHash;
+
+    listHash.InsertRecord("qwerty", nullptr);
+
+    ASSERT_THROW(listHash.FindRecord("qwertu"), runtime_error);
+}
+
+TEST(ListHash, Can_Insert_Record)
+{
+    TListHash listHash;
+
+    ASSERT_NO_THROW(listHash.InsertRecord("key", nullptr));
+}
+
+TEST(ListHash, Inserted_Record_Is_Correctly_Paste)
+{
+    TListHash listHash;
+    TTabRecord record("key", nullptr);
+    pTDataValue copy = record.GetCopy();
+
+    listHash.InsertRecord(record.GetKey(), copy);
+
+    EXPECT_EQ(listHash.FindRecord("key"), copy);
+    EXPECT_EQ(listHash.GetDataCount(), 1);
+}
+
+TEST(ListHash, DISABLED_Throw_When_Trying_To_Insert_Record_Into_Full_List)
+{
+    TListHash listHash(2);
+
+    listHash.InsertRecord("record1", nullptr);
+    listHash.InsertRecord("record2", nullptr);
+
+    ASSERT_THROW(listHash.InsertRecord("record3", nullptr), logic_error);
+}
+
+TEST(ListHash, Throw_When_Trying_To_Insert_Existing_Record)
+{
+    TListHash listHash(2);
+
+    listHash.InsertRecord("record1", nullptr);
+    listHash.InsertRecord("record2", nullptr);
+
+    ASSERT_THROW(listHash.InsertRecord("record2", nullptr), runtime_error);
+}
+
+TEST(ListHash, Can_Delete_Record)
+{
+    TListHash listHash;
+
+    listHash.InsertRecord("key", nullptr);
+    listHash.InsertRecord("example", nullptr);
+
+    ASSERT_NO_THROW(listHash.DeleteRecord("key"));
+}
+
+TEST(ListHash, Deleted_Record_Is_Correctly_Removed)
+{
+    TListHash listHash;
+
+    listHash.InsertRecord("key", nullptr);
+    listHash.InsertRecord("example", nullptr);
+
+    listHash.DeleteRecord("key");
+
+    ASSERT_THROW(listHash.FindRecord("key"), runtime_error);
+    EXPECT_EQ(listHash.GetDataCount(), 1);
+}
+
+TEST(ListHash, Throw_When_Trying_To_Delete_Non_Existing_Record)
+{
+    TListHash listHash;
+
+    listHash.InsertRecord("key", nullptr);
+    listHash.InsertRecord("example", nullptr);
+
+    ASSERT_THROW(listHash.DeleteRecord("kay"), logic_error);
+}
+
+TEST(ListHash, Can_Reset)
+{
+    TListHash listHash;
+
+    listHash.InsertRecord("wasd", nullptr);
+
+    ASSERT_NO_THROW(listHash.Reset());
+}
+
+TEST(ListHash, Reset_Changes_List_Condition)
+{
+    TListHash listHash;
+
+    listHash.InsertRecord("wasd", nullptr);
+    listHash.InsertRecord("was", nullptr);
+    listHash.InsertRecord("wa", nullptr);
+
+    listHash.Reset();
+
+    EXPECT_EQ(listHash.GetKey(), "wasd");
+}
+
+TEST(ListHash, DISABLED_Reset_Returns_Minus_One_If_List_Is_Ended)
+{
+    TListHash listHash(3);
+
+    listHash.InsertRecord("wasd", nullptr);
+    listHash.InsertRecord("was", nullptr);
+    listHash.InsertRecord("wa", nullptr);
+
+    EXPECT_EQ(listHash.Reset(), -1);
+}
+
+TEST(ListHash, Reset_Returns_Current_List)
+{
+    TListHash listHash(3);
+
+    listHash.InsertRecord("wasd", nullptr);
+    listHash.InsertRecord("was", nullptr);
+    listHash.InsertRecord("wa", nullptr);
+
+    EXPECT_EQ(listHash.Reset(), 2);
+}
+
+TEST(ListHash, DISABLED_Is_Table_Ended_Returns_True)
+{
+    TListHash listHash(1);
+
+    listHash.InsertRecord("wasd", nullptr);
+
+    EXPECT_TRUE(listHash.IsTableEnded());
+}
+
+TEST(ListHash, Is_Table_Ended_Returns_False)
+{
+    TListHash listHash;
+
+    EXPECT_FALSE(listHash.IsTableEnded());
+}
+
+TEST(ListHash, Can_Go_Next)
+{
+    TListHash listHash;
+
+    listHash.InsertRecord("example", nullptr);
+    listHash.InsertRecord("exampl", nullptr);
+    listHash.InsertRecord("exam", nullptr);
+
+    listHash.Reset();
+
+    ASSERT_NO_THROW(listHash.GoNext());
+}
+
+TEST(ListHash, Go_Next_Set_Correct_State_Of_List)
+{
+    TListHash listHash;
+
+    listHash.InsertRecord("example", nullptr);
+    listHash.InsertRecord("exampl", nullptr);
+    listHash.InsertRecord("exam", nullptr);
+
+    listHash.Reset();
+
+    listHash.GoNext();
+
+    EXPECT_EQ(listHash.GetKey(), "exampl");
+}
+
+TEST(ListHash, Go_Next_Returns_Current_List)
+{
+    TListHash listHash;
+
+    listHash.InsertRecord("example", nullptr);
+    listHash.InsertRecord("exampl", nullptr);
+    listHash.InsertRecord("exam", nullptr);
+
+    listHash.Reset();
+
+    EXPECT_EQ(listHash.GoNext(), 1);
 }
