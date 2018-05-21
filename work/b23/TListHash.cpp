@@ -62,7 +62,7 @@ pTDataValue TListHash::GetValuePTR(void) const
         return nullptr;
     }
 
-    pTTabRecord temp = (pTTabRecord)(pList[currentList]->GetDataValue());
+    pTTabRecord temp = (pTTabRecord)(pList[currentList]->GetDataValue/* GetDataValue */());
     return (temp == nullptr) ? nullptr : temp->pValue;
 }
 
@@ -82,7 +82,7 @@ pTDataValue TListHash::FindRecord(TKey key)
         efficiency++;
         if (((pTTabRecord)(actualList->GetDataValue()))->key == key)
         {
-            return ((pTTabRecord)(actualList->GetDataValue()))->pValue;
+            return ((pTTabRecord)(actualList->GetDataValue/* GetDataValue */()))->pValue;
         }
     }
 
@@ -91,7 +91,6 @@ pTDataValue TListHash::FindRecord(TKey key)
 
 void TListHash::InsertRecord(TKey key, pTDataValue value)
 {
-
     if (IsFull())
     {
         throw logic_error("Error! Cannot insert record into full list");
@@ -163,7 +162,7 @@ int TListHash::GoNext(void)
     {
         if (!(pList[currentList]->IsEmpty()))
         {
-            return 1 /* pList[currentList]->Reset() */;
+            return pList[currentList]->Reset();
         }
     }
 
