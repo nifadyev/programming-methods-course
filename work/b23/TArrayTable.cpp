@@ -37,7 +37,7 @@ TArrayTable::~TArrayTable()
 
 bool TArrayTable::IsFull() const
 {
-    return maxTableSize == dataCount /* currentPosition */;
+    return maxTableSize == dataCount;
 }
 
 int TArrayTable::GetTableSize() const
@@ -63,6 +63,7 @@ TKey TArrayTable::GetKey(TDataPos mode) const
     }
 
     int tempPosition = -1;
+
     switch (mode)
     {
     case FIRST_POS:
@@ -74,8 +75,8 @@ TKey TArrayTable::GetKey(TDataPos mode) const
     case LAST_POS:
         tempPosition = dataCount - 1;
         break;
-        // Impossible to get wrong position because
-        // it is already checked in SetCurrentPosition or in GoNext
+    // Impossible to get wrong position because
+    // it is already checked in SetCurrentPosition or in GoNext
     }
 
     return (pRecords[tempPosition] == nullptr) ? TKey("") : pRecords[tempPosition]->key;
@@ -89,6 +90,7 @@ pTDataValue TArrayTable::GetValuePTR(TDataPos mode) const
     }
 
     int tempPosition = -1;
+
     switch (mode)
     {
     case FIRST_POS:
@@ -100,8 +102,8 @@ pTDataValue TArrayTable::GetValuePTR(TDataPos mode) const
     case LAST_POS:
         tempPosition = dataCount - 1;
         break;
-        // Impossible to get wrong position because
-        // it is already checked in SetCurrentPosition or in GoNext
+    // Impossible to get wrong position because
+    // it is already checked in SetCurrentPosition or in GoNext
     }
 
     return (pRecords[tempPosition] == nullptr) ? nullptr : pRecords[tempPosition]->pValue;
@@ -127,7 +129,7 @@ int TArrayTable::GoNext(void)
     return currentPosition++;
 }
 
-/*int*/ void TArrayTable::SetCurrentPosition(int position)
+void TArrayTable::SetCurrentPosition(int position)
 {
     if (position < 0 || position > TABLE_MAX_SIZE)
     {

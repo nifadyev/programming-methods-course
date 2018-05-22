@@ -6,7 +6,7 @@ static const int NUMBER_OF_MARKS = 5;
 
 class StudentInfo : public TDataValue
 {
-  private:
+ private:
     enum
     {
         MATH,
@@ -16,10 +16,10 @@ class StudentInfo : public TDataValue
         MNO
     };
 
-  public:
+ public:
     int marks[NUMBER_OF_MARKS];
 
-    StudentInfo(int math = 4, int aads = 4, int os = 4, int english = 4, int mno = 0)
+    StudentInfo(int math = 4, int aads = 4, int os = 4, int english = 4, int mno = 4)
     {
         if (math < 0 || math > 5 || aads < 0 || aads > 5 || os < 0 || os > 5 || english < 0 || english > 5 || mno < 0 || mno > 5)
         {

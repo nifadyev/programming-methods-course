@@ -39,6 +39,11 @@ TArrayHash::~TArrayHash()
     delete pMark;
 }
 
+int TArrayHash::GetNextPosition(int position) 
+{ 
+    return (position + hashStep) % maxTableSize;
+}
+
 bool TArrayHash::IsFull() const
 {
     return dataCount == maxTableSize;

@@ -12,15 +12,25 @@ class TRootLink
     pTRootLink pNext;
 
  public:
-    explicit TRootLink(pTRootLink pNxt = nullptr) { pNext = pNxt; }
+    explicit TRootLink(pTRootLink pNxt = nullptr) 
+    { 
+        pNext = pNxt;
+    }
 
-    pTRootLink GetNextLink() const { return pNext; }
-    void SetNextLink(const pTRootLink pLink) { pNext = pLink; }
+    pTRootLink GetNextLink() const 
+    { 
+        return pNext;
+    }
+    void SetNextLink(const pTRootLink pLink) 
+    { 
+        pNext = pLink;
+    }
 
     void InsertNextLink(pTRootLink pLink)
     {
         pTRootLink p = pNext;
         pNext = pLink;
+        
         if (pLink != nullptr)
         {
             pLink->pNext = p;

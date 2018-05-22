@@ -10,7 +10,7 @@
 template <class Table>
 class StudentAchievements
 {
-  private:
+ private:
     vector<TTable *> tables;
     int groupNumber;
 
@@ -61,15 +61,14 @@ class StudentAchievements
     string GetFileName(int groupID)
     {
         // TODO: Change when is'll be ready to pull
-        //string filename = "students/group";
-        string filename = "group";
+        string filename = "students/group";
         filename += '0' + groupID;
         filename += ".txt";
 
         return filename;
     }
 
-  public:
+ public:
     StudentAchievements()
     {
         groupNumber = GetGroupNumber();
@@ -88,13 +87,10 @@ class StudentAchievements
             }
             catch (...)
             {
-                // FIXME: ???
                 return 0;
             }
             
         }
-
-        // return 0;
     }
 
     // Student mark
@@ -115,6 +111,7 @@ class StudentAchievements
         {
             throw;
         }
+
         StudentInfo *info = GetStudentInfo(studentName);
         double result = 0;
 
@@ -148,8 +145,8 @@ class StudentAchievements
         double result = 0;
         double count = 0;
         TTable *table = tables[group];
-
         table->Reset();
+        
         while (!table->IsTableEnded())
         {
             StudentInfo *info = (StudentInfo *)(table->GetValuePTR());
