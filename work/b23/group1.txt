@@ -1,0 +1,5 @@
+Kozhevnikov 4 3 2 5 4
+Sysnin 3 3 2 4 3
+Zobova 5 5 4 3 5
+Filipov 5 5 5 5 5
+Pronicheva 4 4 5 4 5
