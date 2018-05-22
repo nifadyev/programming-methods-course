@@ -1,19 +1,34 @@
-/* Необходимо разработать интерфейс доступа к операциям поиска, вставки и удаления, не зависящий от способа организации таблицы.
+#include "TTabRecord.h"
+#include "TArrayTable.h"
+#include "TScanTable.h"
+#include "TSortTable.h"
+#include "TTreeNode.h"
+#include "TTreeTable.h"
+#include "TBalanceNode.h"
+#include "TBalanceTree.h"
+#include "TArrayHash.h"
+#include "TListHash.h"
+#include "StudentAchievements.h"
 
-Демонстрацию работоспособности разрабатываемых при выполнении лабораторной работы программ следует проводить на примере таблиц, содержащих данные о результатах экзаменационной успеваемости студентов. Для данного примера следует реализовать следующие операции:
+int main()
+{
+    StudentAchievements<TScanTable> table;
+    cout << "-----------------------Group 1-----------------------\n"; 
+    cout << "Number of students with excellent marks in group 1: " << table.GetExcellentStudentsNumber(0) << endl;
+    cout << "Average group mark: " << table.CalculateAverageGroupMark(0) << endl;
 
-1) для таблицы с результатами успеваемости отдельной студенческой группы:
-
-получение сведений об успеваемости отдельного студента (оценка по конкретному предмету, средняя оценка по всем предметам);
-определение средней оценки по группе по отдельному предмету или по всем предметам;
-подсчет количества студентов-отличников и т.п.
-2) для нескольких таблиц с результатами успеваемости для всех студенческих групп курса:
-
-получение средних оценок по всем студенческим группам по отдельному предмету или по всем предметам;
-определение студенческой группы с лучшей успеваемостью по конкретному предмету (или по всем предметам экзаменационной сессии);
-подсчет количества студентов-отличников для всего курса и т.п.
-Задача обработки результатов успеваемости может быть расширена возможностью хранения данных для нескольких экзаменационных сессий (например, за весь период обучения студентов).
-
-Указанный выше набор операций обработки результатов успеваемости является минимально необходимым; определение полного перечня необходимых операций должно выполняться на этапе постановки лабораторной работе (в том числе, например, могут быть выбраны различающиеся наборы операций для получения разных постановок лабораторной работы).
-
-Результаты обработки успеваемости рекомендуется дополнять построением графиков и диаграмм различного вида (например, диаграммы по средним баллам для разных студенческих групп, графики успеваемости студентов по разным предметам). */
+cout << "/n-----------------------Group 2-----------------------\n"; 
+    cout << "Number of students with excellent marks in group: " << table.GetExcellentStudentsNumber(1) << endl;
+    cout << "Average group mark: " << table.CalculateAverageGroupMark(1) << endl;
+    
+    cout << "/n-----------------------Additional information-----------------------\n"; 
+    cout << "Average mark on Math: " << table.CalculateAverageMark(0) << endl;
+    cout << "Average mark on AaDS: " << table.CalculateAverageMark(1) << endl;
+    cout << "Average mark on OS: " << table.CalculateAverageMark(2) << endl;
+    cout << "Average mark on English: " << table.CalculateAverageMark(3) << endl;
+    cout << "Average mark on MNO: " << table.CalculateAverageMark(4) << endl;
+    
+    cout << "\nBest group (based on average mark among students): " << table.GetGroupIDWithBestMarks(0) << endl;
+    
+    return 0;
+}
