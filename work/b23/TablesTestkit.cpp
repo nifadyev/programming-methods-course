@@ -8,6 +8,7 @@
 #include "TBalanceTree.h"
 #include "TArrayHash.h"
 #include "TListHash.h"
+#include "StudentAchievements.h"
 
 #include <gtest/gtest.h>
 
@@ -174,14 +175,6 @@ TEST(TabRecord, Can_Compare_Table_Records_Using_More)
     TTabRecord tableRecord1("qwerty"), tableRecord2("wasd");
 
     ASSERT_NO_THROW(tableRecord1 > tableRecord2);
-}
-// TODO: All comparison methods return const value than cannot be changed
-TEST(TabRecord, DISABLED_Can_Compare_Not_Equal_Table_Records_Using_More)
-{
-    TKey str("b"), str1("ab");
-    TTabRecord tableRecord1(str1), tableRecord2(str);
-
-    EXPECT_TRUE(tableRecord1 > tableRecord2);
 }
 
 TEST(TabRecord, Can_Compare_Equal_Table_Records_Using_More)
@@ -849,13 +842,6 @@ TEST(TreeTable, Can_Create_Default_Tree_Table)
     ASSERT_NO_THROW(TTreeTable treeTable);
 }
 
-TEST(TreeTable, DISABLED_Is_Full_Returns_True)
-{
-    TTreeTable treeTable;
-
-    EXPECT_TRUE(treeTable.IsFull());
-}
-
 TEST(TreeTable, Is_Full_Returns_False)
 {
     TTreeTable treeTable;
@@ -916,11 +902,6 @@ TEST(TreeTable, Inserted_Record_Is_Correct)
     EXPECT_EQ(treeTable.GetKey(), "example");
     EXPECT_EQ(treeTable.GetValuePTR(), nullptr);
     EXPECT_EQ(treeTable.GetDataCount(), 1);
-}
-
-TEST(TreeTable, DISABLED_Throw_When_Trying_To_Insert_Record_Into_Full_Table)
-{
-    // TODO:
 }
 
 TEST(TreeTable, Throw_When_Trying_To_Insert_Already_Existing_Record)
@@ -1174,18 +1155,6 @@ TEST(BalanceTree, Inserted_Record_Is_Correctly_Paste)
     ASSERT_NO_THROW(balanceTree.FindRecord("wasd"));
 }
 
-TEST(BalanceTree, DISABLED_Throw_When_Trying_To_Insert_Record_Into_Full_Balance_Tree)
-{
-    TBalanceTree balanceTree;
-    // TODO: How to make balance tree full?
-    for (int i = 0; i < 25; i++)
-    {
-        balanceTree.InsertRecord(to_string(i), nullptr);
-    }
-
-    ASSERT_ANY_THROW(balanceTree.InsertRecord("abc", nullptr));
-}
-
 TEST(BalanceTree, Throw_When_Trying_To_Insert_Already_Existing_Record)
 {
     TBalanceTree balanceTree;
@@ -1257,10 +1226,6 @@ TEST(ArrayHash, Is_Full_Returns_False)
     EXPECT_FALSE(arrayHash.IsFull());
 }
 
-TEST(ArrayHash, DISABLED_Is_Full_Returns_True)
-{
-}
-
 TEST(ArrayHash, Can_Get_Key)
 {
     TArrayHash arrayHash;
@@ -1281,9 +1246,11 @@ TEST(ArrayHash, Get_Key_Returns_Correct_Value)
     EXPECT_EQ(arrayHash.GetKey(), "qwerty");
 }
 
-TEST(ArrayHash, DISABLED_Get_Key_Returns_Empty_Key)
+TEST(ArrayHash, Get_Key_Returns_Empty_Key)
 {
     TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("", nullptr);
 
     EXPECT_EQ(arrayHash.GetKey(), "");
 }
@@ -1310,9 +1277,11 @@ TEST(ArrayHash, Get_Value_Returns_Correct_Value)
     EXPECT_EQ(arrayHash.GetValuePTR(), copy);
 }
 
-TEST(ArrayHash, DISABLED_Get_Value_Returns_Nullptr)
+TEST(ArrayHash, Get_Value_Returns_Nullptr)
 {
     TArrayHash arrayHash;
+
+    arrayHash.InsertRecord("qwerty", nullptr);
 
     EXPECT_EQ(arrayHash.GetValuePTR(), nullptr);
 }
@@ -1370,10 +1339,6 @@ TEST(ArrayHash, Inserted_Record_Is_Correctly_Paste)
     arrayHash.InsertRecord(record.GetKey(), copy);
 
     EXPECT_EQ(arrayHash.FindRecord("key"), copy);
-}
-
-TEST(ArrayHash, DISABLED_Throw_When_Trying_To_Insert_Record_Into_Full_Array)
-{
 }
 
 TEST(ArrayHash, Throw_When_Trying_To_Insert_Already_Existing_Record)
@@ -1446,28 +1411,6 @@ TEST(ArrayHash, Reset_Returns_Correct_Current_Position)
     EXPECT_EQ(arrayHash.Reset(), 15);
 }
 
-TEST(ArrayHash, DISABLED_Reset_Returns_Correct_Value_If_Table_Is_Ended)
-{
-    TArrayHash arrayHash;
-
-    arrayHash.InsertRecord("qwerty", nullptr);
-    arrayHash.InsertRecord("qwert", nullptr);
-
-    EXPECT_EQ(arrayHash.Reset(), -1);
-}
-
-TEST(ArrayHash, DISABLED_Is_Table_Ended_Returns_True)
-{
-    TArrayHash arrayHash(8, 2);
-
-    arrayHash.InsertRecord("example", nullptr);
-    arrayHash.InsertRecord("key", nullptr);
-    arrayHash.InsertRecord("exampl", nullptr);
-    arrayHash.InsertRecord("keys", nullptr);
-
-    EXPECT_TRUE(arrayHash.IsTableEnded());
-}
-
 TEST(ArrayHash, Is_Table_Ended_Returns_False)
 {
     TArrayHash arrayHash;
@@ -1502,17 +1445,6 @@ TEST(ArrayHash, Go_Next_Set_Correct_State_Of_Table)
     EXPECT_EQ(arrayHash.GetKey(), "qwerty");
 }
 
-TEST(ArrayHash, DISABLED_Go_Next_Returns_1_If_Table_Is_Ended)
-{
-    TArrayHash arrayHash;
-
-    arrayHash.InsertRecord("example", nullptr);
-    arrayHash.InsertRecord("qwerty", nullptr);
-    arrayHash.Reset();
-
-    EXPECT_EQ(arrayHash.GoNext(), 1);
-}
-
 // FIXME:----------------Testing class TListHash----------------
 TEST(ListHash, Can_Create_List_Hash)
 {
@@ -1527,16 +1459,6 @@ TEST(ListHash, Throw_When_Trying_To_Create_List_Hash_With_Negative_Size)
 TEST(ListHash, Throw_When_Trying_To_Create_List_Hash_With_Too_Big_Size)
 {
     ASSERT_THROW(TListHash listHash(27), out_of_range);
-}
-
-TEST(ListHash, DISABLED_Is_Full_Returns_True)
-{
-    TListHash listHash(2);
-
-    listHash.InsertRecord("key", nullptr);
-    listHash.InsertRecord("qwerty", nullptr);
-
-    EXPECT_TRUE(listHash.IsFull());
 }
 
 TEST(ListHash, Is_Full_Returns_False)
@@ -1658,16 +1580,6 @@ TEST(ListHash, Inserted_Record_Is_Correctly_Paste)
     EXPECT_EQ(listHash.GetDataCount(), 1);
 }
 
-TEST(ListHash, DISABLED_Throw_When_Trying_To_Insert_Record_Into_Full_List)
-{
-    TListHash listHash(2);
-
-    listHash.InsertRecord("record1", nullptr);
-    listHash.InsertRecord("record2", nullptr);
-
-    ASSERT_THROW(listHash.InsertRecord("record3", nullptr), logic_error);
-}
-
 TEST(ListHash, Throw_When_Trying_To_Insert_Existing_Record)
 {
     TListHash listHash(2);
@@ -1733,17 +1645,6 @@ TEST(ListHash, Reset_Changes_List_Condition)
     EXPECT_EQ(listHash.GetKey(), "wasd");
 }
 
-TEST(ListHash, DISABLED_Reset_Returns_Minus_One_If_List_Is_Ended)
-{
-    TListHash listHash(3);
-
-    listHash.InsertRecord("wasd", nullptr);
-    listHash.InsertRecord("was", nullptr);
-    listHash.InsertRecord("wa", nullptr);
-
-    EXPECT_EQ(listHash.Reset(), -1);
-}
-
 TEST(ListHash, Reset_Returns_Current_List)
 {
     TListHash listHash(3);
@@ -1755,14 +1656,6 @@ TEST(ListHash, Reset_Returns_Current_List)
     EXPECT_EQ(listHash.Reset(), 2);
 }
 
-TEST(ListHash, DISABLED_Is_Table_Ended_Returns_True)
-{
-    TListHash listHash(1);
-
-    listHash.InsertRecord("wasd", nullptr);
-
-    EXPECT_TRUE(listHash.IsTableEnded());
-}
 
 TEST(ListHash, Is_Table_Ended_Returns_False)
 {
@@ -1810,4 +1703,153 @@ TEST(ListHash, Go_Next_Returns_Current_List)
     listHash.Reset();
 
     EXPECT_EQ(listHash.GoNext(), 1);
+}
+
+// FIXME:----------------Testing class StudentInfo----------------
+TEST(StudentInfo, Can_Create_Default_Student_Info)
+{
+    ASSERT_NO_THROW(StudentInfo info);
+}
+
+TEST(StudentInfo, Can_Create_Student_Info_With_Custom_Paremeters)
+{
+    ASSERT_NO_THROW(StudentInfo info(1, 2, 3, 4, 5));
+}
+
+TEST(StudentInfo, Throw_When_Trying_To_Create_Student_Info_With_Negative_Parameter)
+{
+    ASSERT_THROW(StudentInfo info(2, 3, 4, -2, 5), invalid_argument);
+}
+
+TEST(StudentInfo, Throw_When_Trying_To_Create_Student_Info_With_Too_Big_Parameter)
+{
+    ASSERT_THROW(StudentInfo info(2, 3, 4, 7, 5), invalid_argument);
+}
+
+TEST(StudentInfo, Can_Get_Copy)
+{
+    StudentInfo info;
+
+    ASSERT_NO_THROW(info.GetCopy());
+}
+
+// FIXME:----------------Testing class StudentAchievements----------------
+TEST(StudentAchievements, Can_Create_Default_Student_Achievements)
+{
+    ASSERT_NO_THROW(StudentAchievements<TSortTable> achivements);
+}
+
+TEST(StudentAchievements, Can_Get_Student_Info)
+{
+    StudentAchievements<TScanTable> achievements;
+
+    ASSERT_NO_THROW(achievements.GetStudentInfo("Зобова"));
+}
+
+TEST(StudentAchievements, Get_Student_Info_Returns_Correct_Info)
+{
+    StudentAchievements<TScanTable> achievements;
+    StudentInfo *info;
+    int expectedMarks[] = {5, 5, 4, 3, 5};
+
+    info = achievements.GetStudentInfo("Zobova");
+
+    for (int i = 0; i < 5; i++)
+    {
+        EXPECT_EQ(info->GetMark(i), expectedMarks[i]);
+    }
+}
+
+TEST(StudentAchievements, Can_Get_Student_Mark)
+{
+    StudentAchievements<TScanTable> achievements;
+
+    ASSERT_NO_THROW(achievements.GetStudentMark("Filipov", 2));
+}
+
+TEST(StudentAchievements, Get_Student_Mark_Returns_Correct_Value)
+{
+    StudentAchievements<TScanTable> achievements;
+
+    EXPECT_EQ(achievements.GetStudentMark("Filipov", 2), 5);
+}
+
+TEST(StudentAchievements, Throw_When_Trying_To_Get_Mark_For_Unexisting_Course)
+{
+    StudentAchievements<TScanTable> achievements;
+
+    ASSERT_THROW(achievements.GetStudentMark("Filipov", -1), invalid_argument);
+}
+
+TEST(StudentAchievements, Can_Calculate_Student_Average_Mark)
+{
+    // TODO: Cannot get info from student of 2 group
+    StudentAchievements<TSortTable> achievements;
+
+    ASSERT_NO_THROW(achievements.CalculateStudentAverageMark("Pronicheva"));
+}
+
+TEST(StudentAchievements, Calculated_Student_Average_Mark_Is_Correct)
+{
+    StudentAchievements<TScanTable> achievements;
+
+    EXPECT_DOUBLE_EQ(achievements.CalculateStudentAverageMark("Sysnin"), 3);
+}
+
+TEST(StudentAchievements, Can_Calculate_Average_Mark)
+{
+    StudentAchievements<TScanTable> achievements;
+
+    ASSERT_NO_THROW(achievements.CalculateAverageMark(0));
+}
+
+TEST(StudentAchievements, Calculated_Average_Mark_Is_Correct)
+{
+    StudentAchievements<TScanTable> achievements;
+    double expectedResult = 3.9000000000000004;
+
+    EXPECT_DOUBLE_EQ(achievements.CalculateAverageMark(0), expectedResult);
+}
+
+TEST(StudentAchievements, Can_Calculate_Average_Group_Mark)
+{
+    StudentAchievements<TScanTable> achievements;
+
+    ASSERT_NO_THROW(achievements.CalculateAverageGroupMark(1, 3));
+}
+
+TEST(StudentAchievements, Calculated_Average_Group_Mark_Is_Correct)
+{
+    StudentAchievements<TScanTable> achievements;
+    double expectedResult = 3.7999999999999998;
+
+    EXPECT_DOUBLE_EQ(achievements.CalculateAverageGroupMark(1, 3), expectedResult);
+}
+
+TEST(StudentAchievements, Can_Get_Group_ID_With_Best_Marks)
+{
+    StudentAchievements<TScanTable> achievements;
+
+    ASSERT_NO_THROW(achievements.GetGroupIDWithBestMarks(2));
+}
+
+TEST(StudentAchievements, Get_Group_ID_With_Best_Marks_Is_Correct)
+{
+    StudentAchievements<TScanTable> achievements;
+
+    EXPECT_EQ(achievements.GetGroupIDWithBestMarks(2), 2);
+}
+
+TEST(StudentAchievements, Can_Get_Excellent_Students_Number)
+{
+    StudentAchievements<TScanTable> achievements;
+
+    ASSERT_NO_THROW(achievements.GetExcellentStudentsNumber(1));
+}
+
+TEST(StudentAchievements, Get_Excellent_Students_Number_Returns_Correct_Value)
+{
+    StudentAchievements<TScanTable> achievements;
+
+    EXPECT_EQ(achievements.GetExcellentStudentsNumber(1), 2);
 }
