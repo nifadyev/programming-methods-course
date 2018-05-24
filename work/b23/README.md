@@ -2252,7 +2252,6 @@ class StudentAchievements
 
     string GetFileName(int groupID)
     {
-        // TODO: Change when is'll be ready to pull
         string filename = "students/group";
         filename += '0' + groupID;
         filename += ".txt";
@@ -2424,11 +2423,8 @@ class StudentAchievements
 
 ## Результаты тестирования и работы программы 
 ### Результаты тестирования
-CHANGE TO CORRECT
-![](https://bytebucket.org/VadimNifadyev/lab6-texts/raw/8d7d980f7acb2060a98f7634a2b11d9e01651a81/work/b23/TestResult.png)
+![](https://bytebucket.org/VadimNifadyev/lab7-tables/raw/be71f263d6cfa8d97afae498fcaa7410eb6cf2ad/work/b23/tests_result.png)
 ### Демонстрация работы программы
-CHANGE TO CORRECT
-![](https://bytebucket.org/VadimNifadyev/lab7-tables/raw/b00d9df7dddb0da2c4a563091f29692e0c1a4b87/work/b23/main_result.png)
+![](https://bytebucket.org/VadimNifadyev/lab7-tables/raw/be71f263d6cfa8d97afae498fcaa7410eb6cf2ad/work/b23/main_result.png)
 ## Вывод
-CHANGE TO CORRECT
-В рамках данной лабораторной работы были изучены способы представления и хранения текста с использованием стека и списка, были реализованы различные операции над текстом.
+В рамках данной лабораторной работы были изучены способы организации таблиц, а также принципы проектирования структур хранения, используемых в методах решения прикладных задач.
