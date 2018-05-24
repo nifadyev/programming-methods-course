@@ -12,6 +12,7 @@ TListHash::TListHash(int size) : THashTable()
     {
         pList[i] = new TDataList();
     }
+
     tableSize = size;
     currentList = 0;
 }
@@ -26,7 +27,6 @@ TListHash::~TListHash()
         }
         delete[] pList;
     }
-    // TabRecord->pValue must be deleted manually
 }
 
 bool TListHash::IsFull() const
@@ -62,7 +62,7 @@ pTDataValue TListHash::GetValuePTR(void) const
         return nullptr;
     }
 
-    pTTabRecord temp = (pTTabRecord)(pList[currentList]->GetDataValue/* GetDataValue */());
+    pTTabRecord temp = (pTTabRecord)(pList[currentList]->GetDataValue());
     return (temp == nullptr) ? nullptr : temp->pValue;
 }
 
@@ -82,7 +82,7 @@ pTDataValue TListHash::FindRecord(TKey key)
         efficiency++;
         if (((pTTabRecord)(actualList->GetDataValue()))->key == key)
         {
-            return ((pTTabRecord)(actualList->GetDataValue/* GetDataValue */()))->pValue;
+            return ((pTTabRecord)(actualList->GetDataValue()))->pValue;
         }
     }
 
@@ -105,6 +105,7 @@ void TListHash::InsertRecord(TKey key, pTDataValue value)
         currentList = HashFunction(key) % tableSize;
         pList[currentList]->InsertBeforeFirst(new TTabRecord(key, value));
         dataCount++;
+
         return;
     }
 
@@ -141,6 +142,7 @@ int TListHash::Reset(void)
     else
     {
         pList[currentList]->Reset();
+        
         return currentList;
     }
 }

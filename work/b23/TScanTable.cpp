@@ -65,9 +65,8 @@ void TScanTable::DeleteRecord(TKey key)
             }
             delete pRecords[i];
             pRecords[i] = nullptr;
-            //TODO: try to --dataCount in next string
-            pRecords[dataCount - 1] = nullptr;
-            dataCount--;
+            pRecords[--dataCount] = nullptr;
+
             return;
         }
     }

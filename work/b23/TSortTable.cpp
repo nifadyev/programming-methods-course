@@ -22,7 +22,6 @@ void TSortTable::InsertSort(pTTabRecord *pMemory, int dataCount)
 {
     for (int i = 0; i < dataCount; i++)
     {
-        //TODO: try using for instead of while
         int j = i;
         pTTabRecord temp = pRecords[i];
 
@@ -137,9 +136,9 @@ TSortTable::TSortTable(const TScanTable &table) : TScanTable(table.GetTableSize(
     dataCount = table.dataCount;
     for (int i = 0; i < dataCount; i++)
     {
-        // Could be incorrect
         pRecords[i] = new TTabRecord(table.pRecords[i]->GetKey(), table.pRecords[i]->GetValuePTR());
     }
+
     sortMethod = INSERT_SORT;
     SortData();
     Reset();
@@ -172,7 +171,6 @@ TSortTable &TSortTable::operator=(const TScanTable &table)
         for (int i = 0; i < maxTableSize; ++i)
         {
             if (table.pRecords[i] != nullptr)
-            // Could be incorrect
             {
                 pRecords[i] = new TTabRecord(table.pRecords[i]->GetKey(), table.pRecords[i]->GetValuePTR());
             }
@@ -210,22 +208,11 @@ pTDataValue TSortTable::FindRecord(TKey key)
     {
         throw logic_error("Error! Cannot find record in empty table");
     }
-    // FIXME: GLOBAL ERROR- string comparison using <, > or ==
-    // if (key < pRecords[0]->GetKey() || key > pRecords[dataCount - 1]->GetKey())
-    // {
-    //     // Is it really needed?
-    //     if (key > pRecords[dataCount - 1]->GetKey())
-    //     {
-    //         currentPosition = dataCount;
-    //     }
-    //     throw runtime_error("Error! Required record is out of range");
-    // }
 
     Reset();
     efficiency = 0;
     int left = 0, right = dataCount;
 
-    // Try to use for instead of while
     while ((right - left) > 0)
     {
         efficiency++;
@@ -246,7 +233,7 @@ pTDataValue TSortTable::FindRecord(TKey key)
         }
     }
 
-    currentPosition = right; // or currentPosition = left;
+    currentPosition = right;
 
     throw runtime_error("Error! There is no record with such key");
 }
@@ -272,18 +259,8 @@ void TSortTable::InsertRecord(TKey key, pTDataValue value)
         dataCount++;
         return;
     }
-    // FIXME: This throw is never ran
+
     throw runtime_error("Error! Record with such data has already existed");
-    // pTDataValue temp = FindRecord(key);
-    // if (temp != nullptr)
-    // {
-    //     for (int i = dataCount; i > currentPosition; --i)
-    //     {
-    //         pRecords[i] = pRecords[i - 1];
-    //     }
-    //     pRecords[currentPosition] = new TTabRecord(key, value);
-    //     dataCount++;
-    // }
 }
 
 void TSortTable::DeleteRecord(TKey key)
@@ -314,6 +291,7 @@ void TSortTable::DeleteRecord(TKey key)
     {
         pRecords[i] = pRecords[i + 1];
     }
+    
     pRecords[dataCount - 1] = nullptr;
     dataCount--;
     Reset();

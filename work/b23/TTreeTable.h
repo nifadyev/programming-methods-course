@@ -5,34 +5,33 @@
 #include "TTreeNode.h"
 #include <stack>
 
-class  TTreeTable : public TTable 
+class  TTreeTable : public TTable
 {
  protected:
-    pTTreeNode pRoot;             // ��������� �� ������ ������
-    //TODO: Rename
-    pTTreeNode /* * */ppRef;            // ����� ��������� �� �������-���������� � FindRecord
-    pTTreeNode pCurrent;          // ��������� �� ������� �������
-    int currentPosition;          // ����� ������� �������
-    stack <pTTreeNode> iterators; // ���� ��� ���������
+    pTTreeNode pRoot;              // Указатель на корень дерева
+    pTTreeNode ppRef;              // Адрес указател€ на вершину-результата в FindRecord
+    pTTreeNode pCurrent;           // Указатель на текущую вершину
+    int currentPosition;           // Ќомер текущей вершины
+    stack <pTTreeNode> iterators;  // Стек для итератора
 
-    void DeleteTreeTable(pTTreeNode pNode); // ��������
+    void DeleteTreeTable(pTTreeNode pNode);
  public:
     TTreeTable() : TTable(), currentPosition(0), pRoot(nullptr), pCurrent(nullptr), ppRef(nullptr) {}
     ~TTreeTable() { DeleteTreeTable(pRoot); }
-    //-----------------------------�������������� ������-----------------------------
-    virtual /*int*/bool IsFull() const;
+    //-----------------------------Информационные методы-----------------------------
+    virtual bool IsFull() const;
 
-    //-----------------------------�������� ������-----------------------------
+    //-----------------------------Основные методы-----------------------------
     virtual pTDataValue FindRecord(TKey key);
     virtual void InsertRecord(TKey key, pTDataValue value);
     virtual void DeleteRecord(TKey key);
 
-    //-----------------------------���������-----------------------------
+    //-----------------------------Навигация------------------------------
     virtual TKey GetKey(void) const;
     virtual pTDataValue GetValuePTR(void) const;
-    virtual int Reset(void);   // ���������� �� ������ ������
+    virtual int Reset(void);   // Установить на первую запись
     virtual bool IsTableEnded(void) const;
-    virtual int GoNext(void); // ������� � ��������� ������, (=1 ����� ���������� ��� ��������� ������ �������)
+    virtual int GoNext(void);  // Переход к следующей записи, (=1 после применени€ дл€ последней записи таблицы)
 };
 
-#endif // TTREE_TABLE_INCLUDE_TTREE_TABLE_H
+#endif  // TTREE_TABLE_INCLUDE_TTREE_TABLE_H

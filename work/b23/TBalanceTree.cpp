@@ -94,6 +94,7 @@ bool TBalanceTree::DeleteBalanceTree(pTBalanceNode pNode, TKey key, pTBalanceNod
             {
                 delete pNode->pValue;
             }
+
             pNode->pValue = mostLeftNode->pValue;
             mostLeftNode->pValue = nullptr;
             pNode->key = mostLeftNode->key;
@@ -105,6 +106,7 @@ bool TBalanceTree::DeleteBalanceTree(pTBalanceNode pNode, TKey key, pTBalanceNod
 
     return needBalancing;
 }
+
 int TBalanceTree::LeftTreeBalancing(pTBalanceNode pNode)
 {
     bool isHeightIncreased = false;

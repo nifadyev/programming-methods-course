@@ -1,28 +1,27 @@
-#include <iostream>
-// #include "TDatValue.h"
-#include "DatValue.h"
-using namespace std;
-
 #ifndef TTAB_RECORD_INCLUDE_TTAB_RECORD_H
 #define TTAB_RECORD_INCLUDE_TTAB_RECORD_H
 
-typedef string TKey;    // ��� ����� ������
+#include <iostream>
+#include "DatValue.h"
+using namespace std;
+
+typedef string TKey;  // Тип ключа записи
 
 
-//----------------����� ��������-�������� ��� ������� �������----------------   
+//----------------Класс объектов-значений для записей таблицы----------------   
 class TTabRecord : public TDataValue
 {
  protected:
-    TKey key;             // ���� ������
-    pTDataValue pValue;   // ��������� �� ��������
+    TKey key;            // Ключ записи
+    pTDataValue pValue;  // Указатель на значение
  public:
-    TTabRecord(TKey key = "", pTDataValue value = nullptr);
+    explicit TTabRecord(TKey key = "", pTDataValue value = nullptr);
 
     void SetKey(TKey key);
     TKey GetKey(void);
 
-    void SetValuePtr(pTDataValue ptr); // ���������� ��������� �� ������
-    pTDataValue GetValuePTR(void);     // �������� ��������� �� ������
+    void SetValuePtr(pTDataValue ptr);  // Установить указатель на данные
+    pTDataValue GetValuePTR(void);      // Получить указатель на данные
 
     virtual TDataValue* GetCopy();
 
@@ -31,7 +30,7 @@ class TTabRecord : public TDataValue
     virtual int operator < (const TTabRecord &record);
     virtual int operator > (const TTabRecord &record);
 
-    //----------------������������� ������ ��� ��������� ����� ������----------------
+    //----------------Дружественные классы для различных типов таблиц----------------
     friend class TArrayTable;
     friend class TScanTable;
     friend class TSortTable;
@@ -40,5 +39,6 @@ class TTabRecord : public TDataValue
     friend class TArrayHash;
     friend class TListHash;
 };
+
 typedef TTabRecord *pTTabRecord;
 #endif  // TTAB_RECORD_INCLUDE_TTAB_RECORD_H

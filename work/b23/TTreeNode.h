@@ -1,22 +1,21 @@
-#include "TTabRecord.h"
-#include "DatValue.h"
-
 #ifndef TTREE_NODE_INCLUDE_TTREE_NODE_H
 #define TTREE_NODE_INCLUDE_TTREE_NODE_H
+
+#include "TTabRecord.h"
 
 class  TTreeNode;
 typedef  TTreeNode *pTTreeNode;
 
-class  TTreeNode : public TTabRecord 
+class  TTreeNode : public TTabRecord
 {
  protected:
-    pTTreeNode pLeft, pRight; // ��������� �� ����������
+    pTTreeNode pLeft, pRight;  // Указатели на поддеревья
  public:
     TTreeNode(TKey key = "", pTDataValue value = nullptr, pTTreeNode pLft = nullptr,
         pTTreeNode pRght = nullptr) : TTabRecord(key, value), pLeft(pLft), pRight(pRght) {}
 
-    pTTreeNode GetLeft(void) const; // ��������� �� ����� ���������
-    pTTreeNode GetRight(void) const; // ��������� �� ������ ���������
+    pTTreeNode GetLeft(void) const;   // Указатель на левое поддерево
+    pTTreeNode GetRight(void) const;  // Указатель на правое поддерево
 
     virtual TDataValue *GetCopy();
     friend class TTreeTable;
