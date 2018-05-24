@@ -60,8 +60,7 @@ class StudentAchievements
 
     string GetFileName(int groupID)
     {
-        // TODO: Change when is'll be ready to pull
-        string filename = "students/group";
+        string filename = "group";
         filename += '0' + groupID;
         filename += ".txt";
 
