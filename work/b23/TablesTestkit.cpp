@@ -191,7 +191,7 @@ TEST(TabRecord, Can_Compare_Table_Record_With_Itself_Using_More)
     EXPECT_FALSE(tableRecord > tableRecord);
 }
 
-// FIXME:----------------Testing class TTable----------------
+//----------------Testing class TTable----------------
 TEST(TTable, Can_Get_Data_Count)
 {
     TScanTable table;
@@ -223,7 +223,7 @@ TEST(TTable, Get_Efficiency_Returns_Correct_Value)
     EXPECT_EQ(table.GetEfficiency(), 0);
 }
 
-// FIXME:----------------Testing class TArrayTable----------------
+//----------------Testing class TArrayTable----------------
 TEST(ArrayTable, Can_Create_Default_Array_Table)
 {
     ASSERT_NO_THROW(TScanTable arrayTable);
@@ -414,7 +414,7 @@ TEST(ArrayTable, Get_Correct_Value_Of_Current_Position)
     EXPECT_EQ(scanTable.GetCurrentPosition(), 0);
 }
 
-// FIXME:----------------Testing class TScanTable----------------
+//----------------Testing class TScanTable----------------
 TEST(ScanTable, Can_Find_Record)
 {
     TScanTable scanTable;
@@ -533,7 +533,7 @@ TEST(ScanTable, Throw_When_Trying_To_Delete_Non_Existing_Record)
     ASSERT_THROW(scanTable.DeleteRecord(wrongKey), runtime_error);
 }
 
-// FIXME:----------------Testing class TSortTable----------------
+//----------------Testing class TSortTable----------------
 TEST(SortTable, Can_Create_Default_Sort_Table)
 {
     ASSERT_NO_THROW(TSortTable sortTable);
@@ -744,7 +744,6 @@ TEST(SortTable, Can_Delete_Record)
 TEST(SortTable, Delete_Record_Change_The_Table)
 {
     TSortTable sortTable(5);
-    // TODO: Check expectedKey again
     TKey expectedKey = "example";
 
     sortTable.InsertRecord("qwerty", nullptr);
@@ -776,7 +775,7 @@ TEST(SortTable, Throw_When_Trying_To_Delete_Non_Existing_Record)
     ASSERT_THROW(sortTable.DeleteRecord("examplr"), runtime_error);
 }
 
-// FIXME:----------------Testing class TTreeNode----------------
+//----------------Testing class TTreeNode----------------
 TEST(TreeNode, Can_Create_Default_Tree_Node)
 {
     ASSERT_NO_THROW(TTreeNode treeNode);
@@ -836,7 +835,7 @@ TEST(TreeNode, Can_Get_Copy_If_Value_Is_Not_Nullptr)
     ASSERT_NO_THROW(source.GetCopy());
 }
 
-// FIXME:----------------Testing class TTreeTable----------------
+//----------------Testing class TTreeTable----------------
 TEST(TreeTable, Can_Create_Default_Tree_Table)
 {
     ASSERT_NO_THROW(TTreeTable treeTable);
@@ -1030,7 +1029,6 @@ TEST(TreeTable, Reset_Works_Correctly)
     treeTable.Reset();
 
     EXPECT_EQ(treeTable.GetDataCount(), 3);
-    // TODO: treeTable.GetKey() should be "qwerty"
     EXPECT_EQ(treeTable.GetKey(), "example");
     EXPECT_EQ(treeTable.GetValuePTR(), nullptr);
 }
@@ -1078,7 +1076,7 @@ TEST(TreeTable, Go_Next_Set_Correct_State_Of_Table)
     EXPECT_EQ(treeTable.GetValuePTR(), nullptr);
 }
 
-// FIXME:----------------Testing class TBalanceNode----------------
+//----------------Testing class TBalanceNode----------------
 TEST(BalanceNode, Can_Create_Default_Balance_Node)
 {
     ASSERT_NO_THROW(TBalanceNode balanceNode);
@@ -1131,7 +1129,7 @@ TEST(BalanceNode, Throw_When_Trying_To_Set_Incorrect_Balance)
     ASSERT_THROW(balanceNode.SetBalance(4324), invalid_argument);
 }
 
-// FIXME:----------------Testing class TBalanceTree----------------
+//----------------Testing class TBalanceTree----------------
 TEST(BalanceTree, Can_Create_Default_Balance_Tree)
 {
     ASSERT_NO_THROW(TBalanceTree balanceTree);
@@ -1193,7 +1191,7 @@ TEST(BalanceTree, Throw_When_Trying_To_Delete_Record_From_Empty_Balance_Tree)
     ASSERT_THROW(balanceTree.DeleteRecord("qwerty"), logic_error);
 }
 
-// FIXME:----------------Testing class TArrayHash----------------
+//----------------Testing class TArrayHash----------------
 TEST(ArrayHash, Can_Create_Default_Array_Hash)
 {
     ASSERT_NO_THROW(TArrayHash arrayHash);
@@ -1407,7 +1405,6 @@ TEST(ArrayHash, Reset_Returns_Correct_Current_Position)
     arrayHash.InsertRecord("qwerty", nullptr);
     arrayHash.InsertRecord("qwert", nullptr);
 
-    // TODO: Why Reset returned 15?
     EXPECT_EQ(arrayHash.Reset(), 15);
 }
 
@@ -1445,7 +1442,7 @@ TEST(ArrayHash, Go_Next_Set_Correct_State_Of_Table)
     EXPECT_EQ(arrayHash.GetKey(), "qwerty");
 }
 
-// FIXME:----------------Testing class TListHash----------------
+//----------------Testing class TListHash----------------
 TEST(ListHash, Can_Create_List_Hash)
 {
     ASSERT_NO_THROW(TListHash listHash);
@@ -1705,7 +1702,7 @@ TEST(ListHash, Go_Next_Returns_Current_List)
     EXPECT_EQ(listHash.GoNext(), 1);
 }
 
-// FIXME:----------------Testing class StudentInfo----------------
+//----------------Testing class StudentInfo----------------
 TEST(StudentInfo, Can_Create_Default_Student_Info)
 {
     ASSERT_NO_THROW(StudentInfo info);
@@ -1716,16 +1713,6 @@ TEST(StudentInfo, Can_Create_Student_Info_With_Custom_Paremeters)
     ASSERT_NO_THROW(StudentInfo info(1, 2, 3, 4, 5));
 }
 
-TEST(StudentInfo, Throw_When_Trying_To_Create_Student_Info_With_Negative_Parameter)
-{
-    ASSERT_THROW(StudentInfo info(2, 3, 4, -2, 5), invalid_argument);
-}
-
-TEST(StudentInfo, Throw_When_Trying_To_Create_Student_Info_With_Too_Big_Parameter)
-{
-    ASSERT_THROW(StudentInfo info(2, 3, 4, 7, 5), invalid_argument);
-}
-
 TEST(StudentInfo, Can_Get_Copy)
 {
     StudentInfo info;
@@ -1733,7 +1720,7 @@ TEST(StudentInfo, Can_Get_Copy)
     ASSERT_NO_THROW(info.GetCopy());
 }
 
-// FIXME:----------------Testing class StudentAchievements----------------
+//----------------Testing class StudentAchievements----------------
 TEST(StudentAchievements, Can_Create_Default_Student_Achievements)
 {
     ASSERT_NO_THROW(StudentAchievements<TSortTable> achivements);
@@ -1783,7 +1770,6 @@ TEST(StudentAchievements, Throw_When_Trying_To_Get_Mark_For_Unexisting_Course)
 
 TEST(StudentAchievements, Can_Calculate_Student_Average_Mark)
 {
-    // TODO: Cannot get info from student of 2 group
     StudentAchievements<TSortTable> achievements;
 
     ASSERT_NO_THROW(achievements.CalculateStudentAverageMark("Pronicheva"));

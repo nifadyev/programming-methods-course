@@ -2,6 +2,7 @@
 #define STUDENT_INFO_INCLUDE_STUDENT_INFO_H
 
 #include "DatValue.h"
+
 static const int NUMBER_OF_MARKS = 5;
 
 class StudentInfo : public TDataValue
@@ -21,11 +22,6 @@ class StudentInfo : public TDataValue
 
     StudentInfo(int math = 4, int aads = 4, int os = 4, int english = 4, int mno = 4)
     {
-        if (math < 0 || math > 5 || aads < 0 || aads > 5 || os < 0 || os > 5 || english < 0 || english > 5 || mno < 0 || mno > 5)
-        {
-            throw invalid_argument("Error! Marks should be more than 0 and less than 6");
-        }
-
         marks[MATH] = math;
         marks[AaDS] = aads;
         marks[OS] = os;
@@ -44,4 +40,4 @@ class StudentInfo : public TDataValue
     }
 };
 
-#endif // STUDENT_INFO_INCLUDE_STUDENT_INFO_H
+#endif  // STUDENT_INFO_INCLUDE_STUDENT_INFO_H
