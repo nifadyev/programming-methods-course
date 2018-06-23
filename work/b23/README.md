@@ -6,26 +6,29 @@
 
 В рамках данной лабораторной работы ставится задача создания программных средств, поддерживающих табличные динамические структуры данных (таблицы) и базовые операции над ними:
 
--	поиск записи;
--	вставка записи (без дублирования);
--	удаление записи.
+- поиск записи;
+- вставка записи (без дублирования);
+- удаление записи.
 
-Выполнение операций над таблицами может осуществляться с различной степенью эффективности в зависимости от способа организации таблицы. 
+Выполнение операций над таблицами может осуществляться с различной степенью эффективности в зависимости от способа организации таблицы.
 
 В рамках лабораторной работы как показатель эффективности предлагается использовать количество операций, необходимых для выполнения операции поиска записи в таблице. Величина этого показателя должна определяться как аналитически (при использовании тех или иных упрощающих предположений), так и экспериментально на основе проведения вычислительных экспериментов.
 
 В лабораторной работе предлагается реализовать следующие типы таблиц:
 
--	просмотровые (неупорядоченные);
--	упорядоченные (сортированные);
--	таблицы со структурами хранения на основе деревьев поиска;
--	хеш-таблицы или перемешанные (с вычисляемыми адресами).
+- просмотровые (неупорядоченные);
+- упорядоченные (сортированные);
+- таблицы со структурами хранения на основе деревьев поиска;
+- хеш-таблицы или перемешанные (с вычисляемыми адресами).
 
 Необходимо разработать интерфейс доступа к операциям поиска, вставки и удаления, не зависящий от способа организации таблицы.
 
 ## Описание работы
+
 ### Реализация класса `TTabRecord`
+
 #### TTabRecord.h
+
 ```C++
 #ifndef TTAB_RECORD_INCLUDE_TTAB_RECORD_H
 #define TTAB_RECORD_INCLUDE_TTAB_RECORD_H
@@ -37,7 +40,7 @@ using namespace std;
 typedef string TKey;  // Тип ключа записи
 
 
-//----------------Класс объектов-значений для записей таблицы----------------   
+//----------------Класс объектов-значений для записей таблицы----------------
 class TTabRecord : public TDataValue
 {
  protected:
@@ -74,6 +77,7 @@ typedef TTabRecord *pTTabRecord;
 ```
 
 #### TTabRecord.cpp
+
 ```C++
 #include "TTabRecord.h"
 
@@ -133,7 +137,9 @@ int TTabRecord::operator>(const TTabRecord & record)
 ```
 
 ### Реализация класса `TTable`
+
 #### TTable.h
+
 ```C++
 #ifndef TTABLE_INCLUDE_TTABLE_H
 #define TTABLE_INCLUDE_TTABLE_H
@@ -151,16 +157,16 @@ public:
 
     //-----------------------------Информационные методы-----------------------------
     int GetDataCount() const
-    { 
+    {
         return dataCount;
     }
     int GetEfficiency() const
-    { 
+    {
         return efficiency;
     }
 
     bool IsEmpty() const
-    { 
+    {
         return dataCount == 0;
     }
     virtual bool IsFull() const = 0;
@@ -183,7 +189,9 @@ public:
 ```
 
 ### Реализация класса `TArrayTable`
+
 #### TArrayTable.h
+
 ```C++
 #include "TTable.h"
 
@@ -203,7 +211,7 @@ public:
     ~TArrayTable();
 
     //-----------------------------Информационные методы-----------------------------
-    virtual /*int*/bool IsFull() const;
+    virtual bool IsFull() const;
     int GetTableSize() const;
 
     //-----------------------------Доступ-----------------------------
@@ -222,16 +230,17 @@ public:
     virtual int Reset(void);   // Установить на первую запись
     virtual bool IsTableEnded(void) const;
     virtual int GoNext(void);  // Переход к следующей записи, (=1 после применения для последней записи таблицы)
-    
+
     virtual void SetCurrentPosition(int position);
     int GetCurrentPosition(void) const;
-    
+
     friend class TSortTable;
 };
 #endif // TARRAY_TABLE_INCLUDE_TARRAY_TABLE_H
 ```
 
 #### TArrayTable.cpp
+
 ```C++
 #include "TArrayTable.h"
 
@@ -381,7 +390,9 @@ int TArrayTable::GetCurrentPosition(void) const
 ```
 
 ### Реализация класса `TScanTable`
+
 #### TScanTable.h
+
 ```C++
 #include "TArrayTable.h"
 
@@ -402,6 +413,7 @@ public:
 ```
 
 #### TScanTable.cpp
+
 ```C++
 #include "TScanTable.h"
 
@@ -481,7 +493,9 @@ void TScanTable::DeleteRecord(TKey key)
 ```
 
 ### Реализация класса `TSortTable`
+
 #### TSortTable.h
+
 ```C++
 #include "TScanTable.h"
 
@@ -520,7 +534,9 @@ class  TSortTable : public TScanTable
 };
 #endif  // TSORT_TABLE_INCLUDE_TSORT_TABLE_H
 ```
+
 #### TSortTable.cpp
+
 ```C++
 #include "TSortTable.h"
 
@@ -815,7 +831,7 @@ void TSortTable::DeleteRecord(TKey key)
     {
         pRecords[i] = pRecords[i + 1];
     }
-    
+
     pRecords[dataCount - 1] = nullptr;
     dataCount--;
     Reset();
@@ -823,7 +839,9 @@ void TSortTable::DeleteRecord(TKey key)
 ```
 
 ### Реализация класса `TreeNode`
+
 #### TTreeNode.h
+
 ```C++
 #ifndef TTREE_NODE_INCLUDE_TTREE_NODE_H
 #define TTREE_NODE_INCLUDE_TTREE_NODE_H
@@ -851,7 +869,9 @@ class  TTreeNode : public TTabRecord
 
 #endif // TTREE_NODE_INCLUDE_TTREE_NODE_H
 ```
+
 #### TTreeNode.cpp
+
 ```C++
 #include "TTreeNode.h"
 
@@ -877,7 +897,9 @@ TDataValue * TTreeNode::GetCopy()
 ```
 
 ### Реализация класса `TTreeTable`
+
 #### TTreeTable.h
+
 ```C++
 #ifndef TTREE_TABLE_INCLUDE_TTREE_TABLE_H
 #define TTREE_TABLE_INCLUDE_TTREE_TABLE_H
@@ -917,7 +939,9 @@ class  TTreeTable : public TTable
 
 #endif  // TTREE_TABLE_INCLUDE_TTREE_TABLE_H
 ```
+
 #### TTreeTable.h
+
 ```C++
 #include "TTreeTable.h"
 
@@ -947,7 +971,6 @@ void TTreeTable::DeleteTreeTable(pTTreeNode pNode)
 
 bool TTreeTable::IsFull() const
 {
-    // Change BY ALL MEANS
     try
     {
         pTTreeNode tmp = new TTreeNode();
@@ -971,7 +994,6 @@ pTDataValue TTreeTable::FindRecord(TKey key)
         efficiency++;
         if (currentNode->key == key)
         {
-            // cout << "I AM HERE\n";
             return currentNode->GetValuePTR();
         }
         else
@@ -1132,88 +1154,6 @@ void TTreeTable::DeleteRecord(TKey key)
     dataCount--;
 }
 
-// pTDataValue TTreeTable ::FindRecord(TKey k)
-// {
-//     pTTreeNode pNode = pRoot;
-//     ppRef = &pRoot;
-//     efficiency = 0;
-//     while (pNode != nullptr)
-//     {
-//         efficiency++;
-//         if (pNode->key == k)
-//             break;
-//         if (pNode->key < k)
-//             ppRef = &pNode->pRight;
-//         else
-//             ppRef = &pNode->pLeft;
-//         pNode = *ppRef;
-//     }
-//     return (pNode == nullptr) ? nullptr : pNode->pValue;
-// }
-// void TTreeTable::InsertRecord(TKey k, pTDataValue pVal)
-// {
-//     // if (IsFull())
-//     //     SetRetCode(TabFull);
-//     // else if (FindRecord(k) != nullptr)
-//     //     SetRetCode(TabRecDbl);
-//     // else
-//     // {
-//         *ppRef = new TTreeNode(k, pVal);
-//         dataCount++;
-//     //}
-// }
-// void TTreeTable ::DeleteRecord(TKey k)
-// {
-//     // if (IsEmpty())
-//     //     SetRetCode(TabEmpty);
-//     // else if (FindRecord(k) == nullptr)
-//     //     SetRetCode(TabNoRec);
-//     // else
-//     // {
-//         pTTreeNode pNode = *ppRef;
-//         if (pNode->pRight == nullptr && pNode->pLeft == nullptr)
-//             *ppRef = nullptr;
-//         else if (pNode->pRight == nullptr)
-//         {
-//             pNode->key = pNode->pLeft->key;
-//             pNode->pValue = pNode->pLeft->pValue;
-//         }
-//         else if (pNode->pLeft == nullptr)
-//         {
-//             pNode->key = pNode->pRight->key;
-//             pNode->pValue = pNode->pRight->pValue;
-//         }
-//         else
-//         {
-//             pTTreeNode min = pNode->pLeft;
-//             pTTreeNode minParent = pNode;
-//             while (min->pRight != nullptr)
-//             {
-//                 minParent = min;
-//                 min = min->pRight;
-//             }
-//             if (minParent != pNode)
-//             {
-//                 minParent->pRight = min->pLeft;
-//                 pNode->key = min->key;
-//                 pNode->pValue = min->pValue;
-//                 pNode = min;
-//             }
-//             else
-//             {
-//                 pNode->key = min->key;
-//                 pNode->pValue = min->pValue;
-//                 pNode->pRight = min->pRight;
-//                 pNode = min;
-//             }
-//             //delete min;
-//             //delete minParent;
-//         }
-//         //delete pNode;
-//         dataCount--;
-//     //}
-// }
-
 TKey TTreeTable::GetKey(void) const
 {
     return (pCurrent == nullptr) ? TKey("") : pCurrent->key;
@@ -1275,7 +1215,9 @@ int TTreeTable::GoNext(void)
 ```
 
 ### Реализация класса `TBalanceNode`
+
 #### TBalanceNode.h
+
 ```C++
 #include "TTable.h"
 #include "TTreeNode.h"
@@ -1312,7 +1254,9 @@ typedef TBalanceNode *pTBalanceNode;
 
 #endif // TBALANCE_NODE_INCLUDE_TBALANCE_NODE_H
 ```
+
 #### TBalanceNode.cpp
+
 ```C++
 #include "TBalanceNode.h"
 
@@ -1345,7 +1289,9 @@ void TBalanceNode::SetBalance(const int& balance)
 ```
 
 ### Реализация класса `TBalanceTree`
+
 #### TBalanceTree.h
+
 ```C++
 #ifndef TBALANCE_TREE_INCLUDE_TBALANCE_TREE_H
 #define TBALANCE_TREE_INCLUDE_TBALANCE_TREE_H
@@ -1370,7 +1316,9 @@ class  TBalanceTree : public TTreeTable
 
 #endif  // TBALANCE_TREE_INCLUDE_TBALANCE_TREE_H
 ```
+
 #### TBalanceTree.cpp
+
 ```C++
 #include "TBalanceTree.h"
 
@@ -1623,14 +1571,16 @@ void TBalanceTree::DeleteRecord(TKey key)
 ```
 
 ### Реализация класса `THashTable`
+
 #### THashTable.h
+
 ```C++
 #include "TTable.h"
 
 #ifndef THASH_TABLE_INCLUDE_THASH_TABLE_H
 #define THASH_TABLE_INCLUDE_THASH_TABLE_H
 
-class  THashTable : public TTable 
+class  THashTable : public TTable
 {
 protected:
     virtual unsigned long HashFunction(const TKey& key);
@@ -1640,7 +1590,9 @@ public:
 
 #endif // THASH_TABLE_INCLUDE_THASH_TABLE_H
 ```
+
 #### THashTable.cpp
+
 ```C++
 #include "THashTable.h"
 
@@ -1658,7 +1610,9 @@ unsigned long THashTable::HashFunction(const TKey &key)
 ```
 
 ### Реализация класса `TArrayHash`
+
 #### TArrayHash.h
+
 ```C++
 #ifndef TARRAY_HASH_INCLUDE_TARRAY_HASH_H
 #define TARRAY_HASH_INCLUDE_TARRAY_HASH_H
@@ -1684,7 +1638,7 @@ public:
     ~TArrayHash();
 
     //-----------------------------Информационные методы-----------------------------
-    virtual /*int*/bool IsFull() const;
+    virtual bool IsFull() const;
 
     //-----------------------------Доступ-----------------------------
     virtual TKey GetKey(void) const;
@@ -1697,13 +1651,15 @@ public:
 
     //-----------------------------Навигация-----------------------------
     virtual int Reset(void);   // Установить на первую запись
-    virtual /*int*/bool IsTableEnded(void) const;
+    virtual bool IsTableEnded(void) const;
     virtual int GoNext(void);  // Переход к следующей записи, (=1 после применения для последней записи таблицы)
 };
 
 #endif // TARRAY_HASH_INCLUDE_TARRAY_HASH_H
 ```
+
 #### TArrayHash.cpp
+
 ```C++
 #include "TArrayHash.h"
 
@@ -1746,8 +1702,8 @@ TArrayHash::~TArrayHash()
     delete pMark;
 }
 
-int TArrayHash::GetNextPosition(int position) 
-{ 
+int TArrayHash::GetNextPosition(int position)
+{
     return (position + hashStep) % maxTableSize;
 }
 
@@ -1920,7 +1876,9 @@ int TArrayHash::GoNext(void)
 ```
 
 ### Реализация класса `TListHash`
+
 #### TListHash.h
+
 ```C++
 #include "THashTable.h"
 #include "DatList.h"
@@ -1960,6 +1918,7 @@ class TListHash : public THashTable
 ```
 
 #### TListHash.cpp
+
 ```C++
 #include "TListHash.h"
 
@@ -2105,7 +2064,7 @@ int TListHash::Reset(void)
     else
     {
         pList[currentList]->Reset();
-        
+
         return currentList;
     }
 }
@@ -2136,7 +2095,9 @@ int TListHash::GoNext(void)
 ```
 
 ### Реализация класса `StudentInfo`
+
 #### StudentInfo.h
+
 ```C++
 #ifndef STUDENT_INFO_INCLUDE_STUDENT_INFO_H
 #define STUDENT_INFO_INCLUDE_STUDENT_INFO_H
@@ -2188,7 +2149,9 @@ class StudentInfo : public TDataValue
 ```
 
 ### Реализация класса `StudentAchievements`
+
 #### StudentAchievements.h
+
 ```C++
 #ifndef STUDENT_ACHIEVEMENTS_INCLUDE_STUDENT_ACHIEVEMENTS_H
 #define STUDENT_ACHIEVEMENTS_INCLUDE_STUDENT_ACHIEVEMENTS_H
@@ -2269,7 +2232,7 @@ class StudentAchievements
     // Student marks
     StudentInfo *GetStudentInfo(TKey studentName)
     {
-        for (auto /* TTable */ i = tables.begin(); i != tables.end(); i++)
+        for (auto i = tables.begin(); i != tables.end(); i++)
         {
             try
             {
@@ -2280,7 +2243,7 @@ class StudentAchievements
             {
                 return 0;
             }
-            
+
         }
     }
 
@@ -2337,7 +2300,7 @@ class StudentAchievements
         double count = 0;
         TTable *table = tables[group];
         table->Reset();
-        
+
         while (!table->IsTableEnded())
         {
             StudentInfo *info = (StudentInfo *)(table->GetValuePTR());
@@ -2421,10 +2384,16 @@ class StudentAchievements
 #endif // STUDENT_ACHIEVEMENTS_INCLUDE_STUDENT_ACHIEVEMENTS_H
 ```
 
-## Результаты тестирования и работы программы 
+## Результаты тестирования и работы программы
+
 ### Результаты тестирования
+
 ![](https://bytebucket.org/VadimNifadyev/lab7-tables/raw/be71f263d6cfa8d97afae498fcaa7410eb6cf2ad/work/b23/tests_result.png)
+
 ### Демонстрация работы программы
+
 ![](https://bytebucket.org/VadimNifadyev/lab7-tables/raw/be71f263d6cfa8d97afae498fcaa7410eb6cf2ad/work/b23/main_result.png)
+
 ## Вывод
+
 В рамках данной лабораторной работы были изучены способы организации таблиц, а также принципы проектирования структур хранения, используемых в методах решения прикладных задач.
