@@ -1,0 +1,5 @@
+Nikonov 3 4 4 3 5
+Pankova 3 3 2 3 2
+Yalovegina 5 3 4 5 5
+Kolosova 2 2 3 3 3
+Kazmin 5 5 5 5 5
